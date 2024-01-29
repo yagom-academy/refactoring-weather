@@ -155,10 +155,13 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(
+            weatherDetailInfo: WeatherDetailInfo(
+                weatherForecastInfo: weatherJSON!.weatherForecast[indexPath.row],
+                cityInfo: weatherJSON!.city,
+                tempUnit: tempUnit
+            )
+        )
         navigationController?.show(detailViewController, sender: self)
     }
 }

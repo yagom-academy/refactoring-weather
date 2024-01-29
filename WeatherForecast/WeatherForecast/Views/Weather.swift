@@ -13,29 +13,65 @@ class WeatherJSON: Decodable {
 }
 
 // MARK: - List
-class WeatherForecastInfo: Decodable {
+struct WeatherForecastInfo: Decodable {
     let dt: TimeInterval
     let main: MainInfo
     let weather: Weather
     let dtTxt: String
+    
+    func getWeather() -> String {
+        return weather.main
+    }
+    
+    func getDescription() -> String {
+        return weather.description
+    }
+    
+    func getTemp() -> Double {
+        return main.temp
+    }
+    
+    func getTempMax() -> Double {
+        return main.tempMax
+    }
+    
+    func getTempMin() -> Double {
+        return main.tempMin
+    }
+    
+    func getFeelsLike() -> Double {
+        return main.feelsLike
+    }
+    
+    func getPop() -> String {
+        return "\(main.pop * 100)%"
+    }
+    
+    func getHumidity() -> String {
+        return "\(main.humidity)%"
+    }
+    
+    func getIconName() -> String {
+        return weather.icon
+    }
 }
 
 // MARK: - MainClass
-class MainInfo: Decodable {
+struct MainInfo: Decodable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
-class Weather: Decodable {
+struct Weather: Decodable {
     let id: Int
     let main: String
     let description: String
     let icon: String
 }
 
-// MARK: - City
-class City: Decodable {
+// MARK: - Ci
+struct City: Decodable {
     let id: Int
     let name: String
     let coord: Coord
@@ -45,7 +81,7 @@ class City: Decodable {
 }
 
 // MARK: - Coord
-class Coord: Decodable {
+struct Coord: Decodable {
     let lat, lon: Double
 }
 

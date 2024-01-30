@@ -49,7 +49,7 @@ final class WeatherInfo: WeatherInfoCoordinator {
         return tempUnit.expressionTitle
     }
     
-    func changeTempUnit() {
+    func toggleTempUnit() {
         if tempUnit is Metric {
             tempUnit = Imperial()
             return

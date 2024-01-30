@@ -24,7 +24,8 @@ final class WeatherDetailViewController: UIViewController {
     
     //MARK: - LifeCycle
     override func loadView() {
-        view = WeatherDetailView(weatherDetailInfo: weatherDetailInfo)
+        view = WeatherDetailView(weatherDetailInfo: weatherDetailInfo,
+                                 imageService: ImageService())
     }
     
     override func viewDidLoad() {

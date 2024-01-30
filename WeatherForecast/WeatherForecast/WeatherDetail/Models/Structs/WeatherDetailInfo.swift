@@ -6,8 +6,22 @@
 //
 
 import Foundation
+protocol WeatherDetailInfoCoordinator {
+    var sunrise: String { get }
+    var sunset: String { get }
+    func getWeather() -> String
+    func getDescription() -> String
+    func getTemp() -> String
+    func getTempMax() -> String
+    func getTempMin() -> String
+    func getFeelsLike() -> String
+    func getTempUnitExpression() -> String
+    func getPop() -> String
+    func getHumidity() -> String
+    func getIconName() -> String
+}
 
-struct WeatherDetailInfo {
+struct WeatherDetailInfo: WeatherDetailInfoCoordinator {
     //MARK: - Properties
     private let weatherForecastInfo: WeatherForecastInfo
     private let cityInfo: City
@@ -21,13 +35,10 @@ struct WeatherDetailInfo {
     }()
     
     var date: String {
-        let dateFormatter: DateFormatter = {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.locale = .init(identifier: "ko_KR")
-            formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-            return formatter
-        }()
-        return dateFormatter.string(from: Date(timeIntervalSince1970: weatherForecastInfo.dt))
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter.string(from: Date(timeIntervalSince1970: weatherForecastInfo.dt))
     }
     
     var sunrise: String {

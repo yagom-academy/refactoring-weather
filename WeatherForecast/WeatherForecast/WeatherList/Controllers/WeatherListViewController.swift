@@ -31,7 +31,7 @@ class WeatherListViewController: UIViewController {
     //MARK: - Layout
     private func initialSetUp() {
         view.backgroundColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(toggleTempUnit))
     }
     
     private func layoutWeatherListView() {
@@ -53,7 +53,7 @@ class WeatherListViewController: UIViewController {
     
     @objc private func changeTempUnit() {
         navigationItem.rightBarButtonItem?.title = weatherInfo.getTempExpressionTitle()
-        weatherInfo.changeTempUnit()
+        weatherInfo.toggleTempUnit()
         weatherListView.refresh()
     }
 }

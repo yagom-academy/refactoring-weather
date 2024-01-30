@@ -10,7 +10,8 @@ import UIKit
 
 final class WeatherDetailView: UIView {
     //MARK: - Properties
-    private let weatherDetailInfo: WeatherDetailInfo
+    private let weatherDetailInfo: WeatherDetailInfoCoordinator
+    private let imageService: ImageServiceable
     
     //MARK: - UI
     private let iconImageView           : UIImageView   = UIImageView()
@@ -27,8 +28,10 @@ final class WeatherDetailView: UIView {
     private let spacingView             : UIView        = UIView()
     
     //MARK: - Init
-    init(weatherDetailInfo: WeatherDetailInfo) {
+    init(weatherDetailInfo: WeatherDetailInfoCoordinator,
+         imageService: ImageServiceable) {
         self.weatherDetailInfo = weatherDetailInfo
+        self.imageService = imageService
         super.init(frame: .zero)
         layoutview()
         updateLabel()
@@ -104,17 +107,10 @@ final class WeatherDetailView: UIView {
     }
     
     private func updateIcon() {
-        Task {
-            let iconName: String = weatherDetailInfo.getIconName()
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+        imageService.getIcon(iconName: weatherDetailInfo.getIconName()) { image in
+            DispatchQueue.main.async {
+                self.iconImageView.image = image
             }
-            
-            iconImageView.image = image
         }
     }
 }

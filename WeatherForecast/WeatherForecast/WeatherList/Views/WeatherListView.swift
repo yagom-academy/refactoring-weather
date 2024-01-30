@@ -77,16 +77,9 @@ final class WeatherListView: UIView {
     }
     
     private func fetchWeatherJSON() {
-        guard let info = jsonService.fetchWeatherJSON() else  {
-            return
-        }
-        
+        guard let info = jsonService.fetchWeatherJSON() else  { return }
         weatherInfo.setWeatherJSON(json: info)
         delegate?.changeNavigationTitle(title: weatherInfo.getCityInfo()?.name)
-    }
-    
-    func setTempUnit(type: TempUnit) {
-        weatherInfo.tempUnit = type
     }
 }
 

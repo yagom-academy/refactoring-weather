@@ -7,15 +7,24 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    
+    // MARK: - Properties
+    var weatherIcon         : UIImageView = UIImageView()
+    var dateLabel           : CustomLabel = CustomLabel()
+    var temperatureLabel    : CustomLabel = CustomLabel()
+    var weatherLabel        : CustomLabel = CustomLabel()
+    var dashLabel           : CustomLabel = CustomLabel()
+    var descriptionLabel    : CustomLabel = CustomLabel()
      
+    // StackViews
+    var weatherStackView    : UIStackView!
+    var verticalStackView   : UIStackView!
+    var contentsStackView   : UIStackView!
+    
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        setUpLayout()
         reset()
     }
     
@@ -28,23 +37,16 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
-        
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
-        
-        labels.forEach { label in
-            label.textColor = .black
-            label.font = .preferredFont(forTextStyle: .body)
-            label.numberOfLines = 1
-        }
-        
-        let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
+    
+    // MARK: - Methods
+    private func setUpLayout() {
+        layoutWeatherStackView()
+        layoutVerticalStackView()
+        layoutContentStackView()
+    }
+    
+    private func layoutWeatherStackView() {
+        weatherStackView = UIStackView(arrangedSubviews: [
             weatherLabel,
             dashLabel,
             descriptionLabel
@@ -57,9 +59,10 @@ class WeatherTableViewCell: UITableViewCell {
         weatherStackView.spacing = 8
         weatherStackView.alignment = .center
         weatherStackView.distribution = .fill
-        
-        
-        let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [
+    }
+    
+    private func layoutVerticalStackView() {
+        verticalStackView = UIStackView(arrangedSubviews: [
             dateLabel,
             temperatureLabel,
             weatherStackView
@@ -69,8 +72,10 @@ class WeatherTableViewCell: UITableViewCell {
         verticalStackView.spacing = 8
         verticalStackView.distribution = .fill
         verticalStackView.alignment = .leading
-        
-        let contentsStackView: UIStackView = UIStackView(arrangedSubviews: [
+    }
+    
+    private func layoutContentStackView() {
+        contentsStackView = UIStackView(arrangedSubviews: [
             weatherIcon,
             verticalStackView
         ])
@@ -100,4 +105,6 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
+    
+    
 }

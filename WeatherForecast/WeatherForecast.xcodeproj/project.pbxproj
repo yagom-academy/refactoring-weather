@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		814BC1922B6957FB00B830C2 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814BC1912B6957FB00B830C2 /* CustomLabel.swift */; };
 		81BCA1B52B6870D500833743 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BCA1B42B6870D500833743 /* NetworkManager.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		814BC1912B6957FB00B830C2 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		81BCA1B42B6870D500833743 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C7743D892B21C38100DF0D09 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
 				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
+				814BC1912B6957FB00B830C2 /* CustomLabel.swift */,
 				C7743D902B21C38100DF0D09 /* ViewController.swift */,
 				81BCA1B42B6870D500833743 /* NetworkManager.swift */,
 				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
@@ -157,6 +160,7 @@
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				814BC1922B6957FB00B830C2 /* CustomLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

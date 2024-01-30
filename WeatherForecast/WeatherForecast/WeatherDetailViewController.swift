@@ -13,13 +13,6 @@ class WeatherDetailViewController: UIViewController {
     var tempUnit: TempUnit = .metric
     let dataRequester: DataRequestable
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     init(dataRequester: DataRequestable = DataRequest()) {
         self.dataRequester = dataRequester
         super.init(nibName: nil, bundle: nil)
@@ -40,7 +33,7 @@ class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = date.toString(format: WeatherDate.format)
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()

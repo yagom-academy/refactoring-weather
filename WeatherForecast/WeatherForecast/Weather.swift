@@ -60,3 +60,8 @@ enum TempUnit: String {
     }
 }
 
+// MARK: - Weather Date Namespace
+
+enum WeatherDate {
+    static let format: String = "yyyy-MM-dd(EEEEE) a HH:mm"
+}

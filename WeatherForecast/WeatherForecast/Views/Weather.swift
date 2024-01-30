@@ -86,13 +86,34 @@ struct Coord: Decodable {
 }
 
 // MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
+//enum TempUnit: String {
+//    case metric, imperial
+//    var korean: String {
+//        switch self {
+//        case .metric: return "화씨"
+//        case .imperial: return "섭씨"
+//        }
+//    }
+//    
+//    var expression: String {
+//        switch self {
+//        case .metric: return "℃"
+//        case .imperial: return "℉"
+//        }
+//    }
+//}
+
+protocol TempUnit {
+    var expression: String { get }
+    var expressionTitle: String { get }
+}
+struct Metric: TempUnit {
+    var expression: String = "℉"
+    var expressionTitle: String = "화씨"
+}
+
+struct Imperial: TempUnit {
+    var expression: String = "℃"
+    var expressionTitle: String = "섭씨"
 }
 

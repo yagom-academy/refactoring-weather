@@ -100,4 +100,20 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
+    
+    func configure(weatherInfo: WeatherInfoCoordinator,
+                   image: UIImage,
+                   index: Int) {
+        guard let weatherForecastInfo = weatherInfo.getWeatherForecastInfo(at: index),
+              let weatherForecastTemp = weatherInfo.getTemp(at: index) else {
+            return
+        }
+
+        weatherLabel.text      = weatherForecastInfo.getWeather()
+        descriptionLabel.text  = weatherForecastInfo.getDescription()
+        temperatureLabel.text  = weatherForecastTemp
+        dateLabel.text         = weatherForecastInfo.date
+        weatherIcon.image      = image
+    }
+    
 }

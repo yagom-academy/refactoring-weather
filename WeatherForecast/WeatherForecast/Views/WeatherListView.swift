@@ -18,6 +18,7 @@ final class WeatherListView: UIView {
     var weatherInfo: WeatherInfoCoordinator
     var imageService: ImageServiceable
     var jsonService: JsonServiceable
+    
     //MARK: - UI
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
@@ -33,16 +34,7 @@ final class WeatherListView: UIView {
         
         super.init(frame: .zero)
         layoutView()
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        refreshControl.addTarget(self,
-                                 action: #selector(refresh),
-                                 for: .valueChanged)
-        
+        setTableView()
     }
     
     required init?(coder: NSCoder) {
@@ -65,6 +57,17 @@ final class WeatherListView: UIView {
             tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
+    }
+    
+    private func setTableView() {
+        tableView.refreshControl = refreshControl
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        refreshControl.addTarget(self,
+                                 action: #selector(refresh),
+                                 for: .valueChanged)
     }
     
     @objc func refresh() {
@@ -96,19 +99,13 @@ extension WeatherListView: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherInfo.getWeatherForecastInfo(at: indexPath.row),
-              let weatherForecastTemp = weatherInfo.getTemp(at: indexPath.row) else {
+              let weatherForecastInfo = weatherInfo.getWeatherForecastInfo(at: indexPath.row) else {
             return cell
         }
         
-        cell.weatherLabel.text      = weatherForecastInfo.getWeather()
-        cell.descriptionLabel.text  = weatherForecastInfo.getDescription()
-        cell.temperatureLabel.text  = weatherForecastTemp
-        cell.dateLabel.text         = weatherForecastInfo.date
-        
         imageService.getIcon(iconName: weatherForecastInfo.getIconName()) { image in
             DispatchQueue.main.async {
-                cell.weatherIcon.image = image
+                cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
              }
         }
         

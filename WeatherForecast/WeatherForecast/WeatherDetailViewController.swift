@@ -117,9 +117,16 @@ class WeatherDetailViewController: UIViewController {
         Task {
             let iconName: String = listInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            guard let data = await dataRequester.request(urlString: urlString), let image: UIImage = UIImage(data: data) else { return }
             
-            iconImageView.image = image
+            do {
+                let data = try await dataRequester.request(urlString: urlString)
+                guard let image: UIImage = UIImage(data: data) else { return }
+                iconImageView.image = image
+
+            } catch {
+                print(error.localizedDescription)
+                return
+            }
         }
     }
 }

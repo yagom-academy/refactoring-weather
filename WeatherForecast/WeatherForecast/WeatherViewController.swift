@@ -7,6 +7,14 @@
 import UIKit
 
 class WeatherViewController: UIViewController {
+    private var weatherView: WeatherView!
+    
+    var weatherJSON: WeatherJSON? {
+        didSet {
+            navigationItem.title = weatherJSON?.city.name
+        }
+    }
+    
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -17,12 +25,18 @@ class WeatherViewController: UIViewController {
     
     var tempUnit: TempUnit = .metric
     
+    override func loadView() {
+        weatherView = WeatherView(delegate: self)
+        view = weatherView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
     }
 }
 
+extension WeatherViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -32,16 +46,27 @@ class WeatherViewController: UIViewController {
             tempUnit = .imperial
             navigationItem.rightBarButtonItem?.title = "화씨"
         }
+        weatherView.reloadData()
     }
     
     
     private func initialSetUp() {
+        setupNavigationItem()
+        setupWeatherView()
     }
     
+    private func setupNavigationItem() {
+        let rightBarButtonItem: UIBarButtonItem = .init(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = rightBarButtonItem
     }
+    
+    private func setupWeatherView() {
+        weatherView.setupTableViewDelegate(with: self)
+        weatherView.setupTableViewDataSource(with: self)
     }
 }
 
+extension WeatherViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -65,7 +90,10 @@ class WeatherViewController: UIViewController {
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = dateFormatter.string(from: date)
+        
+        let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        
         if let image = imageChache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
             return cell
@@ -89,6 +117,7 @@ class WeatherViewController: UIViewController {
     }
 }
 
+extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -101,3 +130,23 @@ class WeatherViewController: UIViewController {
 }
 
 
+extension WeatherViewController: WeatherViewDelegate {
+    func fetchWeatherJSON() {
+        let jsonDecoder: JSONDecoder = .init()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        guard let data = NSDataAsset(name: "weather")?.data else {
+            return
+        }
+        
+        let info: WeatherJSON
+        do {
+            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+        
+        weatherJSON = info
+    }
+}

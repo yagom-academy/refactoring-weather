@@ -12,11 +12,14 @@ class ViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dataRequester: DataRequestable = DataRequest()
+    let dataRequester: DataRequestable
+    let jsonExtracter: any JsonExtractable
     
     var tempUnit: TempUnit = .metric
     
-    init() {
+    init(dataRequester: DataRequestable = DataRequest(), jsonExtracter: any JsonExtractable = WeatherJsonExtracter()) {
+        self.dataRequester = dataRequester
+        self.jsonExtracter = jsonExtracter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -82,24 +85,14 @@ extension ViewController {
 
 extension ViewController {
     private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
+        guard let result = weatherJsonExtractedResult() else { return }
+        weatherJSON = result
+        navigationItem.title = result.city.name
+    }
+    
+    private func weatherJsonExtractedResult() -> WeatherJsonExtracter.Result? {
+        guard let result = jsonExtracter.extract() as? WeatherJsonExtracter.Result else { return nil }
+        return result
     }
 }
 
@@ -160,5 +153,4 @@ extension ViewController: UITableViewDelegate {
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
-
 

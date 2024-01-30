@@ -12,12 +12,7 @@ class WeatherDetailViewController: UIViewController {
     var cityInfo: City?
     var tempUnit: TempUnit = .metric
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    let dateFormatter = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,8 +24,7 @@ class WeatherDetailViewController: UIViewController {
         
         guard let listInfo = weatherForecastInfo else { return }
         
-        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+      navigationItem.title = dateFormatter.string(from: listInfo.dt)
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -103,12 +97,9 @@ class WeatherDetailViewController: UIViewController {
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
         if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+          let dateFormatter = DateFormatterContext(strategy: SunsetDateFormatterStrategy())
+          sunriseTimeLabel.text = "일출 : \(dateFormatter.string(from: cityInfo.sunrise))"
+          sunsetTimeLabel.text = "일몰 : \(dateFormatter.string(from: cityInfo.sunset))"
         }
         
         Task {

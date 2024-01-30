@@ -12,12 +12,7 @@ class ViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+  let dateFormatter = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
     
     var tempUnit: TempUnit = .metric
     
@@ -122,8 +117,7 @@ extension ViewController: UITableViewDataSource {
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
+      cell.dateLabel.text = dateFormatter.string(from: weatherForecastInfo.dt)
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

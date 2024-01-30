@@ -17,6 +17,13 @@
 		C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */; };
 		C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */; };
 		EF5124072B6943A100F8AF4F /* WeatherForecastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124062B6943A100F8AF4F /* WeatherForecastTests.swift */; };
+		EF5124112B6945BD00F8AF4F /* DateFormatterCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124102B6945BD00F8AF4F /* DateFormatterCache.swift */; };
+		EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124142B695A4F00F8AF4F /* DateFormatterStrategy.swift */; };
+		EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124162B695AC200F8AF4F /* DateFormatterContextService.swift */; };
+		EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124182B695ADA00F8AF4F /* DateFormatterContext.swift */; };
+		EF51241B2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF51241A2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift */; };
+		EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF51241C2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift */; };
+		EF5124222B695BC300F8AF4F /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5124212B695BC300F8AF4F /* DateFormatter+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +50,13 @@
 		C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
 		EF5124042B6943A100F8AF4F /* WeatherForecastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherForecastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF5124062B6943A100F8AF4F /* WeatherForecastTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastTests.swift; sourceTree = "<group>"; };
+		EF5124102B6945BD00F8AF4F /* DateFormatterCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterCache.swift; sourceTree = "<group>"; };
+		EF5124142B695A4F00F8AF4F /* DateFormatterStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterStrategy.swift; sourceTree = "<group>"; };
+		EF5124162B695AC200F8AF4F /* DateFormatterContextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterContextService.swift; sourceTree = "<group>"; };
+		EF5124182B695ADA00F8AF4F /* DateFormatterContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterContext.swift; sourceTree = "<group>"; };
+		EF51241A2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDateFormatterStrategy.swift; sourceTree = "<group>"; };
+		EF51241C2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunsetDateFormatterStrategy.swift; sourceTree = "<group>"; };
+		EF5124212B695BC300F8AF4F /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +98,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				EF5124202B695BB600F8AF4F /* Extensions */,
 				EF5123FF2B69428100F8AF4F /* Controller */,
 				EF5123FC2B69424800F8AF4F /* AppStart */,
 				EF5123FD2B69425A00F8AF4F /* Views */,
@@ -116,7 +131,8 @@
 		EF5123FE2B69426700F8AF4F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+				EF5124132B695A4300F8AF4F /* Implement */,
+				EF5124122B695A3B00F8AF4F /* Interface */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -136,6 +152,35 @@
 				EF5124062B6943A100F8AF4F /* WeatherForecastTests.swift */,
 			);
 			path = WeatherForecastTests;
+			sourceTree = "<group>";
+		};
+		EF5124122B695A3B00F8AF4F /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				EF5124142B695A4F00F8AF4F /* DateFormatterStrategy.swift */,
+				EF5124162B695AC200F8AF4F /* DateFormatterContextService.swift */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		EF5124132B695A4300F8AF4F /* Implement */ = {
+			isa = PBXGroup;
+			children = (
+				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+				EF5124102B6945BD00F8AF4F /* DateFormatterCache.swift */,
+				EF5124182B695ADA00F8AF4F /* DateFormatterContext.swift */,
+				EF51241A2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift */,
+				EF51241C2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift */,
+			);
+			path = Implement;
+			sourceTree = "<group>";
+		};
+		EF5124202B695BB600F8AF4F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				EF5124212B695BC300F8AF4F /* DateFormatter+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,11 +284,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF51241B2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
+				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
+				EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */,
+				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,
+				EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */,
+				EF5124112B6945BD00F8AF4F /* DateFormatterCache.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
+				EF5124222B695BC300F8AF4F /* DateFormatter+Extensions.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

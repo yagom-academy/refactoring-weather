@@ -16,6 +16,7 @@ final class WeatherListView: UIView {
     //MARK: - Properties
     var delegate: WeatherListViewDelegate?
     var weatherInfo: WeatherInfoCoordinator
+    var imageService: ImageServiceable
     
     //MARK: - UI
     var tableView: UITableView!
@@ -27,11 +28,13 @@ final class WeatherListView: UIView {
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    
     
     //MARK: - Init
-    init(weatherInfo: WeatherInfoCoordinator) {
+    init(weatherInfo: WeatherInfoCoordinator,
+         imageService: ImageServiceable) {
         self.weatherInfo = weatherInfo
+        self.imageService = imageService
         super.init(frame: .zero)
         layoutView()
         
@@ -124,29 +127,12 @@ extension WeatherListView: UITableViewDataSource {
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = dateFormatter.string(from: date)
-                
-        let iconName: String = weatherForecastInfo.getIconName()
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
         
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
+        imageService.getIcon(iconName: weatherForecastInfo.getIconName()) { image in
+            DispatchQueue.main.async {
                 cell.weatherIcon.image = image
-            }
+             }
         }
-        
         return cell
     }
 }

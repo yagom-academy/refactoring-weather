@@ -8,15 +8,15 @@
 import Foundation
 
 protocol DataRequestable {
-    func request(urlString: String) async -> Data?
+    func request(urlString: String) async throws -> Data
 }
 
 struct DataRequest: DataRequestable {
     
-    func request(urlString: String) async -> Data? {
+    func request(urlString: String) async throws -> Data {
         guard let url: URL = URL(string: urlString),
               let (data, _) = try? await URLSession.shared.data(from: url) else {
-            return nil
+            throw NSError() 
         }
         return data
     }

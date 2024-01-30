@@ -21,6 +21,14 @@ class ViewController: UIViewController {
     
     var tempUnit: TempUnit = .metric
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -159,7 +167,7 @@ extension ViewController: UITableViewDelegate {
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city
         detailViewController.tempUnit = tempUnit
-        navigationController?.show(detailViewController, sender: self)
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 

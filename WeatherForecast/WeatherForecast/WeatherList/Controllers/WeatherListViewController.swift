@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
     //MARK: - Properties
     var weatherListView: WeatherListView!
     var weatherInfo: WeatherInfoCoordinator

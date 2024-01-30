@@ -11,6 +11,7 @@ class WeatherDetailViewController: UIViewController {
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
     var tempUnit: TempUnit = .metric
+    let dataRequester: DataRequestable
     
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -18,6 +19,15 @@ class WeatherDetailViewController: UIViewController {
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
+    
+    init(dataRequester: DataRequestable = DataRequest()) {
+        self.dataRequester = dataRequester
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,12 +124,7 @@ class WeatherDetailViewController: UIViewController {
         Task {
             let iconName: String = listInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
+            guard let data = await dataRequester.request(urlString: urlString), let image: UIImage = UIImage(data: data) else { return }
             
             iconImageView.image = image
         }

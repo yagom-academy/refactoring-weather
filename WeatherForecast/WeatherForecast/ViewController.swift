@@ -18,6 +18,7 @@ class ViewController: UIViewController {
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
+    let dataRequester: DataRequestable = DataRequest()
     
     var tempUnit: TempUnit = .metric
     
@@ -142,12 +143,7 @@ extension ViewController: UITableViewDataSource {
         }
         
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
+            guard let data = await dataRequester.request(urlString: urlString), let image: UIImage = UIImage(data: data) else { return }
             imageChache.setObject(image, forKey: urlString as NSString)
             
             if indexPath == tableView.indexPath(for: cell) {

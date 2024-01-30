@@ -13,13 +13,6 @@ class WeatherTableViewCell: UITableViewCell {
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         commonInit()
@@ -61,7 +54,7 @@ class WeatherTableViewCell: UITableViewCell {
     
     private func setupDateLabel(with timeInterval: TimeInterval) {
         let date: Date = Date(timeIntervalSince1970: timeInterval)
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = date.toString(type: .full)
     }
     
     private func setupWeatherIcon(with iconName: String, imageCache: NSCache<NSString, UIImage>) {

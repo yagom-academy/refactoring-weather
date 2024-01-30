@@ -18,6 +18,13 @@ struct WeatherForecastInfo: Decodable {
     let main: MainInfo
     let weather: Weather
     let dtTxt: String
+    var date: String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        
+        return formatter.string(from: Date(timeIntervalSince1970: dt))
+    }
     
     func getWeather() -> String {
         return weather.main
@@ -86,23 +93,6 @@ struct Coord: Decodable {
 }
 
 // MARK: - Temperature Unit
-//enum TempUnit: String {
-//    case metric, imperial
-//    var korean: String {
-//        switch self {
-//        case .metric: return "화씨"
-//        case .imperial: return "섭씨"
-//        }
-//    }
-//    
-//    var expression: String {
-//        switch self {
-//        case .metric: return "℃"
-//        case .imperial: return "℉"
-//        }
-//    }
-//}
-
 protocol TempUnit {
     var expression: String { get }
     var expressionTitle: String { get }

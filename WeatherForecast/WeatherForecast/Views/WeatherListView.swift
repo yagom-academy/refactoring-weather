@@ -17,24 +17,20 @@ final class WeatherListView: UIView {
     var delegate: WeatherListViewDelegate?
     var weatherInfo: WeatherInfoCoordinator
     var imageService: ImageServiceable
-    
+    var jsonService: JsonServiceable
     //MARK: - UI
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
-    
     //MARK: - Init
     init(weatherInfo: WeatherInfoCoordinator,
-         imageService: ImageServiceable) {
+         imageService: ImageServiceable,
+         jsonService: JsonServiceable) {
+        print("WeatherListView - init()")
         self.weatherInfo = weatherInfo
         self.imageService = imageService
+        self.jsonService = jsonService
+        
         super.init(frame: .zero)
         layoutView()
         
@@ -78,19 +74,7 @@ final class WeatherListView: UIView {
     }
     
     private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
+        guard let info = jsonService.fetchWeatherJSON() else  {
             return
         }
         
@@ -104,10 +88,6 @@ final class WeatherListView: UIView {
 }
 
 extension WeatherListView: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         weatherInfo.weatherForecastInfo?.count ?? 0
     }
@@ -124,15 +104,14 @@ extension WeatherListView: UITableViewDataSource {
         cell.weatherLabel.text      = weatherForecastInfo.getWeather()
         cell.descriptionLabel.text  = weatherForecastInfo.getDescription()
         cell.temperatureLabel.text  = weatherForecastTemp
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
+        cell.dateLabel.text         = weatherForecastInfo.date
         
         imageService.getIcon(iconName: weatherForecastInfo.getIconName()) { image in
             DispatchQueue.main.async {
                 cell.weatherIcon.image = image
              }
         }
+        
         return cell
     }
 }

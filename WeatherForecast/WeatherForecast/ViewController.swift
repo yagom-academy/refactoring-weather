@@ -94,6 +94,57 @@ extension ViewController {
         guard let result = jsonExtracter.extract() as? WeatherJsonExtracter.Result else { return nil }
         return result
     }
+    
+    private func requestWeatherIconImageData(urlString: String) async -> Data? {
+        do {
+            let data = try await dataRequester.request(urlString: urlString)
+            return data
+            
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    
+    private func dataToUIImage(data: Data?) -> UIImage? {
+        if let data = data, let image: UIImage = UIImage(data: data) {
+            return image
+        }
+
+        return nil
+    }
+    
+    private func setImageCache(image: UIImage?, key: String) {
+        if let image = image {
+            imageChache.setObject(image, forKey: key as NSString)
+        }
+    }
+    
+    private func setWeatherIconImageInTableView(image: UIImage?, tableView: UITableView, cell: WeatherTableViewCell, indexPath: IndexPath) {
+        if isCorrectIndexPath(indexPath: indexPath, tableView: tableView, cell: cell) {
+            cell.weatherIcon.image = image
+        }
+    }
+    
+    private func imageFromCache(key: String) -> UIImage? {
+        let image = imageChache.object(forKey: key as NSString)
+        return image
+    }
+    
+    private func processAfterWeatherIconImageRequest(urlString: String, indexPath: IndexPath, tableView: UITableView, cell: WeatherTableViewCell) {
+        Task {
+            let imageData: Data? = await requestWeatherIconImageData(urlString: urlString)
+            let dataToImage: UIImage? = dataToUIImage(data: imageData)
+            DispatchQueue.main.async {
+                self.setImageCache(image: dataToImage, key: urlString)
+                self.setWeatherIconImageInTableView(image: dataToImage, tableView: tableView, cell: cell, indexPath: indexPath)
+            }
+        }
+    }
+    
+    private func isCorrectIndexPath(indexPath: IndexPath, tableView: UITableView, cell: UITableViewCell) -> Bool {
+        return indexPath == tableView.indexPath(for: cell)
+    }
 }
 
 extension ViewController: UITableViewDataSource {
@@ -123,20 +174,13 @@ extension ViewController: UITableViewDataSource {
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
+        
+        if let image = imageFromCache(key: urlString) {
             cell.weatherIcon.image = image
             return cell
         }
         
-        Task {
-            guard let data = await dataRequester.request(urlString: urlString), let image: UIImage = UIImage(data: data) else { return }
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
+        processAfterWeatherIconImageRequest(urlString: urlString, indexPath: indexPath, tableView: tableView, cell: cell)
         
         return cell
     }

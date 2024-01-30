@@ -51,7 +51,7 @@ class WeatherListViewController: UIViewController {
         ])
     }
     
-    @objc private func changeTempUnit() {
+    @objc private func toggleTempUnit() {
         navigationItem.rightBarButtonItem?.title = weatherInfo.getTempExpressionTitle()
         weatherInfo.toggleTempUnit()
         weatherListView.refresh()

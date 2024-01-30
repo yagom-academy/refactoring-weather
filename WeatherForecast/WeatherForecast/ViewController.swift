@@ -75,30 +75,9 @@ class ViewController: UIViewController {
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
-    
-    
-}
 
-// MARK: - Extension: Data
-extension ViewController {
     private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-        
-        weatherJSON = info
+        weatherJSON = NetworkManager.shared.fetchWeatherJSON()
         navigationItem.title = weatherJSON?.city.name
     }
 }
@@ -137,17 +116,15 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
+        NetworkManager.shared.fetchImage(from: urlString) { [weak self] image in
+            guard let image = image else { return }
             
-            imageChache.setObject(image, forKey: urlString as NSString)
+            self?.imageChache.setObject(image, forKey: urlString as NSString)
             
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
+            DispatchQueue.main.async {
+                if indexPath == tableView.indexPath(for: cell) {
+                    cell.weatherIcon.image = image
+                }
             }
         }
         

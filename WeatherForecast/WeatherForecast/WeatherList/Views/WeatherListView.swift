@@ -68,7 +68,6 @@ final class WeatherListView: UIView {
     
     @objc func refresh() {
         fetchWeatherJSON()
-        tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
@@ -78,6 +77,7 @@ final class WeatherListView: UIView {
         case .success(let info):
             weatherInfo.weatherJson = info
             delegate?.changeNavigationTitle(title: weatherInfo.cityInfo?.name)
+            tableView.reloadData()
         case .failure(let error):
             print(error)
         }

@@ -107,8 +107,7 @@ class WeatherDetailContentStackView: UIStackView {
         
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
-            iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
-                                                 multiplier: 0.3)
+            iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.3)
         ])
     }
     

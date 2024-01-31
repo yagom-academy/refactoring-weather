@@ -8,11 +8,11 @@
 import UIKit
 
 extension UILabel {
-    func makeLabel(labelColor: UIColor = .black,
-                   backgroundColor: UIColor = .clear,
-                   numberOfLines: Int = 1,
-                   textAlignment: NSTextAlignment = .center,
-                   font: UIFont = .preferredFont(forTextStyle: .body)) {
+    func makeWeatherDetailLabel(labelColor: UIColor = .black,
+                                backgroundColor: UIColor = .clear,
+                                numberOfLines: Int = 1,
+                                textAlignment: NSTextAlignment = .center,
+                                font: UIFont = .preferredFont(forTextStyle: .body)) {
         self.textColor = labelColor
         self.backgroundColor = backgroundColor
         self.numberOfLines = numberOfLines

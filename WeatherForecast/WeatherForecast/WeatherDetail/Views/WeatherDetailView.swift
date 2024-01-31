@@ -83,16 +83,16 @@ final class WeatherDetailView: UIView {
     }
     
     func makeLabel() {
-        weatherGroupLabel.makeLabel(font: .preferredFont(forTextStyle: .largeTitle))
-        weatherDescriptionLabel.makeLabel(font: .preferredFont(forTextStyle: .largeTitle))
-        temperatureLabel.makeLabel()
-        feelsLikeLabel.makeLabel()
-        maximumTemperatureLable.makeLabel()
-        minimumTemperatureLable.makeLabel()
-        popLabel.makeLabel()
-        humidityLabel.makeLabel()
-        sunriseTimeLabel.makeLabel()
-        sunsetTimeLabel.makeLabel()
+        weatherGroupLabel.makeWeatherDetailLabel(font: .preferredFont(forTextStyle: .largeTitle))
+        weatherDescriptionLabel.makeWeatherDetailLabel(font: .preferredFont(forTextStyle: .largeTitle))
+        temperatureLabel.makeWeatherDetailLabel()
+        feelsLikeLabel.makeWeatherDetailLabel()
+        maximumTemperatureLable.makeWeatherDetailLabel()
+        minimumTemperatureLable.makeWeatherDetailLabel()
+        popLabel.makeWeatherDetailLabel()
+        humidityLabel.makeWeatherDetailLabel()
+        sunriseTimeLabel.makeWeatherDetailLabel()
+        sunsetTimeLabel.makeWeatherDetailLabel()
     }
     
     private func updateLabel() {

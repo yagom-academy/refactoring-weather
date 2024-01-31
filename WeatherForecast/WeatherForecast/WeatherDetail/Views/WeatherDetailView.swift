@@ -46,6 +46,7 @@ final class WeatherDetailView: UIView {
     private func layoutview() {
         backgroundColor = .white
         
+        makeLabel()
         let mainStackView: UIStackView = .init(arrangedSubviews: [
             iconImageView,
             weatherGroupLabel,
@@ -60,18 +61,6 @@ final class WeatherDetailView: UIView {
             sunsetTimeLabel,
             spacingView
         ])
-        
-        mainStackView.arrangedSubviews.forEach { subview in
-            guard let subview: UILabel = subview as? UILabel else { return }
-            subview.textColor = .black
-            subview.backgroundColor = .clear
-            subview.numberOfLines = 1
-            subview.textAlignment = .center
-            subview.font = .preferredFont(forTextStyle: .body)
-        }
-        
-        weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
         
         mainStackView.axis = .vertical
         mainStackView.alignment = .center
@@ -91,6 +80,19 @@ final class WeatherDetailView: UIView {
             iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
                                                  multiplier: 0.3)
         ])
+    }
+    
+    func makeLabel() {
+        weatherGroupLabel.makeLabel(font: .preferredFont(forTextStyle: .largeTitle))
+        weatherDescriptionLabel.makeLabel(font: .preferredFont(forTextStyle: .largeTitle))
+        temperatureLabel.makeLabel()
+        feelsLikeLabel.makeLabel()
+        maximumTemperatureLable.makeLabel()
+        minimumTemperatureLable.makeLabel()
+        popLabel.makeLabel()
+        humidityLabel.makeLabel()
+        sunriseTimeLabel.makeLabel()
+        sunsetTimeLabel.makeLabel()
     }
     
     private func updateLabel() {

@@ -6,13 +6,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherInfoListVC: UIViewController {
     
     // MARK: - Properties
     var icons: [UIImage]?
     var weatherJSON: WeatherJSON?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     var tempUnit: TempUnit = .metric
+    var networkManager: NetworkManagerProtocol
     
     // MARK: - UI
     var tableView: UITableView!
@@ -25,11 +26,22 @@ class ViewController: UIViewController {
         return formatter
     }()
     
+    // MARK: - Init
+    init(networkManager: NetworkManagerProtocol) {
+        self.networkManager = networkManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutTableView()
         setUpTableView()
+        view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
     }
     
@@ -77,13 +89,13 @@ class ViewController: UIViewController {
     }
 
     private func fetchWeatherJSON() {
-        weatherJSON = NetworkManager.shared.fetchWeatherJSON()
+        weatherJSON = networkManager.fetchWeatherJSON()
         navigationItem.title = weatherJSON?.city.name
     }
 }
 
 // MARK: - Extension: UITableViewDataSource
-extension ViewController: UITableViewDataSource {
+extension WeatherInfoListVC: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -116,7 +128,7 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
-        NetworkManager.shared.fetchImage(from: urlString) { [weak self] image in
+        networkManager.fetchImage(from: urlString) { [weak self] image in
             guard let image = image else { return }
             
             self?.imageChache.setObject(image, forKey: urlString as NSString)
@@ -133,7 +145,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 // MARK: - Extension: UITableViewDelegate
-extension ViewController: UITableViewDelegate {
+extension WeatherInfoListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

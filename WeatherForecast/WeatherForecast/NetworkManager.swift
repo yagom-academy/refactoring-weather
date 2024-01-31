@@ -7,11 +7,12 @@
 
 import UIKit
 
-struct NetworkManager {
-    
-    static let shared = NetworkManager()
-    
-    private init() { }
+protocol NetworkManagerProtocol {
+    func fetchWeatherJSON() -> WeatherJSON?
+    func fetchImage(from url: String, completion: @escaping (UIImage?) -> ())
+}
+
+struct NetworkManager: NetworkManagerProtocol {
     
     func fetchWeatherJSON() -> WeatherJSON? {
         

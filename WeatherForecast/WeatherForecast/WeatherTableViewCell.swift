@@ -35,6 +35,8 @@ class WeatherTableViewCell: UITableViewCell {
         imageService: ImageFetchable,
         imageCache: NSCache<NSString, UIImage>
     ) {
+        self.imageService = imageService
+        
         setupWeatherLabel(with: weatherForecastInfo.weather.main)
         setupDescriptionlabel(with: weatherForecastInfo.weather.description)
         setupTemperatureLabel(with: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)")

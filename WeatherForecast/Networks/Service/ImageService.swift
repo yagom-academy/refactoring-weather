@@ -10,7 +10,7 @@ import UIKit
 struct ImageService: ImageServiceable {
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     
-    func getIcon(iconName: String, completion: @escaping (UIImage) -> ()) {
+    func getIcon(iconName: String, urlSession: URLSession, completion: @escaping (UIImage) -> ()) {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         if let image = imageChache.object(forKey: urlString as NSString) {
             completion(image)
@@ -19,7 +19,7 @@ struct ImageService: ImageServiceable {
         
         Task {
             guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
+                  let (data, _) = try? await urlSession.data(from: url),
                   let image: UIImage = UIImage(data: data) else {
                 return
             }

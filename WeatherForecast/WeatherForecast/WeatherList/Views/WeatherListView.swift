@@ -96,7 +96,7 @@ extension WeatherListView: UITableViewDataSource {
             return cell
         }
         
-        imageService.getIcon(iconName: weatherForecastInfo.getIconName()) { image in
+        imageService.getIcon(iconName: weatherForecastInfo.getIconName(), urlSession: URLSession.shared) { image in
             DispatchQueue.main.async {
                 cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
              }

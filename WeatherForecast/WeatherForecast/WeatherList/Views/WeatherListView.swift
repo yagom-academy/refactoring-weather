@@ -27,7 +27,6 @@ final class WeatherListView: UIView {
     init(weatherInfo: WeatherInfoCoordinator,
          imageService: ImageServiceable,
          jsonService: JsonServiceable) {
-        print("WeatherListView - init()")
         self.weatherInfo = weatherInfo
         self.imageService = imageService
         self.jsonService = jsonService

@@ -8,8 +8,8 @@
 import Foundation
 
 final class WeatherInfo: WeatherInfoCoordinator {
-    var weatherJSON: WeatherJSON?
-    var tempUnit: TempUnit
+    private var weatherJSON: WeatherJSON?
+    private(set) var tempUnit: TempUnit
     var weatherForecastInfo: [WeatherForecastInfo]? {
         return weatherJSON?.weatherForecast
     }

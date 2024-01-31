@@ -5,7 +5,6 @@
 //  Created by 김창규 on 1/30/24.
 //
 
-import Foundation
 import UIKit
 
 final class JsonService: JsonServiceable {

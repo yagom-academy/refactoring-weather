@@ -8,7 +8,7 @@
 import UIKit
 
 struct ImageService: ImageServiceable {
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    private let imageChache: NSCache<NSString, UIImage> = NSCache()
     
     func getIcon(iconName: String, urlSession: URLSession, completion: @escaping (UIImage) -> ()) {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

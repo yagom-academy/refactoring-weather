@@ -8,6 +8,6 @@
 import Foundation
 
 struct Metric: TempUnit {
-    var expression: String = "℉"
-    var expressionTitle: String = "화씨"
+    private(set) var expression: String = "℉"
+    private(set) var expressionTitle: String = "화씨"
 }

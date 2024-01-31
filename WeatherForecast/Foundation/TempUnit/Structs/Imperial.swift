@@ -8,6 +8,6 @@
 import Foundation
 
 struct Imperial: TempUnit {
-    var expression: String = "℃"
-    var expressionTitle: String = "섭씨"
+    private(set) var expression: String = "℃"
+    private(set) var expressionTitle: String = "섭씨"
 }

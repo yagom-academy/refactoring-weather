@@ -9,21 +9,21 @@ import UIKit
 
 final class JsonService: JsonServiceable {
     
-    func fetchWeatherJSON() -> WeatherJSON? {
+    func fetchWeatherJSON() -> Result<WeatherJSON, Error> {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
         guard let data = NSDataAsset(name: "weather")?.data else {
-            return nil
+            return .failure(JsonServiceError.jsonNotExist)
         }
         
         let weatherInfo: WeatherJSON
         do {
             weatherInfo = try jsonDecoder.decode(WeatherJSON.self, from: data)
-            return weatherInfo
+            return .success(weatherInfo)
         } catch {
             print(error.localizedDescription)
-            return nil
+            return .failure(JsonServiceError.decodeError)
         }
     }
 }

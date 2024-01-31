@@ -7,5 +7,5 @@
 import UIKit
 
 protocol ImageServiceable {
-    func getIcon(iconName: String, urlSession: URLSession, completion: @escaping (UIImage) -> ())
+    func getIcon(iconName: String, urlSession: URLSession, completion: @escaping (Result<UIImage, Error>) -> ())
 }

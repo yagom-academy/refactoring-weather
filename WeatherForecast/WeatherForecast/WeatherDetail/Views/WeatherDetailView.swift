@@ -107,9 +107,14 @@ final class WeatherDetailView: UIView {
     }
     
     private func updateIcon() {
-        imageService.getIcon(iconName: weatherDetailInfo.iconName, urlSession: URLSession.shared) { image in
-            DispatchQueue.main.async {
-                self.iconImageView.image = image
+        imageService.getIcon(iconName: weatherDetailInfo.iconName, urlSession: URLSession.shared) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.iconImageView.image = image
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }

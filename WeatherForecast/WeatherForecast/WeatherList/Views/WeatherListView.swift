@@ -76,9 +76,14 @@ final class WeatherListView: UIView {
     }
     
     private func fetchWeatherJSON() {
-        guard let info = jsonService.fetchWeatherJSON() else  { return }
-        weatherInfo.weatherJson = info
-        delegate?.changeNavigationTitle(title: weatherInfo.cityInfo?.name)
+        let infoGetable = jsonService.fetchWeatherJSON()
+        switch infoGetable {
+        case .success(let info):
+            weatherInfo.weatherJson = info
+            delegate?.changeNavigationTitle(title: weatherInfo.cityInfo?.name)
+        case .failure(let error):
+            print(error)
+        }
     }
 }
 
@@ -95,10 +100,16 @@ extension WeatherListView: UITableViewDataSource {
             return cell
         }
         
-        imageService.getIcon(iconName: weatherForecastInfo.iconName, urlSession: URLSession.shared) { image in
-            DispatchQueue.main.async {
-                cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
-             }
+        imageService.getIcon(iconName: weatherForecastInfo.iconName, urlSession: URLSession.shared) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
+                 }
+            case .failure(let error):
+                print(error)
+            }
+            
         }
         
         return cell

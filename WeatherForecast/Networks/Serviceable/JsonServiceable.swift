@@ -8,5 +8,5 @@
 import Foundation
 
 protocol JsonServiceable {
-    func fetchWeatherJSON() -> WeatherJSON?
+    func fetchWeatherJSON() -> Result<WeatherJSON, Error>
 }

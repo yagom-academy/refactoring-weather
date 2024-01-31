@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    let imageCache: ImageCache = ImageCache()
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
@@ -128,7 +128,7 @@ extension ViewController: UITableViewDataSource {
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
-        if let image = imageChache.object(forKey: urlString as NSString) {
+        if let image = imageCache[urlString] {
             cell.weatherIcon.image = image
             return cell
         }
@@ -140,7 +140,7 @@ extension ViewController: UITableViewDataSource {
                 return
             }
             
-            imageChache.setObject(image, forKey: urlString as NSString)
+            imageCache[urlString] = image
             
             if indexPath == tableView.indexPath(for: cell) {
                 cell.weatherIcon.image = image

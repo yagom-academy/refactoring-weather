@@ -122,10 +122,10 @@ extension WeatherInfoListView: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailVC = WeatherDetailVC()
-        detailViewController.weatherForecastInfo = weatherJSON.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON.city
-        detailViewController.tempUnit = tempUnit
+        let detailViewController: WeatherDetailVC = WeatherDetailVC(weatherForecastInfo: weatherJSON.weatherForecast[indexPath.row],
+                                                                    cityInfo: weatherJSON.city,
+                                                                    tempUnit: tempUnit)
+        
         delegate?.fetchWeatherDetailVC(detailViewController)
     }
 }

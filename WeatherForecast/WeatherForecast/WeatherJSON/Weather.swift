@@ -5,8 +5,7 @@
 // 
 
 import Foundation
-// change structs to classes (video 26:00)
-// Or change reference types to enums (video 27:20)
+
 // MARK: - Weather JSON Format
 struct WeatherJSON: Decodable {
     let weatherForecast: [WeatherForecastInfo]

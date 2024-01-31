@@ -25,6 +25,39 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         initialSetUp()
     }
+    
+    private func initialSetUp() {
+        
+        setUpView()
+        setUpLayout()
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+    
+    private func setUpView() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        tableView = .init(frame: .zero, style: .plain)
+        tableView.refreshControl = refreshControl
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+    }
+    
+    private func setUpLayout() {
+        
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+        ])
+    }
 }
 
 extension ViewController {
@@ -44,36 +77,6 @@ extension ViewController {
         fetchWeatherJSON()
         tableView.reloadData()
         refreshControl.endRefreshing()
-    }
-    
-    private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
-        
-        layTable()
-        
-        refreshControl.addTarget(self,
-                                 action: #selector(refresh),
-                                 for: .valueChanged)
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-    
-    private func layTable() {
-        tableView = .init(frame: .zero, style: .plain)
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ])
     }
 }
 

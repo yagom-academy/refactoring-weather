@@ -11,11 +11,13 @@ class WeatherTableViewCell: UITableViewCell {
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
+    var dashLabel: UILabel!
     var descriptionLabel: UILabel!
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        setUpViews()
+        setUpLayout()
         reset()
     }
     
@@ -28,12 +30,11 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func layViews() {
+    private func setUpViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
         temperatureLabel = UILabel()
         weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
         descriptionLabel = UILabel()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
@@ -43,6 +44,9 @@ class WeatherTableViewCell: UITableViewCell {
             label.font = .preferredFont(forTextStyle: .body)
             label.numberOfLines = 1
         }
+    }
+    
+    private func setUpLayout() {
         
         let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
             weatherLabel,

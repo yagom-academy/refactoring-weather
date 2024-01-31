@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherDetailView: UIView {
+final class WeatherDetailView: UIView {
     var contentStackView: WeatherDetailContentStackView = {
         let stackView: WeatherDetailContentStackView = .init()
         stackView.axis = .vertical

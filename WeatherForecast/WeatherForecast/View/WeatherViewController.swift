@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     private var weatherView: WeatherView!
     
     var weatherJSON: WeatherJSON? {

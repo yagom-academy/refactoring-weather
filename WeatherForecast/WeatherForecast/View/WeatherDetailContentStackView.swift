@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherDetailContentStackView: UIStackView {
+final class WeatherDetailContentStackView: UIStackView {
     var iconImageView: UIImageView = {
         let imageView: UIImageView = .init()
         return imageView

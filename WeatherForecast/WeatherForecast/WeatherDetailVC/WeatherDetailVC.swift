@@ -10,7 +10,7 @@ class WeatherDetailVC: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TemperatureUnit = .metric
     
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()

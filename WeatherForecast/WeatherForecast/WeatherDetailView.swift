@@ -8,70 +8,15 @@
 import UIKit
 
 class WeatherDetailView: UIView {
-    var iconImageView: UIImageView = {
-        let imageView: UIImageView = .init()
-        return imageView
+    var contentStackView: WeatherDetailContentStackView = {
+        let stackView: WeatherDetailContentStackView = .init()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 8
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
-    
-    var weatherGroupLabel: UILabel = {
-        let label: UILabel = .init()
-        label.font = .preferredFont(forTextStyle: .largeTitle)
-        return label
-    }()
-    
-    var weatherDescriptionLabel: UILabel = {
-        let label: UILabel = .init()
-        label.font = .preferredFont(forTextStyle: .largeTitle)
-        return label
-    }()
-    
-    var temperatureLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var feelsLikeLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var maximumTemperatureLable: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var minimumTemperatureLable: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var popLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var humidityLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var sunriseTimeLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var sunsetTimeLabel: UILabel = {
-        let label: UILabel = .init()
-        return label
-    }()
-    
-    var spacingView: UIView = {
-        let view: UIView = .init()
-        view.backgroundColor = .clear
-        view.setContentHuggingPriority(.defaultLow, for: .vertical)
-        return view
-    }()
-    
+
     let weatherForecastInfo: WeatherForecastInfo
     let cityInfo: City
     let tempUnit: TempUnit
@@ -111,8 +56,8 @@ class WeatherDetailView: UIView {
         setupSunriseTimeLabel()
         setupSunsetTimeLabel()
         
-        let contentsStackView = setupContentsStackView()
-        setupLayouts(contentsStackView)
+        setupContentsStackView()
+        setupLayouts()
     }
     
     private func setupIconImageView() {
@@ -120,65 +65,62 @@ class WeatherDetailView: UIView {
     }
     
     private func setupWeatherGroupLabel() {
-        weatherGroupLabel.text = weatherForecastInfo.weather.main
+        contentStackView.setupWeatherGroupLabel(with: weatherForecastInfo.weather.main)
     }
     
     private func setupWeatherDescriptionLabel() {
-        weatherDescriptionLabel.text = weatherForecastInfo.weather.description
+        contentStackView.setupWeatherDescriptionLabel(with: weatherForecastInfo.weather.description)
     }
     
     private func setupTemperatureLabel() {
-        temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        contentStackView.setupTemperatureLabel(
+            with: weatherForecastInfo.main.temp,
+            expression: tempUnit.expression
+        )
     }
     
     private func setupFeelsLikeLabel() {
-        feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.main.feelsLike)\(tempUnit.expression)"
+        contentStackView.setupFeelsLikeLabel(
+            with: weatherForecastInfo.main.feelsLike,
+            expression: tempUnit.expression
+        )
     }
     
     private func setupMaximumTemperatureLabel() {
-        maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.main.tempMax)\(tempUnit.expression)"
+        contentStackView.setupMaximumTemperatureLabel(
+            with: weatherForecastInfo.main.tempMax,
+            expression: tempUnit.expression
+        )
     }
     
     private func setupMinimumTemperatureLabel() {
-        minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.main.tempMin)\(tempUnit.expression)"
+        contentStackView.setupMinimumTemperatureLabel(
+            with: weatherForecastInfo.main.tempMin,
+            expression: tempUnit.expression
+        )
     }
     
     private func setupPopLabel() {
-        popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
+        contentStackView.setupPopLabel(with: weatherForecastInfo.main.pop)
     }
     
     private func setupHumidityLabel() {
-        humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
+        contentStackView.setupHumidityLabel(with: weatherForecastInfo.main.humidity)
     }
     
     private func setupSunriseTimeLabel() {
         let sunRiseDate: Date = .init(timeIntervalSince1970: cityInfo.sunrise)
-        sunriseTimeLabel.text = "일출 : \(sunRiseDate.toString(type: .none, timeStyle: .short))"
+        contentStackView.setupSunriseTimeLabel(with: sunRiseDate)
     }
     
     private func setupSunsetTimeLabel() {
         let sunSetDate: Date = .init(timeIntervalSince1970: cityInfo.sunset)
-        sunsetTimeLabel.text = "일몰 : \(sunSetDate.toString(type: .none, timeStyle: .short))"
+        contentStackView.setupSunsetTimeLabel(with: sunSetDate)
     }
     
     
-    private func setupContentsStackView() -> UIStackView {
-        let contentsStackView: UIStackView = .init(arrangedSubviews: [
-            iconImageView,
-            weatherGroupLabel,
-            weatherDescriptionLabel,
-            temperatureLabel,
-            feelsLikeLabel,
-            maximumTemperatureLable,
-            minimumTemperatureLable,
-            popLabel,
-            humidityLabel,
-            sunriseTimeLabel,
-            sunsetTimeLabel,
-            spacingView
-        ])
-        
-        contentsStackView.arrangedSubviews.forEach { subview in
+    private func setupContentsStackView() {
+        contentStackView.arrangedSubviews.forEach { subview in
             guard let subview: UILabel = subview as? UILabel else { return }
             subview.textColor = .black
             subview.backgroundColor = .clear
@@ -187,28 +129,19 @@ class WeatherDetailView: UIView {
             subview.font = .preferredFont(forTextStyle: .body)
         }
         
-        contentsStackView.axis = .vertical
-        contentsStackView.alignment = .center
-        contentsStackView.spacing = 8
-        contentsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(contentsStackView)
-        return contentsStackView
+        addSubview(contentStackView)
     }
     
-    private func setupLayouts(_ contentsStackView: UIStackView) {
+    private func setupLayouts() {
         let safeArea: UILayoutGuide = safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            contentsStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            contentsStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            contentsStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
+            contentStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
                                                    constant: 16),
-            contentsStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                   constant: -16),
-            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
-            iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
-                                                 multiplier: 0.3)
+            contentStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
+                                                   constant: -16)
         ])
         
     }
@@ -219,7 +152,7 @@ class WeatherDetailView: UIView {
         
         Task {
             if let image: UIImage = await imageService.fetchIconImage(urlString: urlString) {
-                iconImageView.image = image
+                contentStackView.setupIconImage(with: image)
             }
         }
     }

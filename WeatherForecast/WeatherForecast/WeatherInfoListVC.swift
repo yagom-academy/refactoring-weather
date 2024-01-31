@@ -9,8 +9,8 @@ import UIKit
 class WeatherInfoListVC: UIViewController {
     
     // MARK: - Properties
-    var tempUnit: TemperatureUnit = .metric
-    var weatherInfoListView: WeatherInfoListView!
+    private var tempUnit: TemperatureUnit = .metric
+    private var weatherInfoListView: WeatherInfoListView!
     
     // MARK: - Init
     init() {
@@ -31,7 +31,8 @@ class WeatherInfoListVC: UIViewController {
     
     // MARK: - SetupUI
     private func setupWeatherInfoListView() {
-        weatherInfoListView = .init(fetchDataManager: FetchDataManager(),
+        weatherInfoListView = .init(delegate: self,
+                                    fetchDataManager: FetchDataManager(),
                                     imageManager: ImageManager())
         view.addSubview(weatherInfoListView)
         weatherInfoListView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,8 +56,22 @@ class WeatherInfoListVC: UIViewController {
                 tempUnit = .imperial
                 navigationItem.rightBarButtonItem?.title = "화씨"
         }
+        weatherInfoListView.changeTempUnit(to: tempUnit)
+        weatherInfoListView.refresh()
     }
     
+}
+
+// MARK: - WeatherInfoListViewProtocol delegate methods
+extension WeatherInfoListVC: WeatherInfoListViewProtocol {
+    
+    func fetchCityName(_ cityName: String) {
+        navigationItem.title = cityName
+    }
+    
+    func fetchWeatherDetailVC(_ detailVC: WeatherDetailVC) {
+        navigationController?.show(detailVC, sender: self)
+    }
 }
 
 

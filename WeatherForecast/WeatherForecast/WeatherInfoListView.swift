@@ -7,26 +7,26 @@
 
 import UIKit
 
+protocol WeatherInfoListViewProtocol: AnyObject {
+    func fetchCityName(_ cityName: String)
+    func fetchWeatherDetailVC(_ detailVC: WeatherDetailVC)
+}
+
 final class WeatherInfoListView: UIView {
 
     // MARK: - Properties
-    var fetchDataManager: FetchDataManagerProtocol
-    var imageManager: ImageManagerProtocol
-    var weatherJSON: WeatherJSON?
-    var tempUnit: TemperatureUnit = .metric
+    private var fetchDataManager: FetchDataManagerProtocol
+    private var imageManager: ImageManagerProtocol
+    private var weatherJSON: WeatherJSON?
+    private var tempUnit: TemperatureUnit = .metric
+    private var tableView: UITableView!
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
-    
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    weak var delegate: WeatherInfoListViewProtocol?
     
     // MARK: - Init
-    init(fetchDataManager: FetchDataManagerProtocol, imageManager: ImageManagerProtocol) {
+    init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol, imageManager: ImageManagerProtocol) {
+        self.delegate = delegate
         self.fetchDataManager = fetchDataManager
         self.imageManager = imageManager
         super.init(frame: .zero)
@@ -57,17 +57,22 @@ final class WeatherInfoListView: UIView {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
         
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.cellId)
         tableView.dataSource = self
         tableView.delegate = self
     }
     
-    @objc private func refresh() {
+    // MARK: - Methods
+    func changeTempUnit(to tempUnit: TemperatureUnit) {
+        self.tempUnit = tempUnit
+    }
+    
+    @objc func refresh() {
         fetchDataManager.fetchWeatherJSON { [weak self] weatherJSON in
             if let data = weatherJSON {
                 self?.weatherJSON = data
                 self?.tableView.reloadData()
-//                self?.navigationItem.title = data.city.name
+                self?.delegate?.fetchCityName(data.city.name)
             } else {
                 print("Fetching weather data failed! Try refreshing again.")
             }
@@ -76,7 +81,7 @@ final class WeatherInfoListView: UIView {
     }
 }
 
-
+// MARK: - UITableViewDataSource method
 extension WeatherInfoListView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -87,6 +92,7 @@ extension WeatherInfoListView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
@@ -94,37 +100,32 @@ extension WeatherInfoListView: UITableViewDataSource {
             return cell
         }
         
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
-        
         let iconName: String = weatherForecastInfo.weather.icon
+        var weatherImage: UIImage?
         
-        imageManager.fetchImage(of: iconName) { [weak self] image in
-            guard let image = image else { return }
-            
-            DispatchQueue.main.async {
-                if indexPath == tableView.indexPath(for: cell) {
-                    cell.weatherIcon.image = image
-                }
-            }
+        imageManager.fetchImage(of: iconName) { image in
+            weatherImage = image
+        }
+        
+        DispatchQueue.main.async {
+            cell.updateCellUI(with: weatherForecastInfo, image: weatherImage, tempUnit: self.tempUnit)
         }
         
         return cell
     }
 }
 
+// MARK: - UITableViewDelegate method
 extension WeatherInfoListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let weatherJSON = weatherJSON else { return }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailVC = WeatherDetailVC()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
+        detailViewController.weatherForecastInfo = weatherJSON.weatherForecast[indexPath.row]
+        detailViewController.cityInfo = weatherJSON.city
         detailViewController.tempUnit = tempUnit
-//        navigationController?.show(detailViewController, sender: self)
+        delegate?.fetchWeatherDetailVC(detailViewController)
     }
 }

@@ -9,23 +9,30 @@ import UIKit
 class WeatherTableViewCell: UITableViewCell {
     
     // MARK: - Properties
-    var weatherIcon         : UIImageView = UIImageView()
-    var dateLabel           : CustomLabel = CustomLabel()
-    var temperatureLabel    : CustomLabel = CustomLabel()
-    var weatherLabel        : CustomLabel = CustomLabel()
-    var dashLabel           : CustomLabel = CustomLabel()
-    var descriptionLabel    : CustomLabel = CustomLabel()
-     
-    // StackViews
-    var weatherStackView    : UIStackView!
-    var verticalStackView   : UIStackView!
-    var contentsStackView   : UIStackView!
+    static let cellId               : String = "WeatherCell"
+    private var weatherIcon         : UIImageView = UIImageView()
+    private var dateLabel           : CustomLabel = CustomLabel()
+    private var temperatureLabel    : CustomLabel = CustomLabel()
+    private var weatherLabel        : CustomLabel = CustomLabel()
+    private var dashLabel           : CustomLabel = CustomLabel()
+    private var descriptionLabel    : CustomLabel = CustomLabel()
+    private var weatherStackView    : UIStackView!
+    private var verticalStackView   : UIStackView!
+    private var contentsStackView   : UIStackView!
+    private var defaultImage        : UIImage?    = UIImage(systemName: "arrow.down.circle.dotted")
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
-        reset()
+        resetCell()
     }
     
     required init?(coder: NSCoder) {
@@ -34,11 +41,11 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        reset()
+        resetCell()
     }
     
     
-    // MARK: - Methods
+    // MARK: - SetupUI
     private func setUpLayout() {
         layoutWeatherStackView()
         layoutVerticalStackView()
@@ -98,13 +105,27 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func reset() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
+    private func resetCell() {
+        weatherIcon.image = defaultImage
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
     
+    // MARK: - UI Update Method
+    func updateCellUI(with weatherForecastInfo: WeatherForecastInfo, image: UIImage?, tempUnit: TemperatureUnit) {
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = dateFormatter.string(from: date)
+        
+        if let image = image {
+            weatherIcon.image = image
+        } else {
+            weatherIcon.image = defaultImage
+        }
+    }
     
 }

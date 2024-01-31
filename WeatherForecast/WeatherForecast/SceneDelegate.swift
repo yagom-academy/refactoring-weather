@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         
-        let viewController: WeatherInfoListVC = WeatherInfoListVC(networkManager: NetworkManager())
+        let viewController: WeatherInfoListVC = WeatherInfoListVC(fetchDataManager: FetchDataManager(), imageManager: ImageManager())
         let navigationController: UINavigationController = UINavigationController(rootViewController: viewController)
 
         let window: UIWindow = UIWindow(windowScene: scene)

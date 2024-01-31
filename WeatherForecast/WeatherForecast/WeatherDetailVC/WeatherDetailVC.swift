@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+class WeatherDetailVC: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?

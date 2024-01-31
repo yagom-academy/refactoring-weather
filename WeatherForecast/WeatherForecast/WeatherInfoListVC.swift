@@ -11,9 +11,9 @@ class WeatherInfoListVC: UIViewController {
     // MARK: - Properties
     var icons: [UIImage]?
     var weatherJSON: WeatherJSON?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
     var tempUnit: TempUnit = .metric
-    var networkManager: NetworkManagerProtocol
+    var fetchDataManager: FetchDataManagerProtocol
+    var imageManager: ImageManagerProtocol
     
     // MARK: - UI
     var tableView: UITableView!
@@ -27,8 +27,9 @@ class WeatherInfoListVC: UIViewController {
     }()
     
     // MARK: - Init
-    init(networkManager: NetworkManagerProtocol) {
-        self.networkManager = networkManager
+    init(fetchDataManager: FetchDataManagerProtocol, imageManager: ImageManagerProtocol) {
+        self.fetchDataManager = fetchDataManager
+        self.imageManager = imageManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -83,14 +84,16 @@ class WeatherInfoListVC: UIViewController {
     }
     
     @objc private func refresh() {
-        fetchWeatherJSON()
-        tableView.reloadData()
+        fetchDataManager.fetchWeatherJSON { [weak self] weatherJSON in
+            if let data = weatherJSON {
+                self?.weatherJSON = data
+                self?.tableView.reloadData()
+                self?.navigationItem.title = data.city.name
+            } else {
+                print("Fetching weather data failed! Try refreshing again.")
+            }
+        }
         refreshControl.endRefreshing()
-    }
-
-    private func fetchWeatherJSON() {
-        weatherJSON = networkManager.fetchWeatherJSON()
-        navigationItem.title = weatherJSON?.city.name
     }
 }
 
@@ -121,17 +124,9 @@ extension WeatherInfoListVC: UITableViewDataSource {
         cell.dateLabel.text = dateFormatter.string(from: date)
         
         let iconName: String = weatherForecastInfo.weather.icon
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        networkManager.fetchImage(from: urlString) { [weak self] image in
+        imageManager.fetchImage(of: iconName) { [weak self] image in
             guard let image = image else { return }
-            
-            self?.imageChache.setObject(image, forKey: urlString as NSString)
             
             DispatchQueue.main.async {
                 if indexPath == tableView.indexPath(for: cell) {
@@ -149,7 +144,7 @@ extension WeatherInfoListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
+        let detailViewController: WeatherDetailVC = WeatherDetailVC()
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city
         detailViewController.tempUnit = tempUnit

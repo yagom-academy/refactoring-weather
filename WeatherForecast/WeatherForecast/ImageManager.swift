@@ -7,38 +7,27 @@
 
 import UIKit
 
-protocol NetworkManagerProtocol {
-    func fetchWeatherJSON() -> WeatherJSON?
-    func fetchImage(from url: String, completion: @escaping (UIImage?) -> ())
+protocol ImageManagerProtocol {
+    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> ())
 }
 
-struct NetworkManager: NetworkManagerProtocol {
+struct ImageManager: ImageManagerProtocol {
     
-    func fetchWeatherJSON() -> WeatherJSON? {
+    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    
+    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> ()) {
         
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return nil
+        if let image = imageChache.object(forKey: urlString as NSString) {
+            completion(image)
+            return
         }
         
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return nil
-        }
-        
-        return info
-        
-    }
-    
-    
-    func fetchImage(from url: String, completion: @escaping (UIImage?) -> ()) {
-        if let url = URL(string: url) {
+        if let url = URL(string: urlString) {
+            
             URLSession.shared.dataTask(with: url) { data, response, error in
+                
                 if let error = error {
                     print("Error downloading image: \(error.localizedDescription)")
                     completion(nil)
@@ -46,6 +35,7 @@ struct NetworkManager: NetworkManagerProtocol {
                 }
                 
                 if let data = data, let image = UIImage(data: data) {
+                    imageChache.setObject(image, forKey: urlString as NSString)
                     completion(image)
                 } else {
                     print("Failed to create image from data!")

@@ -8,18 +8,69 @@
 import UIKit
 
 class WeatherDetailView: UIView {
-    var iconImageView: UIImageView!
-    var weatherGroupLabel: UILabel!
-    var weatherDescriptionLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var feelsLikeLabel: UILabel!
-    var maximumTemperatureLable: UILabel!
-    var minimumTemperatureLable: UILabel!
-    var popLabel: UILabel!
-    var humidityLabel: UILabel!
-    var sunriseTimeLabel: UILabel!
-    var sunsetTimeLabel: UILabel!
-    var spacingView: UIView!
+    var iconImageView: UIImageView = {
+        let imageView: UIImageView = .init()
+        return imageView
+    }()
+    
+    var weatherGroupLabel: UILabel = {
+        let label: UILabel = .init()
+        label.font = .preferredFont(forTextStyle: .largeTitle)
+        return label
+    }()
+    
+    var weatherDescriptionLabel: UILabel = {
+        let label: UILabel = .init()
+        label.font = .preferredFont(forTextStyle: .largeTitle)
+        return label
+    }()
+    
+    var temperatureLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var feelsLikeLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var maximumTemperatureLable: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var minimumTemperatureLable: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var popLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var humidityLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var sunriseTimeLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var sunsetTimeLabel: UILabel = {
+        let label: UILabel = .init()
+        return label
+    }()
+    
+    var spacingView: UIView = {
+        let view: UIView = .init()
+        view.backgroundColor = .clear
+        view.setContentHuggingPriority(.defaultLow, for: .vertical)
+        return view
+    }()
     
     let weatherForecastInfo: WeatherForecastInfo
     let cityInfo: City
@@ -52,75 +103,57 @@ class WeatherDetailView: UIView {
         setupHumidityLabel()
         setupSunriseTimeLabel()
         setupSunsetTimeLabel()
-        setupSpacingView()
+        
         let contentsStackView = setupContentsStackView()
         setupLayouts(contentsStackView)
     }
     
     private func setupIconImageView() {
-        iconImageView = .init()
         fetchIconImage()
     }
     
     private func setupWeatherGroupLabel() {
-        weatherGroupLabel = .init()
         weatherGroupLabel.text = weatherForecastInfo.weather.main
-        weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
     }
     
     private func setupWeatherDescriptionLabel() {
-        weatherDescriptionLabel = .init()
         weatherDescriptionLabel.text = weatherForecastInfo.weather.description
-        weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
     }
     
     private func setupTemperatureLabel() {
-        temperatureLabel = .init()
         temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.main.temp)\(tempUnit.expression)"
     }
     
     private func setupFeelsLikeLabel() {
-        feelsLikeLabel = .init()
         feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.main.feelsLike)\(tempUnit.expression)"
     }
     
     private func setupMaximumTemperatureLabel() {
-        maximumTemperatureLable = .init()
         maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.main.tempMax)\(tempUnit.expression)"
     }
     
     private func setupMinimumTemperatureLabel() {
-        minimumTemperatureLable = .init()
         minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.main.tempMin)\(tempUnit.expression)"
     }
     
     private func setupPopLabel() {
-        popLabel = .init()
         popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
     }
     
     private func setupHumidityLabel() {
-        humidityLabel = .init()
         humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
     }
     
     private func setupSunriseTimeLabel() {
-        sunriseTimeLabel = .init()
         let sunRiseDate: Date = .init(timeIntervalSince1970: cityInfo.sunrise)
         sunriseTimeLabel.text = "일출 : \(sunRiseDate.toString(type: .none, timeStyle: .short))"
     }
     
     private func setupSunsetTimeLabel() {
-        sunsetTimeLabel = .init()
         let sunSetDate: Date = .init(timeIntervalSince1970: cityInfo.sunset)
         sunsetTimeLabel.text = "일몰 : \(sunSetDate.toString(type: .none, timeStyle: .short))"
     }
     
-    private func setupSpacingView() {
-        spacingView = .init()
-        spacingView.backgroundColor = .clear
-        spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
-    }
     
     private func setupContentsStackView() -> UIStackView {
         let contentsStackView: UIStackView = .init(arrangedSubviews: [

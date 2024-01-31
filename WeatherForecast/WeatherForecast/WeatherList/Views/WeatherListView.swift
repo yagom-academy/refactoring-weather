@@ -16,7 +16,6 @@ final class WeatherListView: UIView {
     //MARK: - Properties
     var delegate: WeatherListViewDelegate?
     var weatherInfo: WeatherInfoCoordinator
-    var imageService: ImageServiceable
     var jsonService: JsonServiceable
     
     //MARK: - UI
@@ -25,10 +24,8 @@ final class WeatherListView: UIView {
     
     //MARK: - Init
     init(weatherInfo: WeatherInfoCoordinator,
-         imageService: ImageServiceable,
          jsonService: JsonServiceable) {
         self.weatherInfo = weatherInfo
-        self.imageService = imageService
         self.jsonService = jsonService
         
         super.init(frame: .zero)
@@ -100,17 +97,10 @@ extension WeatherListView: UITableViewDataSource {
             return cell
         }
         
-        imageService.getIcon(iconName: weatherForecastInfo.iconName, urlSession: URLSession.shared) { result in
-            switch result {
-            case .success(let image):
-                DispatchQueue.main.async {
-                    cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
-                 }
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
+        cell.configure(weatherInfo: self.weatherInfo,
+                       iconName: weatherForecastInfo.iconName,
+                       index: indexPath.row,
+                       imageService: ImageService())
         
         return cell
     }

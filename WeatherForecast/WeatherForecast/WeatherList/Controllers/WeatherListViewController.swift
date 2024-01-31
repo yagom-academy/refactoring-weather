@@ -36,8 +36,8 @@ final class WeatherListViewController: UIViewController {
     
     private func layoutWeatherListView() {
         weatherListView = .init(weatherInfo: weatherInfo,
-                                imageService: ImageService(),
                                 jsonService: JsonService())
+        
         view.addSubview(weatherListView)
         weatherListView.translatesAutoresizingMaskIntoConstraints = false
         weatherListView.delegate = self

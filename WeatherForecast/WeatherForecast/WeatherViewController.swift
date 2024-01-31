@@ -80,6 +80,7 @@ extension WeatherViewController: UITableViewDataSource {
         cell.configure(
             with: weatherForecastInfo,
             tempUnit: tempUnit,
+            imageService: ImageService(),
             imageCache: imageCache
         )
         return cell

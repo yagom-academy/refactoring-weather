@@ -27,7 +27,8 @@ class WeatherDetailViewController: UIViewController {
         let weatherDetailView: WeatherDetailView = .init(
             weatherForecastInfo: weatherForecastInfo,
             cityInfo: cityInfo,
-            tempUnit: tempUnit
+            tempUnit: tempUnit,
+            imageService: ImageService()
         )
         view = weatherDetailView
     }

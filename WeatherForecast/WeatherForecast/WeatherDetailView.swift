@@ -75,11 +75,18 @@ class WeatherDetailView: UIView {
     let weatherForecastInfo: WeatherForecastInfo
     let cityInfo: City
     let tempUnit: TempUnit
+    let imageService: ImageFetchable
     
-    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit = .metric) {
+    init(
+        weatherForecastInfo: WeatherForecastInfo,
+        cityInfo: City,
+        tempUnit: TempUnit = .metric,
+        imageService: ImageFetchable
+    ) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
+        self.imageService = imageService
         super.init(frame: .zero)
         
         backgroundColor = .white
@@ -207,17 +214,13 @@ class WeatherDetailView: UIView {
     }
     
     private func fetchIconImage() {
+        let iconName: String = weatherForecastInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        
         Task {
-            let iconName: String = weatherForecastInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+            if let image: UIImage = await imageService.fetchIconImage(urlString: urlString) {
+                iconImageView.image = image
             }
-            
-            iconImageView.image = image
         }
     }
 }

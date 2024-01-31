@@ -12,6 +12,7 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
+    var imageService: ImageFetchable!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,6 +32,7 @@ class WeatherTableViewCell: UITableViewCell {
     func configure(
         with weatherForecastInfo: WeatherForecastInfo,
         tempUnit: TempUnit,
+        imageService: ImageFetchable,
         imageCache: NSCache<NSString, UIImage>
     ) {
         setupWeatherLabel(with: weatherForecastInfo.weather.main)
@@ -70,13 +72,10 @@ class WeatherTableViewCell: UITableViewCell {
     
     private func fetchIconImage(urlString: String, imageCache: NSCache<NSString, UIImage>) {
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+            if let image = await imageService.fetchIconImage(urlString: urlString) {
+                imageCache.setObject(image, forKey: urlString as NSString)
+                weatherIcon.image = image
             }
-            imageCache.setObject(image, forKey: urlString as NSString)
-            weatherIcon.image = image
         }
     }
     

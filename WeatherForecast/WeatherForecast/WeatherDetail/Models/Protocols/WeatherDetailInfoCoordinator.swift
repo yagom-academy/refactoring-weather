@@ -8,16 +8,22 @@
 import Foundation
 
 protocol WeatherDetailInfoCoordinator {
+    var date: String { get }
+    
     var sunrise: String { get }
     var sunset: String { get }
-    func getWeather() -> String
-    func getDescription() -> String
-    func getTemp() -> String
-    func getTempMax() -> String
-    func getTempMin() -> String
-    func getFeelsLike() -> String
-    func getTempUnitExpression() -> String
-    func getPop() -> String
-    func getHumidity() -> String
-    func getIconName() -> String
+    
+    var weatherMain: String { get }
+    var description: String { get }
+    
+    var temp: String { get }
+    var tempMax: String { get }
+    var tempMin: String { get }
+    
+    var feelsLike: String { get }
+    var pop: String { get }
+    
+    var humidity: String { get }
+    
+    var iconName: String { get }
 }

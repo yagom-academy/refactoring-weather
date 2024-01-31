@@ -15,4 +15,20 @@ struct City: Decodable {
     let country: String
     let population, timezone: Int
     let sunrise, sunset: TimeInterval
+    
+    var sunriseString: String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter.string(from: Date(timeIntervalSince1970: sunrise))
+    }
+    
+    var sunsetString: String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter.string(from: Date(timeIntervalSince1970: sunset))
+    }
 }

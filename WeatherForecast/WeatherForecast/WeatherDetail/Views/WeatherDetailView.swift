@@ -94,20 +94,20 @@ final class WeatherDetailView: UIView {
     }
     
     private func updateLabel() {
-        weatherGroupLabel.text          = weatherDetailInfo.getWeather()
-        weatherDescriptionLabel.text    = weatherDetailInfo.getDescription()
-        temperatureLabel.text           = "현재 기온 : \(weatherDetailInfo.getTemp())"
-        feelsLikeLabel.text             = "체감 기온 : \(weatherDetailInfo.getFeelsLike())"
-        maximumTemperatureLable.text    = "최고 기온 : \(weatherDetailInfo.getTempMax())"
-        minimumTemperatureLable.text    = "최저 기온 : \(weatherDetailInfo.getTempMin())"
-        popLabel.text                   = "강수 확률 : \(weatherDetailInfo.getPop())"
-        humidityLabel.text              = "습도 : \(weatherDetailInfo.getHumidity())"
+        weatherGroupLabel.text          = weatherDetailInfo.weatherMain
+        weatherDescriptionLabel.text    = weatherDetailInfo.description
+        temperatureLabel.text           = "현재 기온 : \(weatherDetailInfo.temp)"
+        feelsLikeLabel.text             = "체감 기온 : \(weatherDetailInfo.feelsLike)"
+        maximumTemperatureLable.text    = "최고 기온 : \(weatherDetailInfo.tempMax)"
+        minimumTemperatureLable.text    = "최저 기온 : \(weatherDetailInfo.tempMin)"
+        popLabel.text                   = "강수 확률 : \(weatherDetailInfo.pop)"
+        humidityLabel.text              = "습도 : \(weatherDetailInfo.humidity)"
         sunriseTimeLabel.text           = "일출 : \(weatherDetailInfo.sunrise)"
         sunsetTimeLabel.text            = "일몰 : \(weatherDetailInfo.sunset)"
     }
     
     private func updateIcon() {
-        imageService.getIcon(iconName: weatherDetailInfo.getIconName(), urlSession: URLSession.shared) { image in
+        imageService.getIcon(iconName: weatherDetailInfo.iconName, urlSession: URLSession.shared) { image in
             DispatchQueue.main.async {
                 self.iconImageView.image = image
             }

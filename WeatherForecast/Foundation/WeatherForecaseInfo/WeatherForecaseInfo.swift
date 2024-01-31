@@ -9,10 +9,11 @@ import Foundation
 
 // MARK: - List
 struct WeatherForecastInfo: Decodable {
-    let dt: TimeInterval
-    let main: MainInfo
-    let weather: Weather
-    let dtTxt: String
+    private(set) var dt: TimeInterval
+    private let main: MainInfo
+    private let weather: Weather
+    private let dtTxt: String
+    
     var date: String {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
@@ -21,39 +22,16 @@ struct WeatherForecastInfo: Decodable {
         return formatter.string(from: Date(timeIntervalSince1970: dt))
     }
     
-    func getWeather() -> String {
-        return weather.main
-    }
+    var weatherMain: String { weather.main }
+    var description: String { weather.description }
     
-    func getDescription() -> String {
-        return weather.description
-    }
+    var temp: Double { main.temp }
+    var tempMax: Double { main.tempMax }
+    var tempMin: Double { main.tempMin }
+    var feelsLike: Double { main.feelsLike }
     
-    func getTemp() -> Double {
-        return main.temp
-    }
+    var pop: String { "\(main.pop * 100)%" }
+    var humidity: String { "\(main.humidity)%" }
     
-    func getTempMax() -> Double {
-        return main.tempMax
-    }
-    
-    func getTempMin() -> Double {
-        return main.tempMin
-    }
-    
-    func getFeelsLike() -> Double {
-        return main.feelsLike
-    }
-    
-    func getPop() -> String {
-        return "\(main.pop * 100)%"
-    }
-    
-    func getHumidity() -> String {
-        return "\(main.humidity)%"
-    }
-    
-    func getIconName() -> String {
-        return weather.icon
-    }
+    var iconName: String { weather.icon }
 }

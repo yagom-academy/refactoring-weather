@@ -109,8 +109,8 @@ final class WeatherTableViewCell: UITableViewCell {
             return
         }
 
-        weatherLabel.text      = weatherForecastInfo.getWeather()
-        descriptionLabel.text  = weatherForecastInfo.getDescription()
+        weatherLabel.text      = weatherForecastInfo.weatherMain
+        descriptionLabel.text  = weatherForecastInfo.description
         temperatureLabel.text  = weatherForecastTemp
         dateLabel.text         = weatherForecastInfo.date
         weatherIcon.image      = image

@@ -77,8 +77,8 @@ final class WeatherListView: UIView {
     
     private func fetchWeatherJSON() {
         guard let info = jsonService.fetchWeatherJSON() else  { return }
-        weatherInfo.setWeatherJSON(json: info)
-        delegate?.changeNavigationTitle(title: weatherInfo.getCityInfo()?.name)
+        weatherInfo.weatherJson = info
+        delegate?.changeNavigationTitle(title: weatherInfo.cityInfo?.name)
     }
 }
 
@@ -95,7 +95,7 @@ extension WeatherListView: UITableViewDataSource {
             return cell
         }
         
-        imageService.getIcon(iconName: weatherForecastInfo.getIconName(), urlSession: URLSession.shared) { image in
+        imageService.getIcon(iconName: weatherForecastInfo.iconName, urlSession: URLSession.shared) { image in
             DispatchQueue.main.async {
                 cell.configure(weatherInfo: self.weatherInfo,image: image, index: indexPath.row)
              }
@@ -109,7 +109,7 @@ extension WeatherListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let weatherForecastInfo = weatherInfo.getWeatherForecastInfo(at: indexPath.row),
-              let city = weatherInfo.getCityInfo() else { return }
+              let city = weatherInfo.cityInfo else { return }
                 
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(
             weatherDetailInfo: WeatherDetailInfo(

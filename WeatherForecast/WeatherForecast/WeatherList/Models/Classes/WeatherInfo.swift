@@ -10,17 +10,23 @@ import Foundation
 final class WeatherInfo: WeatherInfoCoordinator {
     private var weatherJSON: WeatherJSON?
     private(set) var tempUnit: TempUnit
-    var weatherForecastInfo: [WeatherForecastInfo]? {
-        return weatherJSON?.weatherForecast
+    
+    var weatherJson: WeatherJSON? {
+        get {
+            weatherJSON
+        }
+        set {
+            weatherJSON = newValue
+        }
     }
+    
+    var weatherForecastInfo: [WeatherForecastInfo]? { weatherJSON?.weatherForecast }
+    var tempExpressionTitle: String { tempUnit.expressionTitle}
+    var cityInfo: City? { weatherJSON?.city }
     
     init(weatherJSON: WeatherJSON? = nil, tempUnit: TempUnit) {
         self.weatherJSON = weatherJSON
         self.tempUnit = tempUnit
-    }
-    
-    func setWeatherJSON(json: WeatherJSON) {
-        self.weatherJSON = json
     }
     
     func getWeatherForecastInfo(at index: Int) -> WeatherForecastInfo? {
@@ -31,22 +37,10 @@ final class WeatherInfo: WeatherInfoCoordinator {
         
         return weatherJSON?.weatherForecast[index]
     }
-    
-    func getCityInfo() -> City? {
-        return weatherJSON?.city
-    }
-    
-    func getTempUnit() -> TempUnit {
-        return tempUnit
-    }
-        
+       
     func getTemp(at index: Int) -> String? {
         guard let weatherForecastInfo = getWeatherForecastInfo(at: index) else { return nil }
-        return "\(weatherForecastInfo.getTemp())\(tempUnit.expression)"
-    }
-    
-    func getTempExpressionTitle() -> String {
-        return tempUnit.expressionTitle
+        return "\(weatherForecastInfo.temp)\(tempUnit.expression)"
     }
     
     func toggleTempUnit() {

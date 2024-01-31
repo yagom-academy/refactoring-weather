@@ -12,8 +12,8 @@ protocol WeatherViewDelegate: AnyObject {
 }
 
 final class WeatherView: UIView {
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private var tableView: UITableView!
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     private weak var delegate: WeatherViewDelegate?
     
     init(delegate: WeatherViewDelegate) {

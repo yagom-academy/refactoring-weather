@@ -7,9 +7,9 @@
 import UIKit
 
 final class WeatherDetailViewController: UIViewController {
-    var weatherForecastInfo: WeatherForecastInfo
-    var cityInfo: City
-    var tempUnit: TempUnit
+    private let weatherForecastInfo: WeatherForecastInfo
+    private let cityInfo: City
+    private let tempUnit: TempUnit
     
     init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit = .metric) {
         self.weatherForecastInfo = weatherForecastInfo

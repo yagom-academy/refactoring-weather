@@ -9,14 +9,14 @@ import UIKit
 final class WeatherViewController: UIViewController {
     private var weatherView: WeatherView!
     
-    var weatherJSON: WeatherJSON? {
+    private var weatherJSON: WeatherJSON? {
         didSet {
             navigationItem.title = weatherJSON?.city.name
         }
     }
     
-    let imageCache: NSCache<NSString, UIImage> = NSCache()
-    var tempUnit: TempUnit = .metric
+    private let imageCache: NSCache<NSString, UIImage> = NSCache()
+    private var tempUnit: TempUnit = .metric
     
     override func loadView() {
         weatherView = WeatherView(delegate: self)

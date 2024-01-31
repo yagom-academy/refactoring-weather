@@ -8,64 +8,64 @@
 import UIKit
 
 final class WeatherDetailContentStackView: UIStackView {
-    var iconImageView: UIImageView = {
+    private let iconImageView: UIImageView = {
         let imageView: UIImageView = .init()
         return imageView
     }()
     
-    var weatherGroupLabel: UILabel = {
+    private let weatherGroupLabel: UILabel = {
         let label: UILabel = .init()
         label.font = .preferredFont(forTextStyle: .largeTitle)
         return label
     }()
     
-    var weatherDescriptionLabel: UILabel = {
+    private let weatherDescriptionLabel: UILabel = {
         let label: UILabel = .init()
         label.font = .preferredFont(forTextStyle: .largeTitle)
         return label
     }()
     
-    var temperatureLabel: UILabel = {
+    private let temperatureLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var feelsLikeLabel: UILabel = {
+    private let feelsLikeLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var maximumTemperatureLable: UILabel = {
+    private let maximumTemperatureLable: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var minimumTemperatureLable: UILabel = {
+    private let minimumTemperatureLable: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var popLabel: UILabel = {
+    private let popLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var humidityLabel: UILabel = {
+    private let humidityLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var sunriseTimeLabel: UILabel = {
+    private let sunriseTimeLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var sunsetTimeLabel: UILabel = {
+    private let sunsetTimeLabel: UILabel = {
         let label: UILabel = .init()
         return label
     }()
     
-    var spacingView: UIView = {
+    private let spacingView: UIView = {
         let view: UIView = .init()
         view.backgroundColor = .clear
         view.setContentHuggingPriority(.defaultLow, for: .vertical)

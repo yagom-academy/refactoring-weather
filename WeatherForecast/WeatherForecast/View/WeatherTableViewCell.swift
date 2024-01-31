@@ -7,12 +7,12 @@
 import UIKit
 
 final class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
-    var imageService: ImageFetchable!
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var imageService: ImageFetchable!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -8,7 +8,7 @@
 import UIKit
 
 final class WeatherDetailView: UIView {
-    var contentStackView: WeatherDetailContentStackView = {
+    private let contentStackView: WeatherDetailContentStackView = {
         let stackView: WeatherDetailContentStackView = .init()
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -17,10 +17,10 @@ final class WeatherDetailView: UIView {
         return stackView
     }()
 
-    let weatherForecastInfo: WeatherForecastInfo
-    let cityInfo: City
-    let tempUnit: TempUnit
-    let imageService: ImageFetchable
+    private let weatherForecastInfo: WeatherForecastInfo
+    private let cityInfo: City
+    private let tempUnit: TempUnit
+    private let imageService: ImageFetchable
     
     init(
         weatherForecastInfo: WeatherForecastInfo,

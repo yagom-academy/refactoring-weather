@@ -53,6 +53,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		76F125F42B6AB8A600A62718 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C7743D902B21C38100DF0D09 /* WeatherViewController.swift */,
+				76F125E52B68009300A62718 /* WeatherView.swift */,
+				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
+				C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */,
+				76F125ED2B6950C100A62718 /* WeatherDetailView.swift */,
+				76F125F12B6AA81C00A62718 /* WeatherDetailContentStackView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		76F125F52B6AB8B200A62718 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+				76F125E92B6945AD00A62718 /* DateFormatType.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		76F125F62B6AB8C600A62718 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				76F125EF2B6A954F00A62718 /* ImageService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		76F125F72B6AB8E000A62718 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				76F125EB2B6946D400A62718 /* Date+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		C7743D802B21C38100DF0D09 = {
 			isa = PBXGroup;
 			children = (
@@ -74,19 +112,13 @@
 			children = (
 				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
 				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
-				C7743D902B21C38100DF0D09 /* WeatherViewController.swift */,
-				76F125E52B68009300A62718 /* WeatherView.swift */,
-				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
-				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
-				C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */,
-				76F125ED2B6950C100A62718 /* WeatherDetailView.swift */,
-				76F125E92B6945AD00A62718 /* DateFormatType.swift */,
-				76F125EB2B6946D400A62718 /* Date+Extension.swift */,
 				C7743D952B21C38200DF0D09 /* Assets.xcassets */,
 				C7743D972B21C38200DF0D09 /* LaunchScreen.storyboard */,
 				C7743D9A2B21C38200DF0D09 /* Info.plist */,
-				76F125EF2B6A954F00A62718 /* ImageService.swift */,
-				76F125F12B6AA81C00A62718 /* WeatherDetailContentStackView.swift */,
+				76F125F42B6AB8A600A62718 /* View */,
+				76F125F52B6AB8B200A62718 /* Model */,
+				76F125F72B6AB8E000A62718 /* Extension */,
+				76F125F62B6AB8C600A62718 /* Service */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";

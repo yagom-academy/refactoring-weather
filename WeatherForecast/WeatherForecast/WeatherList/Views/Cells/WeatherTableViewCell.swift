@@ -6,13 +6,18 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+final class WeatherTableViewCell: UITableViewCell {
+    //MARK: - Properties
+    var imageService: ImageServiceable?
+    
+    //MARK: - UI
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
      
+    //MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -23,11 +28,13 @@ class WeatherTableViewCell: UITableViewCell {
         fatalError()
     }
     
+    //MARK: - LifeCycle
     override func prepareForReuse() {
         super.prepareForReuse()
         reset()
     }
     
+    //MARK: - Layout
     private func layViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
@@ -93,11 +100,45 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
+    //MARK: - Methods
     private func reset() {
+        imageService = nil
         weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
+    
+    func configure(weatherInfo: WeatherInfoCoordinator,
+                   iconName: String,
+                   index: Int,
+                   imageService: ImageServiceable) {
+        guard let weatherForecastInfo = weatherInfo.getWeatherForecastInfo(at: index),
+              let weatherForecastTemp = weatherInfo.getTemp(at: index) else {
+            return
+        }
+        self.imageService = imageService
+        
+        weatherLabel.text      = weatherForecastInfo.weatherMain
+        descriptionLabel.text  = weatherForecastInfo.description
+        temperatureLabel.text  = weatherForecastTemp
+        dateLabel.text         = weatherForecastInfo.date
+        
+        updateWeatherIcon(iconName: iconName)
+    }
+    
+    private func updateWeatherIcon(iconName: String) {
+        imageService?.getIcon(iconName: iconName, urlSession: URLSession.shared) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.weatherIcon.image = image
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
 }

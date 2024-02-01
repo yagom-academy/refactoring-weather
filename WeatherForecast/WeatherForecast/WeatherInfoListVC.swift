@@ -24,12 +24,16 @@ class WeatherInfoListVC: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        initialSetUp()
         setupWeatherInfoListView()
+    }
+    
+    // MARK: - SetupUI
+    private func initialSetUp() {
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
     }
     
-    // MARK: - SetupUI
     private func setupWeatherInfoListView() {
         weatherInfoListView = .init(delegate: self,
                                     fetchDataManager: FetchDataManager(),

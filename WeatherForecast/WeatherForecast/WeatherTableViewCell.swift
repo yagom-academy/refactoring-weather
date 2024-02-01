@@ -19,14 +19,7 @@ class WeatherTableViewCell: UITableViewCell {
     private var verticalStackView   : UIStackView!
     private var contentsStackView   : UIStackView!
     private var weatherIcon         : UIImageView = UIImageView()
-    private var defaultImage        : UIImage?    = UIImage(systemName: "arrow.down.circle.dotted")
-    
-    private let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    private var defaultImage        : UIImage? = UIImage(systemName: "arrow.down.circle.dotted")
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -118,11 +111,11 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = date.formattedString()
         
         let iconName: String = weatherForecastInfo.weather.icon
-        
         imageManager.fetchImage(of: iconName) { [weak self] image in
             DispatchQueue.main.async {
                 self?.weatherIcon.image = image

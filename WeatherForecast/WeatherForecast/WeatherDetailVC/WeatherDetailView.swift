@@ -97,27 +97,21 @@ final class WeatherDetailView: UIView {
     
     private func updateUI() {
         
-        guard let listInfo = weatherForecastInfo else { return }
+        guard let weatherInfo = weatherForecastInfo, let cityInfo = cityInfo else { return }
         
-        weatherGroupLabel.text = listInfo.weather.main
-        weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+        weatherGroupLabel.text = weatherInfo.weather.main
+        weatherDescriptionLabel.text = weatherInfo.weather.description
+        temperatureLabel.text = "현재 기온 : \(weatherInfo.main.temp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(weatherInfo.main.feelsLike)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(weatherInfo.main.tempMax)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(weatherInfo.main.tempMin)\(tempUnit.expression)"
+        popLabel.text = "강수 확률 : \(weatherInfo.main.pop * 100)%"
+        humidityLabel.text = "습도 : \(weatherInfo.main.humidity)%"
         
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
-        }
+        sunriseTimeLabel.text = "일출 : \(cityInfo.sunrise.stringFromTimeInterval())"
+        sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset.stringFromTimeInterval())"
         
-        let iconName: String = listInfo.weather.icon
+        let iconName: String = weatherInfo.weather.icon
         imageManager.fetchImage(of: iconName) { [weak self] image in
             DispatchQueue.main.async {
                 self?.iconImageView.image = image

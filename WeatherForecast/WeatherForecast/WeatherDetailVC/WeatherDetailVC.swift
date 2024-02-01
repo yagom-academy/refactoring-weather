@@ -13,13 +13,6 @@ class WeatherDetailVC: UIViewController {
     var cityInfo: City?
     var tempUnit: TemperatureUnit = .metric
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     // MARK: - Init
     init(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TemperatureUnit) {
         self.weatherForecastInfo = weatherForecastInfo
@@ -52,7 +45,7 @@ class WeatherDetailVC: UIViewController {
     private func initialSetUp() {
         if let info = weatherForecastInfo {
             let date: Date = Date(timeIntervalSince1970: info.dt)
-            navigationItem.title = dateFormatter.string(from: date)
+            navigationItem.title = date.formattedString()
         }
     }
 }

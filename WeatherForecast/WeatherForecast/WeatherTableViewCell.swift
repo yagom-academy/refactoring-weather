@@ -10,15 +10,15 @@ class WeatherTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let cellId               : String = "WeatherCell"
-    private var weatherIcon         : UIImageView = UIImageView()
-    private var dateLabel           : CustomLabel = CustomLabel()
-    private var temperatureLabel    : CustomLabel = CustomLabel()
-    private var weatherLabel        : CustomLabel = CustomLabel()
-    private var dashLabel           : CustomLabel = CustomLabel()
-    private var descriptionLabel    : CustomLabel = CustomLabel()
+    private var dateLabel           : CustomCellLabel = CustomCellLabel()
+    private var temperatureLabel    : CustomCellLabel = CustomCellLabel()
+    private var weatherLabel        : CustomCellLabel = CustomCellLabel()
+    private var dashLabel           : CustomCellLabel = CustomCellLabel()
+    private var descriptionLabel    : CustomCellLabel = CustomCellLabel()
     private var weatherStackView    : UIStackView!
     private var verticalStackView   : UIStackView!
     private var contentsStackView   : UIStackView!
+    private var weatherIcon         : UIImageView = UIImageView()
     private var defaultImage        : UIImage?    = UIImage(systemName: "arrow.down.circle.dotted")
     
     private let dateFormatter: DateFormatter = {

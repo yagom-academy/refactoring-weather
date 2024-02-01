@@ -10,23 +10,23 @@ import UIKit
 final class WeatherDetailView: UIView {
     
     // MARK: - Properties
-    private let iconImageView: UIImageView = UIImageView()
-    private let weatherGroupLabel: UILabel = UILabel()
-    private let weatherDescriptionLabel: UILabel = UILabel()
-    private let temperatureLabel: UILabel = UILabel()
-    private let feelsLikeLabel: UILabel = UILabel()
-    private let maximumTemperatureLable: UILabel = UILabel()
-    private let minimumTemperatureLable: UILabel = UILabel()
-    private let popLabel: UILabel = UILabel()
-    private let humidityLabel: UILabel = UILabel()
-    private let sunriseTimeLabel: UILabel = UILabel()
-    private let sunsetTimeLabel: UILabel = UILabel()
-    private let spacingView: UIView = UIView()
+    private let iconImageView           : UIImageView = UIImageView()
+    private let weatherGroupLabel       : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let weatherDescriptionLabel : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let temperatureLabel        : CustomDetailLabel = CustomDetailLabel()
+    private let feelsLikeLabel          : CustomDetailLabel = CustomDetailLabel()
+    private let maximumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
+    private let minimumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
+    private let popLabel                : CustomDetailLabel = CustomDetailLabel()
+    private let humidityLabel           : CustomDetailLabel = CustomDetailLabel()
+    private let sunriseTimeLabel        : CustomDetailLabel = CustomDetailLabel()
+    private let sunsetTimeLabel         : CustomDetailLabel = CustomDetailLabel()
+    private let spacingView             : UIView = UIView()
 
-    private var imageManager: ImageManagerProtocol
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TemperatureUnit = .metric
+    private var imageManager            : ImageManagerProtocol
+    var weatherForecastInfo             : WeatherForecastInfo?
+    var cityInfo                        : City?
+    var tempUnit                        : TemperatureUnit = .metric
     
     
     // MARK: - Init
@@ -70,15 +70,6 @@ final class WeatherDetailView: UIView {
             sunsetTimeLabel,
             spacingView
         ])
-                
-        mainStackView.arrangedSubviews.forEach { subview in
-            guard let subview: UILabel = subview as? UILabel else { return }
-            subview.textColor = .black
-            subview.backgroundColor = .clear
-            subview.numberOfLines = 1
-            subview.textAlignment = .center
-            subview.font = .preferredFont(forTextStyle: .body)
-        }
         
         mainStackView.axis = .vertical
         mainStackView.alignment = .center
@@ -104,11 +95,6 @@ final class WeatherDetailView: UIView {
         
         guard let listInfo = weatherForecastInfo else { return }
         
-        weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        
-       
-        
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
         temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
@@ -127,17 +113,11 @@ final class WeatherDetailView: UIView {
             sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }
         
-        Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+        let iconName: String = listInfo.weather.icon
+        imageManager.fetchImage(of: iconName) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.iconImageView.image = image
             }
-            
-            iconImageView.image = image
         }
     }
 }

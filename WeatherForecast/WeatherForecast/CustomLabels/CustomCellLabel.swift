@@ -7,10 +7,10 @@
 
 import UIKit
 
-class CustomLabel: UILabel {
+class CustomCellLabel: UILabel {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: .zero)
         textColor = UIColor.black
         font = .preferredFont(forTextStyle: .body)
         numberOfLines = 1

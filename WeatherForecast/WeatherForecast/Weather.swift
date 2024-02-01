@@ -92,3 +92,9 @@ struct ImperialTempUnit: TempExpression {
 enum WeatherDate {
     static let format: String = "yyyy-MM-dd(EEEEE) a HH:mm"
 }
+
+// MARK: - Json Asset Name
+
+enum JsonAssetName {
+    static let weather: String = "weather"
+}

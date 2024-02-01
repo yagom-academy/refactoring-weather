@@ -8,23 +8,25 @@
 import Foundation
 import UIKit
 
-protocol JsonExtractable {
+protocol JsonFileExtractable {
     associatedtype Result
     func extract() -> Result?
 }
 
-struct WeatherJsonExtracter: JsonExtractable {
-    func extract() -> WeatherJSON? {
+struct JsonFileExtracter< T: Decodable >: JsonFileExtractable {
+    let fileName: String
+    
+    func extract() -> T? {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        guard let data = NSDataAsset(name: "weather")?.data else {
+        guard let data = NSDataAsset(name: fileName)?.data else {
             return nil
         }
         
-        let info: WeatherJSON
+        let info: T
         do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            info = try jsonDecoder.decode(T.self, from: data)
         } catch {
             print(error.localizedDescription)
             return nil

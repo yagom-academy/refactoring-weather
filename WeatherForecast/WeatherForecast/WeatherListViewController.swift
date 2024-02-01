@@ -11,7 +11,10 @@ class WeatherListViewController: UIViewController {
     let refreshControl: UIRefreshControl = UIRefreshControl()
     let model: WeatherListViewModel
     
-    init(dataRequester: DataRequestable = DataRequest(), jsonExtracter: any JsonExtractable = WeatherJsonExtracter()) {
+    init(
+        dataRequester: DataRequestable = DataRequest(),
+        jsonExtracter: any JsonFileExtractable = JsonFileExtracter<WeatherJSON>(fileName: "weather")
+    ) {
         self.model = .init(dataRequester: dataRequester, jsonExtracter: jsonExtracter)
         super.init(nibName: nil, bundle: nil)
     }

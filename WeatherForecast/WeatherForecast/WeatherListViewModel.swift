@@ -13,9 +13,12 @@ final class WeatherListViewModel {
     let imageDataChache: NSCache<NSString, NSData> = NSCache()
 
     let dataRequester: DataRequestable
-    let jsonExtracter: any JsonExtractable
+    let jsonExtracter: any JsonFileExtractable
 
-    init(dataRequester: DataRequestable = DataRequest(), jsonExtracter: any JsonExtractable = WeatherJsonExtracter()) {
+    init(
+        dataRequester: DataRequestable = DataRequest(),
+        jsonExtracter: any JsonFileExtractable = JsonFileExtracter<WeatherJSON>(fileName: JsonAssetName.weather)
+    ) {
         self.dataRequester = dataRequester
         self.jsonExtracter = jsonExtracter
     }
@@ -24,8 +27,8 @@ final class WeatherListViewModel {
 // MARK: - Return Funcs..
 
 extension WeatherListViewModel {
-    func extractedWeatherJsonResult() -> WeatherJsonExtracter.Result? {
-        guard let result = jsonExtracter.extract() as? WeatherJsonExtracter.Result else { return nil }
+    func extractedWeatherJsonResult() -> JsonFileExtracter<WeatherJSON>.Result? {
+        guard let result = jsonExtracter.extract() as? JsonFileExtracter<WeatherJSON>.Result else { return nil }
         return result
     }
     

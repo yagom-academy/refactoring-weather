@@ -64,7 +64,7 @@ final class WeatherTableViewCell: UITableViewCell {
     private func setupWeatherIcon(with iconName: String, imageCache: NSCache<NSString, UIImage>) {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
-        if let image = imageCache.object(forKey: urlString as NSString) {
+        if let image: UIImage = imageCache.object(forKey: urlString as NSString) {
             weatherIcon.image = image
             return
         }
@@ -74,7 +74,7 @@ final class WeatherTableViewCell: UITableViewCell {
     
     private func fetchIconImage(urlString: String, imageCache: NSCache<NSString, UIImage>) {
         Task {
-            if let image = await imageService.fetchIconImage(urlString: urlString) {
+            if let image: UIImage = await imageService.fetchIconImage(urlString: urlString) {
                 imageCache.setObject(image, forKey: urlString as NSString)
                 weatherIcon.image = image
             }

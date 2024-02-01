@@ -66,7 +66,7 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = weatherJSON?.weatherForecast.count {
+        if let count: Int = weatherJSON?.weatherForecast.count {
             return count
         }
         
@@ -77,7 +77,7 @@ extension WeatherViewController: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo: WeatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -112,7 +112,7 @@ extension WeatherViewController: WeatherViewDelegate {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        guard let data = NSDataAsset(name: "weather")?.data else {
+        guard let data: Data = NSDataAsset(name: "weather")?.data else {
             return
         }
         

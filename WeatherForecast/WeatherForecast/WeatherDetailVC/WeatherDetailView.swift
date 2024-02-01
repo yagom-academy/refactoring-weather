@@ -10,6 +10,7 @@ import UIKit
 final class WeatherDetailView: UIView {
     
     // MARK: - Properties
+    private var mainStackView           : UIStackView!
     private let iconImageView           : UIImageView = UIImageView()
     private let weatherGroupLabel       : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
     private let weatherDescriptionLabel : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
@@ -40,6 +41,7 @@ final class WeatherDetailView: UIView {
         
         initialSetUp()
         setupMainStackView()
+        layoutMainStackView()
         updateUI()
     }
     
@@ -56,7 +58,7 @@ final class WeatherDetailView: UIView {
     }
     
     private func setupMainStackView() {
-        let mainStackView: UIStackView = .init(arrangedSubviews: [
+        mainStackView = .init(arrangedSubviews: [
             iconImageView,
             weatherGroupLabel,
             weatherDescriptionLabel,
@@ -76,7 +78,9 @@ final class WeatherDetailView: UIView {
         mainStackView.spacing = 8
         addSubview(mainStackView)
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        
+    }
+    
+    func layoutMainStackView() {
         let safeArea: UILayoutGuide = safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -84,7 +88,7 @@ final class WeatherDetailView: UIView {
             mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
                                                    constant: 16),
             mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                   constant: -16),
+                                                    constant: -16),
             iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
             iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
                                                  multiplier: 0.3)

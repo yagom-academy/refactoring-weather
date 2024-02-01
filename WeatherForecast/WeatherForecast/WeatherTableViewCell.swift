@@ -114,17 +114,19 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     // MARK: - UI Update Method
-    func updateCellUI(with weatherForecastInfo: WeatherForecastInfo, image: UIImage?, tempUnit: TemperatureUnit) {
+    func updateCellUI(with weatherForecastInfo: WeatherForecastInfo, tempUnit: TemperatureUnit, imageManager: ImageManagerProtocol) {
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         dateLabel.text = dateFormatter.string(from: date)
         
-        if let image = image {
-            weatherIcon.image = image
-        } else {
-            weatherIcon.image = defaultImage
+        let iconName: String = weatherForecastInfo.weather.icon
+        
+        imageManager.fetchImage(of: iconName) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.weatherIcon.image = image
+            }
         }
     }
     

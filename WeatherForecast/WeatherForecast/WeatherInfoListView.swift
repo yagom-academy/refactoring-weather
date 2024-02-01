@@ -16,13 +16,14 @@ final class WeatherInfoListView: UIView {
 
     // MARK: - Properties
     private var fetchDataManager: FetchDataManagerProtocol
-    private var imageManager: ImageManagerProtocol
     private var weatherJSON: WeatherJSON?
     private var tempUnit: TemperatureUnit = .metric
     private var tableView: UITableView!
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     weak var delegate: WeatherInfoListViewProtocol?
+    
+    var imageManager: ImageManagerProtocol
     
     // MARK: - Init
     init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol, imageManager: ImageManagerProtocol) {
@@ -100,15 +101,8 @@ extension WeatherInfoListView: UITableViewDataSource {
             return cell
         }
         
-        let iconName: String = weatherForecastInfo.weather.icon
-        var weatherImage: UIImage?
-        
-        imageManager.fetchImage(of: iconName) { image in
-            weatherImage = image
-        }
-        
         DispatchQueue.main.async {
-            cell.updateCellUI(with: weatherForecastInfo, image: weatherImage, tempUnit: self.tempUnit)
+            cell.updateCellUI(with: weatherForecastInfo, tempUnit: self.tempUnit, imageManager: self.imageManager)
         }
         
         return cell

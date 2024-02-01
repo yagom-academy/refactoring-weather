@@ -9,6 +9,7 @@ import UIKit
 
 protocol ImageManagerProtocol {
     func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> ())
+    var imageChache: NSCache<NSString, UIImage> { get }
 }
 
 struct ImageManager: ImageManagerProtocol {
@@ -19,12 +20,12 @@ struct ImageManager: ImageManagerProtocol {
         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            completion(image)
-            return
-        }
-        
         if let url = URL(string: urlString) {
+            
+            if let image = imageChache.object(forKey: urlString as NSString) {
+                completion(image)
+                return
+            }
             
             URLSession.shared.dataTask(with: url) { data, response, error in
                 

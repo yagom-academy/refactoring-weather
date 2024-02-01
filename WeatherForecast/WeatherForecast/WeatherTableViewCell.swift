@@ -28,6 +28,12 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
+    func setData(_ info: WeatherForecastInfo, unit: TempUnit) {
+        weatherLabel.text = info.weather.main
+        descriptionLabel.text = info.weather.description
+        temperatureLabel.text = "\(info.main.temp)\(unit.expression)"
+    }
+    
     private func layViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()

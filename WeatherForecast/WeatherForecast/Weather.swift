@@ -52,12 +52,39 @@ struct Coord: Decodable {
 // MARK: - Temperature Unit
 enum TempUnit: String {
     case metric, imperial
-    var expression: String {
+    
+    var expressStrategy: TempExpression {
         switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
+        case .metric:
+            MetricTempUnit()
+        case .imperial:
+            ImperialTempUnit()
         }
     }
+    
+    mutating func change() {
+        switch self {
+        case .metric:
+            self = .imperial
+        case .imperial:
+            self = .metric
+        }
+    }
+}
+
+protocol TempExpression {
+    var expression: String { get }
+    var text: String { get }
+}
+
+struct MetricTempUnit: TempExpression {
+    let expression: String = "℃"
+    let text: String = "섭씨"
+}
+
+struct ImperialTempUnit: TempExpression {
+    let expression: String = "℉"
+    let text: String = "화씨"
 }
 
 // MARK: - Weather Date Namespace

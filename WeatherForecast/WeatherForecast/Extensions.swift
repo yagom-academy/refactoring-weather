@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension Date {
     func toString(format: String) -> String {
@@ -13,5 +14,11 @@ extension Date {
         dateFormatter.locale = .init(identifier: "ko_KR")
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: self)
+    }
+}
+
+extension Data {
+    func toUIImage() -> UIImage? {
+        return UIImage(data: self)
     }
 }

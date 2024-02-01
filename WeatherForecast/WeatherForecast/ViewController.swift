@@ -121,9 +121,25 @@ extension ViewController {
     }
     
     private func setWeatherIconImageInTableView(image: UIImage?, tableView: UITableView, cell: WeatherTableViewCell, indexPath: IndexPath) {
+        
+        func isCorrectIndexPath(indexPath: IndexPath, tableView: UITableView, cell: UITableViewCell) -> Bool {
+            return indexPath == tableView.indexPath(for: cell)
+        }
+        
         if isCorrectIndexPath(indexPath: indexPath, tableView: tableView, cell: cell) {
             cell.weatherIcon.image = image
         }
+    }
+    
+    /// set success -> true
+    /// set fail -> false
+    private func setWeatherIconImageInCellFromCache(cell: WeatherTableViewCell, key: String) -> Bool {
+        if let image = imageFromCache(key: key) {
+            cell.weatherIcon.image = image
+            return true
+        }
+        
+        return false
     }
     
     private func imageFromCache(key: String) -> UIImage? {
@@ -135,6 +151,7 @@ extension ViewController {
         Task {
             let imageData: Data? = await requestWeatherIconImageData(urlString: urlString)
             let dataToImage: UIImage? = dataToUIImage(data: imageData)
+            
             DispatchQueue.main.async {
                 self.setImageCache(image: dataToImage, key: urlString)
                 self.setWeatherIconImageInTableView(image: dataToImage, tableView: tableView, cell: cell, indexPath: indexPath)
@@ -142,8 +159,21 @@ extension ViewController {
         }
     }
     
-    private func isCorrectIndexPath(indexPath: IndexPath, tableView: UITableView, cell: UITableViewCell) -> Bool {
-        return indexPath == tableView.indexPath(for: cell)
+    private func setCellLabelText(cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo) {
+        cell.weatherLabel.text = weatherForecastInfo.weather.main
+        cell.descriptionLabel.text = weatherForecastInfo.weather.description
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        cell.dateLabel.text = date.toString(format: WeatherDate.format)
+    }
+    
+    private func urlStringForIconRequest(iconName: String) -> String {
+        return "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+    }
+    
+    private func weatherForecastInfo(index: Int) -> WeatherForecastInfo? {
+        return weatherJSON?.weatherForecast[index]
     }
 }
 
@@ -160,26 +190,15 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell, let weatherForecastInfo = weatherForecastInfo(index: indexPath.row) else {
             return cell
         }
-        
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = date.toString(format: WeatherDate.format)
+        setCellLabelText(cell: cell, weatherForecastInfo: weatherForecastInfo)
                 
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        
-        if let image = imageFromCache(key: urlString) {
-            cell.weatherIcon.image = image
+        let urlString: String = urlStringForIconRequest(iconName: weatherForecastInfo.weather.icon)
+        if setWeatherIconImageInCellFromCache(cell: cell, key: urlString) {
             return cell
         }
-        
         processAfterWeatherIconImageRequest(urlString: urlString, indexPath: indexPath, tableView: tableView, cell: cell)
         
         return cell

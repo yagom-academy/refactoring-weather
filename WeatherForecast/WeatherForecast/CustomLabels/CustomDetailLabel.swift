@@ -9,7 +9,6 @@ import UIKit
 
 class CustomDetailLabel: UILabel {
 
-    
     init(with uiFont: UIFont = .preferredFont(forTextStyle: .body)) {
         super.init(frame: .zero)
         textColor = .black

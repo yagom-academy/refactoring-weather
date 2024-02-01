@@ -112,6 +112,10 @@ final class WeatherDetailView: UIView {
         sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset.stringFromTimeInterval())"
         
         let iconName: String = weatherInfo.weather.icon
+        updateImage(with: iconName)
+    }
+    
+    private func updateImage(with iconName: String) {
         imageManager.fetchImage(of: iconName) { [weak self] image in
             DispatchQueue.main.async {
                 self?.iconImageView.image = image

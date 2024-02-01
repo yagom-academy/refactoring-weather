@@ -45,7 +45,7 @@ class WeatherDetailVC: UIViewController {
     private func initialSetUp() {
         if let info = weatherForecastInfo {
             let date: Date = Date(timeIntervalSince1970: info.dt)
-            navigationItem.title = date.formattedString()
+            navigationItem.title = date.formattedStringFromDate()
         }
     }
 }

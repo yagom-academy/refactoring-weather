@@ -113,7 +113,7 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = date.formattedString()
+        dateLabel.text = date.formattedStringFromDate()
         
         let iconName: String = weatherForecastInfo.weather.icon
         imageManager.fetchImage(of: iconName) { [weak self] image in

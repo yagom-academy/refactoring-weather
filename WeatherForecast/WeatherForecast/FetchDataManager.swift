@@ -8,14 +8,14 @@
 import UIKit
 
 protocol FetchDataManagerProtocol {
-    func fetchWeatherJSON(completion: @escaping (WeatherJSON?) -> ())
+    func fetchWeatherData(completion: @escaping (WeatherData?) -> ())
 }
 
 struct FetchDataManager: FetchDataManagerProtocol {
     
-    func fetchWeatherJSON(completion: @escaping (WeatherJSON?) -> ()) {
+    func fetchWeatherData(completion: @escaping (WeatherData?) -> ()) {
         
-        let info: WeatherJSON
+        let info: WeatherData
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
@@ -25,7 +25,7 @@ struct FetchDataManager: FetchDataManagerProtocol {
         }
         
         do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            info = try jsonDecoder.decode(WeatherData.self, from: data)
             completion(info)
         } catch {
             print(error.localizedDescription)

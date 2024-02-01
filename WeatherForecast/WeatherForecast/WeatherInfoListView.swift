@@ -16,7 +16,7 @@ final class WeatherInfoListView: UIView {
 
     // MARK: - Properties
     private var fetchDataManager: FetchDataManagerProtocol
-    private var weatherJSON: WeatherJSON?
+    private var weatherData: WeatherData?
     private var tempUnit: TemperatureUnit = .metric
     private var tableView: UITableView!
     private let refreshControl: UIRefreshControl = UIRefreshControl()
@@ -69,9 +69,9 @@ final class WeatherInfoListView: UIView {
     }
     
     @objc func refresh() {
-        fetchDataManager.fetchWeatherJSON { [weak self] weatherJSON in
-            if let data = weatherJSON {
-                self?.weatherJSON = data
+        fetchDataManager.fetchWeatherData { [weak self] weatherData in
+            if let data = weatherData {
+                self?.weatherData = data
                 self?.tableView.reloadData()
                 self?.delegate?.fetchCityName(data.city.name)
             } else {
@@ -89,7 +89,7 @@ extension WeatherInfoListView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        weatherData?.weatherForecast.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -97,7 +97,7 @@ extension WeatherInfoListView: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo = weatherData?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -112,12 +112,12 @@ extension WeatherInfoListView: UITableViewDataSource {
 // MARK: - UITableViewDelegate method
 extension WeatherInfoListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let weatherJSON = weatherJSON else { return }
+        guard let weatherData = weatherData else { return }
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailVC = WeatherDetailVC(weatherForecastInfo: weatherJSON.weatherForecast[indexPath.row],
-                                                                    cityInfo: weatherJSON.city,
+        let detailViewController: WeatherDetailVC = WeatherDetailVC(weatherForecastInfo: weatherData.weatherForecast[indexPath.row],
+                                                                    cityInfo: weatherData.city,
                                                                     tempUnit: tempUnit)
         
         delegate?.fetchWeatherDetailVC(detailViewController)

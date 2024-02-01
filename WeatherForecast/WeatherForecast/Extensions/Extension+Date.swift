@@ -9,8 +9,9 @@ import Foundation
 
 extension Date {
     
-    /// Returns String with "yyyy-MM-dd(EEEEE) a HH:mm" format in "ko_KR" locale
-    func formattedString() -> String {
+    /// Returns String in "ko_KR" locale formatted as  "yyyy-MM-dd(EEEEE) a HH:mm"
+    /// - Return Value  example: "2024-01-20(토) 오전 7:40"
+    func formattedStringFromDate() -> String {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"

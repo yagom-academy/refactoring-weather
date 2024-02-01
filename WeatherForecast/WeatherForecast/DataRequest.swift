@@ -11,7 +11,7 @@ protocol DataRequestable {
     func request(urlString: String) async throws -> Data
 }
 
-struct DataRequest: DataRequestable {
+struct DataRequester: DataRequestable {
     
     func request(urlString: String) async throws -> Data {
         guard let url: URL = URL(string: urlString),

@@ -13,7 +13,7 @@ class WeatherListDetailViewController: UIViewController {
     var tempUnit: TempUnit = .metric
     let dataRequester: DataRequestable
     
-    init(dataRequester: DataRequestable = DataRequest()) {
+    init(dataRequester: DataRequestable = DataRequester()) {
         self.dataRequester = dataRequester
         super.init(nibName: nil, bundle: nil)
     }

@@ -15,10 +15,7 @@ final class WeatherListViewModel {
     let dataRequester: DataRequestable
     let jsonExtracter: any JsonFileExtractable
 
-    init(
-        dataRequester: DataRequestable = DataRequest(),
-        jsonExtracter: any JsonFileExtractable = JsonFileExtracter<WeatherJSON>(fileName: JsonAssetName.weather)
-    ) {
+    init(dataRequester: DataRequestable, jsonExtracter: any JsonFileExtractable) {
         self.dataRequester = dataRequester
         self.jsonExtracter = jsonExtracter
     }

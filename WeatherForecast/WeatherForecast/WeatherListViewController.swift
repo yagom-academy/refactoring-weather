@@ -12,8 +12,8 @@ class WeatherListViewController: UIViewController {
     let model: WeatherListViewModel
     
     init(
-        dataRequester: DataRequestable = DataRequest(),
-        jsonExtracter: any JsonFileExtractable = JsonFileExtracter<WeatherJSON>(fileName: "weather")
+        dataRequester: DataRequestable = DataRequester(),
+        jsonExtracter: any JsonFileExtractable = JsonFileExtracter<WeatherJSON>(fileName: JsonAssetName.weather)
     ) {
         self.model = .init(dataRequester: dataRequester, jsonExtracter: jsonExtracter)
         super.init(nibName: nil, bundle: nil)

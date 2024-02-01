@@ -10,7 +10,20 @@ import Foundation
 struct Celsius: TempUnit {
     private(set) var expression: String = "℃"
     private(set) var expressionTitle: String = "섭씨"
-    func convertTemp(temp: Double) -> String {
+    
+    func formattedTemp(_ temp: Double) -> String {
+        return "\(temp)\(expression)"
+    }
+    
+    func formattedTempMax(_ temp: Double) -> String {
+        return "\(temp)\(expression)"
+    }
+    
+    func formattedTempMin(_ temp: Double) -> String {
+        return "\(temp)\(expression)"
+    }
+    
+    func formattedFeelsLike(_ temp: Double) -> String {
         return "\(temp)\(expression)"
     }
 }

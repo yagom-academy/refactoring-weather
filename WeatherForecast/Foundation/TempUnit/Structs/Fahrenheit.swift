@@ -10,8 +10,20 @@ import Foundation
 struct Fahrenheit: TempUnit {
     private(set) var expression: String = "℉"
     private(set) var expressionTitle: String = "화씨"
-    func convertTemp(temp: Double) -> String {
-        let formattedTemp = String(format: "%.2f", (temp * 1.8) + 32)
-        return "\(formattedTemp)\(expression)"
+    
+    func formattedTemp(_ temp: Double) -> String {
+        return "\(celsiusToFahrenheit(temp: temp))\(expression)"
+    }
+    
+    func formattedTempMax(_ temp: Double) -> String {
+        return "\(celsiusToFahrenheit(temp: temp))\(expression)"
+    }
+    
+    func formattedTempMin(_ temp: Double) -> String {
+        return "\(celsiusToFahrenheit(temp: temp))\(expression)"
+    }
+    
+    func formattedFeelsLike(_ temp: Double) -> String {
+        return "\(celsiusToFahrenheit(temp: temp))\(expression)"
     }
 }

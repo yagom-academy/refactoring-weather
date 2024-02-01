@@ -40,9 +40,9 @@ final class WeatherInfo: WeatherInfoCoordinator {
        
     func getTemp(at index: Int) -> String? {
         guard let weatherForecastInfo = getWeatherForecastInfo(at: index) else { return nil }
-        return (tempUnit.convertTemp(temp: weatherForecastInfo.temp))
+        return tempUnit.formattedTemp(weatherForecastInfo.temp)
     }
-    
+     
     func toggleTempUnit() {
         if tempUnit is Fahrenheit {
             tempUnit = Celsius()

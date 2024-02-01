@@ -9,7 +9,6 @@ import UIKit
 class WeatherDetailVC: UIViewController {
     
     // MARK: - Properties
-//    private var weatherDetailView: WeatherDetailView!
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
     var tempUnit: TemperatureUnit = .metric
@@ -45,7 +44,6 @@ class WeatherDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
-//        setupWeatherDetailView()
     }
     
     
@@ -57,24 +55,4 @@ class WeatherDetailVC: UIViewController {
             navigationItem.title = dateFormatter.string(from: date)
         }
     }
-    
-//    let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-//    dateLabel.text = dateFormatter.string(from: date)
-    
-//    private func setupWeatherDetailView() {
-//        weatherDetailView = .init(imageManager: ImageManager(),
-//                                  weatherForecastInfo: weatherForecastInfo,
-//                                  cityInfo: cityInfo,
-//                                  tempUnit: tempUnit)
-//        
-//        view.addSubview(weatherDetailView)
-//        
-//        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-//        NSLayoutConstraint.activate([
-//            weatherDetailView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-//            weatherDetailView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-//            weatherDetailView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-//            weatherDetailView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-//        ])
-//    }
 }

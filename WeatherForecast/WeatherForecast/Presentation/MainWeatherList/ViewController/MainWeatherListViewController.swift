@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainWeatherListViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension MainWeatherListViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -77,7 +77,8 @@ extension ViewController {
     }
 }
 
-extension ViewController {
+extension MainWeatherListViewController {
+    // TODO: - 수정 필요
     private func fetchWeatherJSON() {
         
         let jsonDecoder: JSONDecoder = .init()
@@ -100,7 +101,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension MainWeatherListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -118,6 +119,7 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
+        // TODO: - 수정 필요
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
@@ -151,10 +153,10 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension MainWeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        // TODO: - 수정 필요
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city

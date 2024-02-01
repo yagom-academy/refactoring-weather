@@ -22,8 +22,15 @@ class WeatherForecastInfo: Decodable {
 
 // MARK: - MainClass
 class MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
-    let pressure, seaLevel, grndLevel, humidity, pop: Double
+    let temp: Double
+    let feelsLike: Double
+    let tempMin: Double
+    let tempMax: Double
+    let pressure: Double
+    let seaLevel: Double
+    let grndLevel: Double
+    let humidity: Double
+    let pop: Double
 }
 
 // MARK: - Weather
@@ -46,17 +53,6 @@ class City: Decodable {
 
 // MARK: - Coord
 class Coord: Decodable {
-    let lat, lon: Double
+    let lat: Double
+    let lon: Double
 }
-
-// MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
-}
-

@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     let model: WeatherListViewModel

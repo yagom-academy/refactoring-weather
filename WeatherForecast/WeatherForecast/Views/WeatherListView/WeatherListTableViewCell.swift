@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherListTableViewCell: UITableViewCell {
+final class WeatherListTableViewCell: UITableViewCell {
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!

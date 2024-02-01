@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        let vc = WeatherListViewController(weatherInfo: WeatherInfo(tempUnit: Imperial()))
+        let vc = WeatherListViewController(weatherInfo: WeatherInfo(tempUnit: Celsius()))
         let nav = UINavigationController(rootViewController: vc)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()

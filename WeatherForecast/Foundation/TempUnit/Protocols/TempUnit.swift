@@ -11,4 +11,5 @@ import Foundation
 protocol TempUnit {
     var expression: String { get }
     var expressionTitle: String { get }
+    func convertTemp(temp: Double) -> String
 }

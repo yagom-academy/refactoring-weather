@@ -1,12 +1,12 @@
 //
-//  WeatherForecast - WeatherDetailViewController.swift
-//  Created by yagom. 
+//  WeatherForecast - WeatherDetailViewController.swift -> WeatherListDetailViewController.swift
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
 // 
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+class WeatherListDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?

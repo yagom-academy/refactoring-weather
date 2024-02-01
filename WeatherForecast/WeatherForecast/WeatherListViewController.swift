@@ -1,12 +1,12 @@
 //
-//  WeatherForecast - ViewController.swift
-//  Created by yagom. 
+//  WeatherForecast - ViewController.swift -> WeatherListViewController.swift
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
 // 
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherListViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherListViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -62,7 +62,7 @@ extension ViewController {
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherListTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -83,7 +83,7 @@ extension ViewController {
     }
 }
 
-extension ViewController {
+extension WeatherListViewController {
     private func fetchWeatherJSON() {
         guard let result = weatherJsonExtractedResult() else { return }
         weatherJSON = result
@@ -120,7 +120,7 @@ extension ViewController {
         }
     }
     
-    private func setWeatherIconImageInTableView(image: UIImage?, tableView: UITableView, cell: WeatherTableViewCell, indexPath: IndexPath) {
+    private func setWeatherIconImageInTableView(image: UIImage?, tableView: UITableView, cell: WeatherListTableViewCell, indexPath: IndexPath) {
         
         func isCorrectIndexPath(indexPath: IndexPath, tableView: UITableView, cell: UITableViewCell) -> Bool {
             return indexPath == tableView.indexPath(for: cell)
@@ -133,7 +133,7 @@ extension ViewController {
     
     /// set success -> true
     /// set fail -> false
-    private func setWeatherIconImageInCellFromCache(cell: WeatherTableViewCell, key: String) -> Bool {
+    private func setWeatherIconImageInCellFromCache(cell: WeatherListTableViewCell, key: String) -> Bool {
         if let image = imageFromCache(key: key) {
             cell.weatherIcon.image = image
             return true
@@ -147,7 +147,7 @@ extension ViewController {
         return image
     }
     
-    private func processAfterWeatherIconImageRequest(urlString: String, indexPath: IndexPath, tableView: UITableView, cell: WeatherTableViewCell) {
+    private func processAfterWeatherIconImageRequest(urlString: String, indexPath: IndexPath, tableView: UITableView, cell: WeatherListTableViewCell) {
         Task {
             let imageData: Data? = await requestWeatherIconImageData(urlString: urlString)
             let dataToImage: UIImage? = dataToUIImage(data: imageData)
@@ -159,7 +159,7 @@ extension ViewController {
         }
     }
     
-    private func setCellLabelText(cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo) {
+    private func setCellLabelText(cell: WeatherListTableViewCell, weatherForecastInfo: WeatherForecastInfo) {
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
@@ -177,7 +177,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -190,7 +190,7 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell, let weatherForecastInfo = weatherForecastInfo(index: indexPath.row) else {
+        guard let cell: WeatherListTableViewCell = cell as? WeatherListTableViewCell, let weatherForecastInfo = weatherForecastInfo(index: indexPath.row) else {
             return cell
         }
         setCellLabelText(cell: cell, weatherForecastInfo: weatherForecastInfo)
@@ -205,11 +205,11 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
+        let detailViewController: WeatherListDetailViewController = WeatherListDetailViewController()
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city
         detailViewController.tempUnit = tempUnit

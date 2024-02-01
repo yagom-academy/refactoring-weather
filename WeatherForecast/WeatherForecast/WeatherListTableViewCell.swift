@@ -1,12 +1,12 @@
 //
-//  WeatherForecast - WeatherTableViewCell.swift
-//  Created by yagom. 
+//  WeatherForecast - WeatherTableViewCell.swift -> WeatherListTableViewCell.swift
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
 // 
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+class WeatherListTableViewCell: UITableViewCell {
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!

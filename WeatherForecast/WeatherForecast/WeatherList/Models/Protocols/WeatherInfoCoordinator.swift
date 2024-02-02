@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol WeatherInfoCoordinator {
+protocol WeatherInfoCoordinator: AnyObject {
     var weatherForecastInfo: [WeatherForecastInfo]? { get }
     var weatherJson: WeatherJSON? { get set }
     

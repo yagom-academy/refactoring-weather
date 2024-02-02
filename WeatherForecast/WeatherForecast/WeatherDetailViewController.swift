@@ -10,7 +10,7 @@ class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = .celsius
     
     override func loadView() {
         let weatherDetailView: WeatherDetailView = WeatherDetailView(

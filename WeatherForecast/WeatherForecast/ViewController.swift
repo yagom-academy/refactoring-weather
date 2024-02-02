@@ -10,7 +10,7 @@ class ViewController: UIViewController {
     var tableView: UITableView!
     let imageCache: ImageCache = ImageCache()
     var model: WeatherForecastModel!
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = .celsius
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,14 +21,8 @@ class ViewController: UIViewController {
 
 extension ViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        tempUnit.toggle()
+        navigationItem.rightBarButtonItem?.title = tempUnit.title
         refresh()
     }
     

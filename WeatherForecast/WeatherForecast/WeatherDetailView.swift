@@ -51,7 +51,7 @@ class WeatherDetailView: UIView {
     
     let weatherForecastInfo: WeatherForecastInfo
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = .celsius
 }
 
 extension WeatherDetailView {

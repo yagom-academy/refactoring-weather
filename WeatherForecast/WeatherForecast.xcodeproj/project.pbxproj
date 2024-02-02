@@ -12,6 +12,8 @@
 		B53BEAB72B6B6B6900C8C052 /* WeatherForecastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAB62B6B6B6900C8C052 /* WeatherForecastModel.swift */; };
 		B53BEAC42B6CFBFA00C8C052 /* CustomDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */; };
 		B53BEAC62B6CFC0D00C8C052 /* NSDataAssetConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */; };
+		B53BEAC02B6CF45B00C8C052 /* TempUnit+Strategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEABF2B6CF45B00C8C052 /* TempUnit+Strategy.swift */; };
+		B53BEAC22B6CF50300C8C052 /* TempConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC12B6CF50300C8C052 /* TempConverter.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
 		C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */; };
@@ -29,6 +31,8 @@
 		B53BEAB62B6B6B6900C8C052 /* WeatherForecastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastModel.swift; sourceTree = "<group>"; };
 		B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDecoder.swift; sourceTree = "<group>"; };
 		B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDataAssetConvertor.swift; sourceTree = "<group>"; };
+		B53BEABF2B6CF45B00C8C052 /* TempUnit+Strategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TempUnit+Strategy.swift"; sourceTree = "<group>"; };
+		B53BEAC12B6CF50300C8C052 /* TempConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempConverter.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C7743D892B21C38100DF0D09 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				B53BEABF2B6CF45B00C8C052 /* TempUnit+Strategy.swift */,
 				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
 				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
@@ -87,6 +92,7 @@
 				B53BEAB62B6B6B6900C8C052 /* WeatherForecastModel.swift */,
 				B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */,
 				B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */,
+				B53BEAC12B6CF50300C8C052 /* TempConverter.swift */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
@@ -162,6 +168,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B53BEAC02B6CF45B00C8C052 /* TempUnit+Strategy.swift in Sources */,
 				B53BEA952B6A6F6600C8C052 /* WeatherDetailView.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
@@ -171,6 +178,7 @@
 				B53BEAB72B6B6B6900C8C052 /* WeatherForecastModel.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				B53BEA932B6A3DDC00C8C052 /* ImageCache.swift in Sources */,
+				B53BEAC22B6CF50300C8C052 /* TempConverter.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				B53BEAC42B6CFBFA00C8C052 /* CustomDecoder.swift in Sources */,
 			);

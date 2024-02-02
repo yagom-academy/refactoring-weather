@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
@@ -31,7 +31,7 @@ class WeatherTableViewCell: UITableViewCell {
     func setData(_ info: WeatherForecastInfo, unit: TempUnit) {
         weatherLabel.text = info.weather.main
         descriptionLabel.text = info.weather.description
-        temperatureLabel.text = "\(info.main.temp)\(unit.expression)"
+        temperatureLabel.text = unit.strategy.expressionToString(info.main.temp)
     }
     
     private func layViews() {

@@ -15,7 +15,7 @@ protocol Cache {
     func removeAll()
 }
 
-class ImageCache: Cache {
+final class ImageCache: Cache {
     private let cache: NSCache<NSString, UIImage> = NSCache()
     typealias Key = String
     typealias Value = UIImage

@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     var tableView: UITableView!
     let imageCache: ImageCache = ImageCache()
     var model: WeatherForecastModel!

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherForecastModel {
+final class WeatherForecastModel {
     var weatherJSON: WeatherJSON!
     
     init() {

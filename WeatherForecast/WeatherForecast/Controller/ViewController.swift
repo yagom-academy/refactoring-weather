@@ -73,24 +73,25 @@ extension ViewController {
 
 extension ViewController {
     private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
+      let jsonDecoder: JSONDecodeHelperProtocol = JSONDecodeHelper()
+      
+      guard let data = NSDataAsset(name: "weather")?.data else {
+        return
+      }
+      
+      let info: WeatherJSON
+      
+      let result = jsonDecoder.decode(WeatherJSON.self, from: data)
+      switch result {
+      case .success(let data):
+        info = data
+      case .failure(let error):
+        print(error.localizedDescription)
+        return
+      }
+      
+      weatherJSON = info
+      navigationItem.title = weatherJSON?.city.name
     }
 }
 

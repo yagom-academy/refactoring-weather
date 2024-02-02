@@ -28,6 +28,8 @@
 		EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */; };
 		EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270BD2B6CBAC600D9A0A8 /* ImageDownLoader.swift */; };
 		EFF270C02B6CBB0200D9A0A8 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270BF2B6CBB0200D9A0A8 /* ImageProvider.swift */; };
+		EFF270C22B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */; };
+		EFF270C42B6CC03B00D9A0A8 /* JSONDecodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownLoaderService.swift; sourceTree = "<group>"; };
 		EFF270BD2B6CBAC600D9A0A8 /* ImageDownLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownLoader.swift; sourceTree = "<group>"; };
 		EFF270BF2B6CBB0200D9A0A8 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
+		EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecodeHelperProtocol.swift; sourceTree = "<group>"; };
+		EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecodeHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +173,7 @@
 				EF5124162B695AC200F8AF4F /* DateFormatterContextService.swift */,
 				EFF270B92B6CBA9900D9A0A8 /* ImageProviderService.swift */,
 				EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */,
+				EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 				EF51241C2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift */,
 				EFF270BD2B6CBAC600D9A0A8 /* ImageDownLoader.swift */,
 				EFF270BF2B6CBB0200D9A0A8 /* ImageProvider.swift */,
+				EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */,
 			);
 			path = Implement;
 			sourceTree = "<group>";
@@ -296,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFF270C42B6CC03B00D9A0A8 /* JSONDecodeHelper.swift in Sources */,
 				EF51241B2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */,
@@ -311,6 +318,7 @@
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				EF5124222B695BC300F8AF4F /* DateFormatter+Extensions.swift in Sources */,
+				EFF270C22B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift in Sources */,
 				EFF270BA2B6CBA9900D9A0A8 /* ImageProviderService.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 			);

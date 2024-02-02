@@ -36,9 +36,8 @@ extension AppDependency {
     )
     
     let navigationController: UINavigationController = UINavigationController(rootViewController: viewController)
-    navigationController.navigationBar.prefersLargeTitles = true
-    navigationController.navigationBar.tintColor = .black
     
+    window.backgroundColor = .white
     window.rootViewController = navigationController
     
     return AppDependency(

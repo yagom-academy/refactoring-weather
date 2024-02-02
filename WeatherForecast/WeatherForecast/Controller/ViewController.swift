@@ -7,12 +7,15 @@
 import UIKit
 
 final class ViewController: UIViewController {
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
-    var weatherJSON: WeatherJSON?
-    var icons: [UIImage]?
-
-    var tempUnit: TempUnit = .metric
+ private lazy var tableView: UITableView = WeatherTableView(
+  delegate: self,
+  dataSource: self
+ )
+  
+  var weatherJSON: WeatherJSON?
+  var icons: [UIImage]?
+  
+  var tempUnit: TempUnit = .metric
   
   struct Dependency {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
@@ -36,10 +39,10 @@ final class ViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
   
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        initialSetUp()
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    initialSetUp()
+  }
 }
 
 extension ViewController {
@@ -55,29 +58,18 @@ extension ViewController {
         refresh()
     }
     
-    @objc private func refresh() {
+    private func refresh() {
         fetchWeatherJSON()
         tableView.reloadData()
-        refreshControl.endRefreshing()
     }
     
     private func initialSetUp() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
         
         layTable()
-        
-        refreshControl.addTarget(self,
-                                 action: #selector(refresh),
-                                 for: .valueChanged)
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
     }
     
     private func layTable() {
-        tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -156,17 +148,22 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-      let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
-        defaultDateFormatter: dependency.defaultDateFormatter,
-        sunsetDateFormatter: dependency.sunsetDateFormatter,
-        weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
-        cityInfo: weatherJSON?.city,
-        tempUnit: tempUnit
-      )
-      let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
-      navigationController?.show(weatherDetailViewController, sender: self)
-    }
+extension ViewController: UITableViewDelegateWithRefresh {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
+      defaultDateFormatter: dependency.defaultDateFormatter,
+      sunsetDateFormatter: dependency.sunsetDateFormatter,
+      weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
+      cityInfo: weatherJSON?.city,
+      tempUnit: tempUnit
+    )
+    let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
+    navigationController?.show(weatherDetailViewController, sender: self)
+  }
+  
+  func tableView(_ tableView: UITableView, refresh: Void) {
+    fetchWeatherJSON()
+    tableView.reloadData()
+  }
 }

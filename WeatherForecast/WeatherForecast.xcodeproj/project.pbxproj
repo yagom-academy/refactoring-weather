@@ -31,6 +31,8 @@
 		EFF270C22B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */; };
 		EFF270C42B6CC03B00D9A0A8 /* JSONDecodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */; };
 		EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C52B6CD1D900D9A0A8 /* AppDependency.swift */; };
+		EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */; };
+		EFF270CA2B6CE2C000D9A0A8 /* RefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,8 @@
 		EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecodeHelperProtocol.swift; sourceTree = "<group>"; };
 		EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecodeHelper.swift; sourceTree = "<group>"; };
 		EFF270C52B6CD1D900D9A0A8 /* AppDependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
+		EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableView.swift; sourceTree = "<group>"; };
+		EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
+				EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */,
+				EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -310,6 +316,7 @@
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
+				EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */,
 				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
 				EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */,
 				EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */,
@@ -325,6 +332,7 @@
 				EFF270C22B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift in Sources */,
 				EFF270BA2B6CBA9900D9A0A8 /* ImageProviderService.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				EFF270CA2B6CE2C000D9A0A8 /* RefreshControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

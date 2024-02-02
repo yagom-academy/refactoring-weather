@@ -6,14 +6,29 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
-
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TempUnit = .metric
-    
-    let dateFormatter = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
-    
+final class WeatherDetailViewController: UIViewController {
+  struct Dependency {
+    let defaultDateFormatter: DateFormatterContextService
+    let sunsetDateFormatter: DateFormatterContextService
+    let weatherForecastInfo: WeatherForecastInfo?
+    let cityInfo: City?
+    let tempUnit: TempUnit
+  }
+  
+  private let dependency: Dependency
+  
+  init(dependency: Dependency) {
+    self.dependency = dependency
+    super.init(
+      nibName: nil,
+      bundle: nil
+    )
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -21,10 +36,10 @@ class WeatherDetailViewController: UIViewController {
     
     private func initialSetUp() {
         view.backgroundColor = .white
+      
+      guard let listInfo = dependency.weatherForecastInfo else { return }
         
-        guard let listInfo = weatherForecastInfo else { return }
-        
-      navigationItem.title = dateFormatter.string(from: listInfo.dt)
+      navigationItem.title = dependency.defaultDateFormatter.string(from: listInfo.dt)
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -89,18 +104,18 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+      temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(dependency.tempUnit.expression)"
+      feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(dependency.tempUnit.expression)"
+      maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(dependency.tempUnit.expression)"
+      minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(dependency.tempUnit.expression)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
-          let dateFormatter = DateFormatterContext(strategy: SunsetDateFormatterStrategy())
-          sunriseTimeLabel.text = "일출 : \(dateFormatter.string(from: cityInfo.sunrise))"
-          sunsetTimeLabel.text = "일몰 : \(dateFormatter.string(from: cityInfo.sunset))"
-        }
+      if let cityInfo = dependency.cityInfo {
+        let dateFormatter = dependency.sunsetDateFormatter
+        sunriseTimeLabel.text = "일출 : \(dateFormatter.string(from: cityInfo.sunrise))"
+        sunsetTimeLabel.text = "일몰 : \(dateFormatter.string(from: cityInfo.sunset))"
+      }
 
       Task {
         let iconName: String = listInfo.weather.icon

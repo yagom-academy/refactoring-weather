@@ -15,7 +15,7 @@ extension AppDependency {
   static func resolve(_ scene: UIWindowScene) -> AppDependency {
     let window: UIWindow = UIWindow(windowScene: scene)
     window.makeKeyAndVisible()
-    let jsonDecoder: JSONDecodeHelperProtocol = JSONDecodeHelper()
+    let dataAssetProvider: DataAssetProviderService = DataAssetProvider.shared
     let imageProvider: ImageProviderService = ImageProvider.shared
     let defaultDateFormatter: DateFormatterContextService = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
     let sunsetDateFormatter: DateFormatterContextService = DateFormatterContext(strategy: SunsetDateFormatterStrategy())
@@ -30,7 +30,7 @@ extension AppDependency {
         weatherDetailViewControllerFactory: weatherViewControllerFactory,
         defaultDateFormatter: defaultDateFormatter,
         sunsetDateFormatter: sunsetDateFormatter,
-        jsonDecoder: jsonDecoder,
+        dataAssetProvider: dataAssetProvider,
         imageProvider: imageProvider
       )
     )

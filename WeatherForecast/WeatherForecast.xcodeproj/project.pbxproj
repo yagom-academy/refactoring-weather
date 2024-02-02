@@ -33,6 +33,8 @@
 		EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C52B6CD1D900D9A0A8 /* AppDependency.swift */; };
 		EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */; };
 		EFF270CA2B6CE2C000D9A0A8 /* RefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */; };
+		EFF270CC2B6D1FD500D9A0A8 /* DataAssetProviderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */; };
+		EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,8 @@
 		EFF270C52B6CD1D900D9A0A8 /* AppDependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
 		EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableView.swift; sourceTree = "<group>"; };
 		EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControl.swift; sourceTree = "<group>"; };
+		EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAssetProviderService.swift; sourceTree = "<group>"; };
+		EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAssetProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +185,7 @@
 				EF5124142B695A4F00F8AF4F /* DateFormatterStrategy.swift */,
 				EF5124162B695AC200F8AF4F /* DateFormatterContextService.swift */,
 				EFF270B92B6CBA9900D9A0A8 /* ImageProviderService.swift */,
+				EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */,
 				EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */,
 				EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */,
 			);
@@ -197,6 +202,7 @@
 				EF51241C2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift */,
 				EFF270BD2B6CBAC600D9A0A8 /* ImageDownLoader.swift */,
 				EFF270BF2B6CBB0200D9A0A8 /* ImageProvider.swift */,
+				EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */,
 				EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */,
 			);
 			path = Implement;
@@ -318,6 +324,7 @@
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
 				EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */,
 				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
+				EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */,
 				EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */,
 				EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
@@ -326,6 +333,7 @@
 				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,
 				EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */,
 				EF5124112B6945BD00F8AF4F /* DateFormatterCache.swift in Sources */,
+				EFF270CC2B6D1FD500D9A0A8 /* DataAssetProviderService.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				EF5124222B695BC300F8AF4F /* DateFormatter+Extensions.swift in Sources */,

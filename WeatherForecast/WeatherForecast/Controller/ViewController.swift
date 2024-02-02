@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
     let defaultDateFormatter: DateFormatterContextService
     let sunsetDateFormatter: DateFormatterContextService
-    let jsonDecoder: JSONDecodeHelperProtocol
+    let dataAssetProvider: DataAssetProviderService
     let imageProvider: ImageProviderService
   }
   
@@ -57,12 +57,21 @@ extension ViewController {
         }
         refresh()
     }
-    
-    private func refresh() {
-        fetchWeatherJSON()
+  
+  private func refresh() {
+    Task {
+      let fetchResult = await fetchWeatherJSON()
+      switch fetchResult {
+      case .success(let weatherJSON):
+        self.weatherJSON = weatherJSON
         tableView.reloadData()
+        navigationItem.title = weatherJSON.city.name
+      case .failure(let error):
+        print(error.localizedDescription)
+      }
     }
-    
+  }
+  
     private func initialSetUp() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
         
@@ -85,33 +94,29 @@ extension ViewController {
 }
 
 extension ViewController {
-    private func fetchWeatherJSON() {
-      
-      guard let data = NSDataAsset(name: "weather")?.data else {
-        return
-      }
-      
-      let info: WeatherJSON
-      
-      let result = dependency.jsonDecoder.decode(
+  private func fetchWeatherJSON() async -> Result<WeatherJSON, Error> {
+    var result: Result<WeatherJSON, Error>
+    let dataResult = dependency
+      .dataAssetProvider
+      .data(
         WeatherJSON.self,
-        from: data
+        name: "weather"
       )
-      switch result {
-      case .success(let data):
-        info = data
-      case .failure(let error):
-        print(error.localizedDescription)
-        return
-      }
+    
+    switch dataResult {
+    case .success(let weatherJSON):
+      result = .success(weatherJSON)
       
-      weatherJSON = info
-      navigationItem.title = weatherJSON?.city.name
+    case .failure(let error):
+      print(error.localizedDescription)
+      result = .failure(error)
     }
+    
+    return result
+  }
 }
 
 extension ViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
@@ -163,7 +168,6 @@ extension ViewController: UITableViewDelegateWithRefresh {
   }
   
   func tableView(_ tableView: UITableView, refresh: Void) {
-    fetchWeatherJSON()
-    tableView.reloadData()
+    self.refresh()
   }
 }

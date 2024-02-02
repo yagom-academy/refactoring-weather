@@ -7,6 +7,7 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
+    
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
@@ -35,6 +36,7 @@ class WeatherTableViewCell: UITableViewCell {
         dateLabel = UILabel()
         temperatureLabel = UILabel()
         weatherLabel = UILabel()
+        dashLabel = UILabel()
         descriptionLabel = UILabel()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
@@ -86,7 +88,7 @@ class WeatherTableViewCell: UITableViewCell {
         contentsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(contentsStackView)
-                
+                 
         NSLayoutConstraint.activate([
             contentsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             contentsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -96,12 +98,33 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
+}
+
+extension WeatherTableViewCell {
     private func reset() {
         weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    
+    public func setData(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit) {
+        self.weatherLabel.text = weatherForecastInfo.weather.main
+        self.descriptionLabel.text = weatherForecastInfo.weather.description
+        self.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let dateFormatter: DateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ko_KR")
+        dateFormatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        self.dateLabel.text = dateFormatter.string(from: date)
+    }
+    
+    public func setImage(image: UIImage) {
+        DispatchQueue.main.async {
+            self.weatherIcon.image = image
+        }
     }
 }

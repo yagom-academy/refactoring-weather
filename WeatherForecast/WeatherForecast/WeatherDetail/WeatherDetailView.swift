@@ -1,13 +1,28 @@
 //
-//  WeatherForecast - WeatherDetailViewController.swift
-//  Created by yagom. 
-//  Copyright © yagom. All rights reserved.
-// 
+//  WeatherDetailView.swift
+//  WeatherForecast
+//
+//  Created by Daegeon Choi on 2024/02/03.
+//
 
+import Foundation
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+protocol WeatherDetailDelegate {
+    var navigationItem: UINavigationItem { get }
+}
 
+class WeatherDeatilView: UIView {
+    private var delegate: WeatherDetailDelegate
+    private var weatherAPI: WeatherAPI
+    
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
+    
     let iconImageView: UIImageView = UIImageView()
     let weatherGroupLabel: UILabel = UILabel()
     let weatherDescriptionLabel: UILabel = UILabel()
@@ -21,36 +36,21 @@ class WeatherDetailViewController: UIViewController {
     let sunsetTimeLabel: UILabel = UILabel()
     let spacingView: UIView = UIView()
     
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TempUnit = .metric
-    
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        initialSetUp()
-    }
-    
-    private func initialSetUp() {
-        setUpView()
-        setUpData(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo)
+    init(weatherDetailInfo: WeatherDetailInfo, weatherAPI: WeatherAPI, delegate: WeatherDetailDelegate) {
+        self.weatherAPI = weatherAPI
+        self.delegate = delegate
+        super.init(frame: .zero)
+        setUpViews()
         setUpLayout()
-        dataTask()
+        setUpData(weatherDetailInfo: weatherDetailInfo)
     }
     
-    private func setUpView() {
-        view.backgroundColor = .white
-        
-        if let timeInterval = weatherForecastInfo?.dt {
-            let date = Date(timeIntervalSince1970: timeInterval)
-            navigationItem.title = dateFormatter.string(from: date)
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setUpViews() {
+        self.backgroundColor = .white
         
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -87,10 +87,10 @@ class WeatherDetailViewController: UIViewController {
         mainStackView.axis = .vertical
         mainStackView.alignment = .center
         mainStackView.spacing = 8
-        view.addSubview(mainStackView)
+        self.addSubview(mainStackView)
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
+        let safeArea: UILayoutGuide = self.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
@@ -103,47 +103,40 @@ class WeatherDetailViewController: UIViewController {
                                                  multiplier: 0.3)
         ])
     }
-    
-    private func dataTask() {
-        
-        guard let listInfo = weatherForecastInfo else { return }
-        
-        Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            iconImageView.image = image
-        }
-    }
 }
 
-extension WeatherDetailViewController {
-    private func setUpData(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?) {
-        setUpData(weatherForecastInfo: weatherForecastInfo)
+extension WeatherDeatilView {
+    
+    private func setUpData(weatherDetailInfo: WeatherDetailInfo) {
+        
+        let weatherForecastInfo = weatherDetailInfo.weatherForecastInfo
+        let cityInfo = weatherDetailInfo.cityInfo
+        let tempUnit = weatherDetailInfo.tempUnit
+        
+        setUpData(weatherForecastInfo: weatherForecastInfo, tempExpression: tempUnit.expression)
         setUpData(cityInfo: cityInfo)
+        imageTask(imageName: weatherForecastInfo?.weather.icon)
     }
     
-    private func setUpData(weatherForecastInfo: WeatherForecastInfo?) {
+    private func setUpData(weatherForecastInfo: WeatherForecastInfo?, tempExpression: String) {
         guard let listInfo = weatherForecastInfo else { return }
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempExpression)"
+        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempExpression)"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempExpression)"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempExpression)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+        
+        if let timeInterval = weatherForecastInfo?.dt {
+            let date = Date(timeIntervalSince1970: timeInterval)
+            delegate.navigationItem.title = dateFormatter.string(from: date)
+        }
     }
     
     private func setUpData(cityInfo: City?) {
-        
         guard let cityInfo else { return }
         
         let formatter: DateFormatter = DateFormatter()
@@ -152,5 +145,16 @@ extension WeatherDetailViewController {
         formatter.locale = .init(identifier: "ko_KR")
         sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
         sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+    }
+    
+    private func imageTask(imageName: String?) {
+        
+        guard let imageName else { return }
+        
+        weatherAPI.fetchImage(iconName: imageName) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.iconImageView.image = image
+            }
+        }
     }
 }

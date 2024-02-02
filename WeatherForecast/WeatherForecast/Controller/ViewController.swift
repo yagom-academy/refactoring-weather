@@ -6,15 +6,36 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
-  let dateFormatter = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
 
     var tempUnit: TempUnit = .metric
-    
+  
+  struct Dependency {
+    let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
+    let defaultDateFormatter: DateFormatterContextService
+    let sunsetDateFormatter: DateFormatterContextService
+    let jsonDecoder: JSONDecodeHelperProtocol
+    let imageProvider: ImageProviderService
+  }
+  
+  private let dependency: Dependency
+  
+  init(dependency: Dependency) {
+    self.dependency = dependency
+    super.init(
+      nibName: nil,
+      bundle: nil
+    )
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -73,7 +94,6 @@ extension ViewController {
 
 extension ViewController {
     private func fetchWeatherJSON() {
-      let jsonDecoder: JSONDecodeHelperProtocol = JSONDecodeHelper()
       
       guard let data = NSDataAsset(name: "weather")?.data else {
         return
@@ -81,7 +101,10 @@ extension ViewController {
       
       let info: WeatherJSON
       
-      let result = jsonDecoder.decode(WeatherJSON.self, from: data)
+      let result = dependency.jsonDecoder.decode(
+        WeatherJSON.self,
+        from: data
+      )
       switch result {
       case .success(let data):
         info = data
@@ -117,7 +140,7 @@ extension ViewController: UITableViewDataSource {
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
-      cell.dateLabel.text = dateFormatter.string(from: weatherForecastInfo.dt)
+      cell.dateLabel.text = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
                 
         let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
@@ -136,15 +159,14 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-      let detailViewController: WeatherDetailViewController = WeatherDetailViewController(dependency: .init(
-        defaultDateFormatter: DateFormatterContext(strategy: DefaultDateFormatterStrategy()),
-        sunsetDateFormatter: DateFormatterContext(strategy: SunsetDateFormatterStrategy()),
+      let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
+        defaultDateFormatter: dependency.defaultDateFormatter,
+        sunsetDateFormatter: dependency.sunsetDateFormatter,
         weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
         cityInfo: weatherJSON?.city,
         tempUnit: tempUnit
-      ))
-      
-      navigationController?.show(detailViewController, sender: self)
+      )
+      let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
+      navigationController?.show(weatherDetailViewController, sender: self)
     }
 }

@@ -37,6 +37,7 @@
 		EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */; };
 		EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */; };
 		EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */; };
+		EFF270D52B6D2C9A00D9A0A8 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAssetProvider.swift; sourceTree = "<group>"; };
 		EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepository.swift; sourceTree = "<group>"; };
 		EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepositoryService.swift; sourceTree = "<group>"; };
+		EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				EFF270D32B6D2C9000D9A0A8 /* Utils */,
 				EF5124202B695BB600F8AF4F /* Extensions */,
 				EF5123FF2B69428100F8AF4F /* Controller */,
 				EF5123FC2B69424800F8AF4F /* AppStart */,
@@ -220,6 +223,14 @@
 				EF5124212B695BC300F8AF4F /* DateFormatter+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		EFF270D32B6D2C9000D9A0A8 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +347,7 @@
 				EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				EFF270C02B6CBB0200D9A0A8 /* ImageProvider.swift in Sources */,
+				EFF270D52B6D2C9A00D9A0A8 /* Observable.swift in Sources */,
 				EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */,
 				EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */,
 				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,

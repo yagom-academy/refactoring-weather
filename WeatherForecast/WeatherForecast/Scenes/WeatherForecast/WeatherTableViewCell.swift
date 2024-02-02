@@ -7,11 +7,11 @@
 import UIKit
 
 final class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -32,6 +32,14 @@ final class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = info.weather.main
         descriptionLabel.text = info.weather.description
         temperatureLabel.text = unit.strategy.expressionToString(info.main.temp)
+    }
+    
+    func setDateLabel(with string: String) {
+        dateLabel.text = string
+    }
+    
+    func setWeatherIcon(image: UIImage?) {
+        weatherIcon.image = image
     }
     
     private func layViews() {

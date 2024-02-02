@@ -1,16 +1,16 @@
 //
-//  WeatherForecast - ViewController.swift
+//  WeatherForecast - WeatherForecastViewController.swift
 //  Created by yagom. 
 //  Copyright © yagom. All rights reserved.
 // 
 
 import UIKit
 
-final class ViewController: UIViewController {
-    var tableView: UITableView!
-    let imageCache: ImageCache = ImageCache()
-    var model: WeatherForecastModel!
-    var tempUnit: TempUnit = .celsius
+final class WeatherForecastViewController: UIViewController {
+    private var tableView: UITableView!
+    private let imageCache: ImageCache = ImageCache()
+    private var model: WeatherForecastModel!
+    private var tempUnit: TempUnit = .celsius
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +19,7 @@ final class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherForecastViewController {
     @objc private func changeTempUnit() {
         tempUnit.toggle()
         navigationItem.rightBarButtonItem?.title = tempUnit.title
@@ -60,15 +60,24 @@ extension ViewController {
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
     }
+    
+    private func fetchImage(urlString: String) async -> UIImage? {
+        guard let url: URL = URL(string: urlString),
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let image: UIImage = UIImage(data: data) else {
+            return nil
+        }
+        return image
+    }
 }
 
-extension ViewController {
+extension WeatherForecastViewController {
     private func requestWeatherJSON() {
         navigationItem.title = model.cityName
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherForecastViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         model.weatherForecastCount
@@ -90,27 +99,20 @@ extension ViewController: UITableViewDataSource {
         dateFormatter.locale = .init(identifier: "ko_KR")
         dateFormatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
     
-        cell.dateLabel.text = dateFormatter.string(from: date)
+        cell.setDateLabel(with: dateFormatter.string(from: date))
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
         if let image = imageCache[urlString] {
-            cell.weatherIcon.image = image
+            cell.setWeatherIcon(image: image)
             return cell
         }
         
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageCache[urlString] = image
-            
             if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
+                let image = await fetchImage(urlString: urlString)
+                cell.setWeatherIcon(image: image)
             }
         }
         
@@ -118,16 +120,19 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
+        
         let weatherInfo = model.weatherForecast[indexPath.row]
         
-        detailViewController.weatherForecastInfo = weatherInfo
-        detailViewController.cityInfo = model.city
-        detailViewController.tempUnit = tempUnit
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(
+            weatherForecastInfo: weatherInfo,
+            cityInfo: model.city,
+            tempUnit: tempUnit
+        )
+        
         navigationController?.show(detailViewController, sender: self)
     }
 }

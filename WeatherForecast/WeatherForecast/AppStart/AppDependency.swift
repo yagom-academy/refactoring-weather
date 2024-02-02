@@ -20,7 +20,7 @@ extension AppDependency {
     let defaultDateFormatter: DateFormatterContextService = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
     let sunsetDateFormatter: DateFormatterContextService = DateFormatterContext(strategy: SunsetDateFormatterStrategy())
     let weatherRepository: WeatherRepositoryService = WeatherRepository(dataAssetProvider: dataAssetProvider)
-
+    let tempUnitManager: TempUnitManagerService = TempUnitManager()
       
     let weatherViewControllerFactory = { dependency in
       WeatherDetailViewController(dependency: dependency)
@@ -32,7 +32,8 @@ extension AppDependency {
         defaultDateFormatter: defaultDateFormatter,
         sunsetDateFormatter: sunsetDateFormatter,
         weatherRepository: weatherRepository,
-        imageProvider: imageProvider
+        imageProvider: imageProvider,
+        tempUnitManager: tempUnitManager
       )
     )
     

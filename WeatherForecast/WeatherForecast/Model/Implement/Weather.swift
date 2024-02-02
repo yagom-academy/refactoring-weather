@@ -51,11 +51,18 @@ class Coord: Decodable {
 
 // MARK: - Temperature Unit
 enum TempUnit: String {
-    case metric, imperial
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
+  case metric, imperial
+  var expression: String {
+    switch self {
+    case .metric: return "℃"
+    case .imperial: return "℉"
     }
+  }
+  
+  var character: String {
+    switch self {
+    case .metric: return "섭씨"
+    case .imperial: return "화씨"
+    }
+  }
 }

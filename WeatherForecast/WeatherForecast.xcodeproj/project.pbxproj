@@ -38,6 +38,8 @@
 		EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */; };
 		EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */; };
 		EFF270D52B6D2C9A00D9A0A8 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */; };
+		EFF270D72B6D3D0F00D9A0A8 /* TempUnitManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D62B6D3D0F00D9A0A8 /* TempUnitManagerService.swift */; };
+		EFF270D92B6D3D2300D9A0A8 /* TempUnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,8 @@
 		EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepository.swift; sourceTree = "<group>"; };
 		EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepositoryService.swift; sourceTree = "<group>"; };
 		EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		EFF270D62B6D3D0F00D9A0A8 /* TempUnitManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnitManagerService.swift; sourceTree = "<group>"; };
+		EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +200,7 @@
 				EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */,
 				EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */,
 				EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */,
+				EFF270D62B6D3D0F00D9A0A8 /* TempUnitManagerService.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -213,6 +218,7 @@
 				EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */,
 				EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */,
 				EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */,
+				EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */,
 			);
 			path = Implement;
 			sourceTree = "<group>";
@@ -339,11 +345,13 @@
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
+				EFF270D72B6D3D0F00D9A0A8 /* TempUnitManagerService.swift in Sources */,
 				EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */,
 				EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */,
 				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
 				EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */,
 				EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */,
+				EFF270D92B6D3D2300D9A0A8 /* TempUnitManager.swift in Sources */,
 				EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				EFF270C02B6CBB0200D9A0A8 /* ImageProvider.swift in Sources */,

@@ -27,6 +27,7 @@ final class WeatherTableView: UITableView {
       style: style
     )
     self.refreshDelegate = delegate
+    self.delegate = self
     self.dataSource = dataSource
     register()
     setup()
@@ -55,6 +56,12 @@ extension WeatherTableView {
       let refreshControl = RefreshControl(self)
       self.refreshControl = refreshControl
     }
+  }
+}
+
+extension WeatherTableView: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    refreshDelegate?.tableView?(tableView, didSelectRowAt: indexPath)
   }
 }
 

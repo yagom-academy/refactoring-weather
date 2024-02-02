@@ -14,15 +14,14 @@ final class ViewController: UIViewController {
   
   private var weatherJSON: WeatherJSON?
   var icons: [UIImage]?
-  
-  var tempUnit: TempUnit = .metric
-  
+    
   struct Dependency {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
     let defaultDateFormatter: DateFormatterContextService
     let sunsetDateFormatter: DateFormatterContextService
     let weatherRepository: WeatherRepositoryService
     let imageProvider: ImageProviderService
+    let tempUnitManager: TempUnitManagerService
   }
   
   private let dependency: Dependency
@@ -44,20 +43,23 @@ final class ViewController: UIViewController {
     refresh()
     initialSetUp()
   }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    dependency
+      .tempUnitManager
+      .subscribe { [weak self] tempUnit in
+        guard let self = self else { return }
+        self.navigationItem.rightBarButtonItem?.title = tempUnit.character
+        self.refresh()
+      }
+  }
 }
 
 extension ViewController {
-    @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
-        refresh()
-    }
+  @objc private func changeTempUnit() {
+    dependency.tempUnitManager.update()
+  }
   
   private func refresh() {
     Task {
@@ -119,7 +121,7 @@ extension ViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+      cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(dependency.tempUnitManager.currentValue.expression))"
         
       cell.dateLabel.text = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
                 
@@ -145,7 +147,7 @@ extension ViewController: UITableViewDelegateWithRefresh {
       sunsetDateFormatter: dependency.sunsetDateFormatter,
       weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
       cityInfo: weatherJSON?.city,
-      tempUnit: tempUnit
+      tempUnitManager: dependency.tempUnitManager
     )
     let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
     navigationController?.show(weatherDetailViewController, sender: self)

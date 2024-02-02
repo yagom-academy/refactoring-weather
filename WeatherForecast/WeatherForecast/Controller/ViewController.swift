@@ -7,12 +7,12 @@
 import UIKit
 
 final class ViewController: UIViewController {
- private lazy var tableView: UITableView = WeatherTableView(
-  delegate: self,
-  dataSource: self
- )
+  private lazy var tableView: UITableView = WeatherTableView(
+    delegate: self,
+    dataSource: self
+  )
   
-  var weatherJSON: WeatherJSON?
+  private var weatherJSON: WeatherJSON?
   var icons: [UIImage]?
   
   var tempUnit: TempUnit = .metric
@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
     let defaultDateFormatter: DateFormatterContextService
     let sunsetDateFormatter: DateFormatterContextService
-    let dataAssetProvider: DataAssetProviderService
+    let weatherRepository: WeatherRepositoryService
     let imageProvider: ImageProviderService
   }
   
@@ -41,6 +41,7 @@ final class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    refresh()
     initialSetUp()
   }
 }
@@ -60,7 +61,7 @@ extension ViewController {
   
   private func refresh() {
     Task {
-      let fetchResult = await fetchWeatherJSON()
+      let fetchResult = await fetchWeather()
       switch fetchResult {
       case .success(let weatherJSON):
         self.weatherJSON = weatherJSON
@@ -94,25 +95,8 @@ extension ViewController {
 }
 
 extension ViewController {
-  private func fetchWeatherJSON() async -> Result<WeatherJSON, Error> {
-    var result: Result<WeatherJSON, Error>
-    let dataResult = dependency
-      .dataAssetProvider
-      .data(
-        WeatherJSON.self,
-        name: "weather"
-      )
-    
-    switch dataResult {
-    case .success(let weatherJSON):
-      result = .success(weatherJSON)
-      
-    case .failure(let error):
-      print(error.localizedDescription)
-      result = .failure(error)
-    }
-    
-    return result
+  private func fetchWeather() async -> Result<WeatherJSON, Error> {
+    return await dependency.weatherRepository.load()
   }
 }
 

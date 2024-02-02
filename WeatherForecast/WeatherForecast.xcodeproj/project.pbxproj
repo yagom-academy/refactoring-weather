@@ -35,6 +35,8 @@
 		EFF270CA2B6CE2C000D9A0A8 /* RefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */; };
 		EFF270CC2B6D1FD500D9A0A8 /* DataAssetProviderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */; };
 		EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */; };
+		EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */; };
+		EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +81,8 @@
 		EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControl.swift; sourceTree = "<group>"; };
 		EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAssetProviderService.swift; sourceTree = "<group>"; };
 		EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAssetProvider.swift; sourceTree = "<group>"; };
+		EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepository.swift; sourceTree = "<group>"; };
+		EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepositoryService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +192,7 @@
 				EFF270CB2B6D1FD500D9A0A8 /* DataAssetProviderService.swift */,
 				EFF270BB2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift */,
 				EFF270C12B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift */,
+				EFF270D12B6D23CF00D9A0A8 /* WeatherRepositoryService.swift */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -204,6 +209,7 @@
 				EFF270BF2B6CBB0200D9A0A8 /* ImageProvider.swift */,
 				EFF270CD2B6D1FE700D9A0A8 /* DataAssetProvider.swift */,
 				EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */,
+				EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */,
 			);
 			path = Implement;
 			sourceTree = "<group>";
@@ -323,12 +329,14 @@
 				EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
 				EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */,
+				EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */,
 				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
 				EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */,
 				EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */,
 				EFF270BC2B6CBAAC00D9A0A8 /* ImageDownLoaderService.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				EFF270C02B6CBB0200D9A0A8 /* ImageProvider.swift in Sources */,
+				EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */,
 				EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */,
 				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,
 				EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */,

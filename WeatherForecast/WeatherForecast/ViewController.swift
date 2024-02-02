@@ -64,14 +64,14 @@ extension ViewController {
 
 extension ViewController {
     private func requestWeatherJSON() {
-        navigationItem.title = model.getCityName()
+        navigationItem.title = model.cityName
     }
 }
 
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        model.getWeatherForecastCount()
+        model.weatherForecastCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,7 +81,7 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
-        let weatherForecastInfo = model.getWeatherForecast()[indexPath.row]
+        let weatherForecastInfo = model.weatherForecast[indexPath.row]
         
         cell.setData(weatherForecastInfo, unit: tempUnit)
         
@@ -123,10 +123,10 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        let weatherInfo = model.getWeatherForecast()[indexPath.row]
+        let weatherInfo = model.weatherForecast[indexPath.row]
         
         detailViewController.weatherForecastInfo = weatherInfo
-        detailViewController.cityInfo = model.getCity()
+        detailViewController.cityInfo = model.city
         detailViewController.tempUnit = tempUnit
         navigationController?.show(detailViewController, sender: self)
     }

@@ -29,8 +29,23 @@ extension WeatherForecastModel {
         
         weatherJSON = response
     }
+}
+
+
+extension WeatherForecastModel {
+    var city: City {
+        return weatherJSON.city
+    }
     
-    func getWeatherForecast() -> [WeatherForecastInfo] {
+    var cityName: String {
+        return weatherJSON.city.name
+    }
+    
+    var weatherForecastCount: Int {
+        return weatherJSON.weatherForecast.count
+    }
+    
+    var weatherForecast: [WeatherForecastInfo] {
         return weatherJSON.weatherForecast
     }
 }

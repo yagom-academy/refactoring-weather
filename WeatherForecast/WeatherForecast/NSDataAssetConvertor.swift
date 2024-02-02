@@ -21,13 +21,3 @@ struct NSDataAssetConvertor: NSDataAssetConvertable {
     return dataAsset.data
   }
 }
-
-extension WeatherForecastModel {
-    func getCityName() -> String {
-        return weatherJSON.city.name
-    }
-    
-    func getWeatherForecast() -> Int {
-        return weatherJSON.weatherForecast.count
-    }
-}

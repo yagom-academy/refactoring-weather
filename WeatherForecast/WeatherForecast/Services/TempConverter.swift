@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TempConverter {
+enum TempConverter {
     static func convertToFahrenheit(with celsius: Double) -> Double {
         let fahrenheit = celsius * 1.8 + 32
         return fahrenheit

@@ -14,6 +14,8 @@
 		B53BEAC22B6CF50300C8C052 /* TempConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC12B6CF50300C8C052 /* TempConverter.swift */; };
 		B53BEAC42B6CFBFA00C8C052 /* CustomDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */; };
 		B53BEAC62B6CFC0D00C8C052 /* NSDataAssetConvertor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */; };
+		B53BEACF2B6D181A00C8C052 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEACE2B6D181A00C8C052 /* Date+.swift */; };
+		B53BEAD12B6D1A1800C8C052 /* DateFormatterKR.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53BEAD02B6D1A1800C8C052 /* DateFormatterKR.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
 		C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */; };
@@ -33,6 +35,8 @@
 		B53BEAC12B6CF50300C8C052 /* TempConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempConverter.swift; sourceTree = "<group>"; };
 		B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDecoder.swift; sourceTree = "<group>"; };
 		B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDataAssetConvertor.swift; sourceTree = "<group>"; };
+		B53BEACE2B6D181A00C8C052 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		B53BEAD02B6D1A1800C8C052 /* DateFormatterKR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterKR.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C7743D892B21C38100DF0D09 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 				B53BEA922B6A3DDC00C8C052 /* ImageCache.swift */,
 				B53BEAC32B6CFBFA00C8C052 /* CustomDecoder.swift */,
 				B53BEAC52B6CFC0D00C8C052 /* NSDataAssetConvertor.swift */,
+				B53BEAD02B6D1A1800C8C052 /* DateFormatterKR.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -114,6 +119,14 @@
 			path = Scenes;
 			sourceTree = "<group>";
 		};
+		B53BEACD2B6D180D00C8C052 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B53BEACE2B6D181A00C8C052 /* Date+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C7743D802B21C38100DF0D09 = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +146,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				B53BEACD2B6D180D00C8C052 /* Extensions */,
 				B53BEAC72B6D07AE00C8C052 /* App */,
 				B53BEAC82B6D07C000C8C052 /* Services */,
 				B53BEACC2B6D083200C8C052 /* Scenes */,
@@ -223,11 +237,13 @@
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				B53BEAC62B6CFC0D00C8C052 /* NSDataAssetConvertor.swift in Sources */,
+				B53BEACF2B6D181A00C8C052 /* Date+.swift in Sources */,
 				B53BEAB72B6B6B6900C8C052 /* WeatherForecastModel.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				B53BEA932B6A3DDC00C8C052 /* ImageCache.swift in Sources */,
 				B53BEAC22B6CF50300C8C052 /* TempConverter.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				B53BEAD12B6D1A1800C8C052 /* DateFormatterKR.swift in Sources */,
 				B53BEAC42B6CFBFA00C8C052 /* CustomDecoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -42,9 +42,7 @@ final class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.locale = .init(identifier: "ko_KR")
-        dateFormatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = date.toString()
     }
 }
+

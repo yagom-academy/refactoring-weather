@@ -41,7 +41,7 @@ extension WeatherForecastViewController {
         tableView.refreshControl?.addTarget(self,
                                            action: #selector(refresh),
                                            for: .valueChanged)
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -84,7 +84,7 @@ extension WeatherForecastViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.reuseIdentifier, for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell else {
             return cell
@@ -95,11 +95,9 @@ extension WeatherForecastViewController: UITableViewDataSource {
         cell.setData(weatherForecastInfo, unit: tempUnit)
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.locale = .init(identifier: "ko_KR")
-        dateFormatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-    
-        cell.setDateLabel(with: dateFormatter.string(from: date))
+        
+        cell.setDateLabel(with: date.toString())
+        
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

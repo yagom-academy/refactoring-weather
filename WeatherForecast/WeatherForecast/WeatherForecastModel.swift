@@ -8,7 +8,7 @@
 import UIKit
 
 final class WeatherForecastModel {
-    var weatherJSON: WeatherJSON!
+    private var weatherJSON: WeatherJSON!
     
     init() {
         fetchWeatherJSON()
@@ -28,5 +28,9 @@ extension WeatherForecastModel {
         else { return }
         
         weatherJSON = response
+    }
+    
+    func getWeatherForecast() -> [WeatherForecastInfo] {
+        return weatherJSON.weatherForecast
     }
 }

@@ -64,23 +64,24 @@ extension ViewController {
 
 extension ViewController {
     private func requestWeatherJSON() {
-        navigationItem.title = model.weatherJSON.city.name
+        navigationItem.title = model.getCityName()
     }
 }
 
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        model.weatherJSON?.weatherForecast.count ?? 0
+        model.getWeatherForecastCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = model.weatherJSON?.weatherForecast[indexPath.row] else {
+        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell else {
             return cell
         }
+        
+        let weatherForecastInfo = model.getWeatherForecast()[indexPath.row]
         
         cell.setData(weatherForecastInfo, unit: tempUnit)
         
@@ -122,10 +123,10 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        guard let weatherInfo = model.weatherJSON?.weatherForecast[indexPath.row] else { return }
+        let weatherInfo = model.getWeatherForecast()[indexPath.row]
         
         detailViewController.weatherForecastInfo = weatherInfo
-        detailViewController.cityInfo = model.weatherJSON?.city
+        detailViewController.cityInfo = model.getCity()
         detailViewController.tempUnit = tempUnit
         navigationController?.show(detailViewController, sender: self)
     }

@@ -8,10 +8,10 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     private let weatherForecastInfo: WeatherForecastInfo
-    private let cityInfo: City
+    private let cityInfo: CityInfo
     private let tempUnit: TempUnit
     
-    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit = .celsius) {
+    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: CityInfo, tempUnit: TempUnit = .celsius) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit

@@ -18,13 +18,13 @@ final class WeatherDetailView: UIView {
     }()
 
     private let weatherForecastInfo: WeatherForecastInfo
-    private let cityInfo: City
+    private let cityInfo: CityInfo
     private let tempUnit: TempUnit
     private let imageService: ImageFetchable
     
     init(
         weatherForecastInfo: WeatherForecastInfo,
-        cityInfo: City,
+        cityInfo: CityInfo,
         tempUnit: TempUnit = .celsius,
         imageService: ImageFetchable
     ) {

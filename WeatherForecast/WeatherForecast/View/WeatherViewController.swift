@@ -9,9 +9,9 @@ import UIKit
 final class WeatherViewController: UIViewController {
     private var weatherView: WeatherView!
     
-    private var weatherJSON: WeatherJSON? {
+    private var weather: Weather? {
         didSet {
-            navigationItem.title = weatherJSON?.city.name
+            navigationItem.title = weather?.city.name
         }
     }
     
@@ -65,7 +65,7 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count: Int = weatherJSON?.weatherForecast.count {
+        if let count: Int = weather?.weatherForecast.count {
             return count
         }
         
@@ -76,7 +76,7 @@ extension WeatherViewController: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo: WeatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo: WeatherForecastInfo = weather?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -94,10 +94,10 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let weatherJSON {
+        if let weather {
             let detailViewController: WeatherDetailViewController = .init(
-                weatherForecastInfo: weatherJSON.weatherForecast[indexPath.row],
-                cityInfo: weatherJSON.city,
+                weatherForecastInfo: weather.weatherForecast[indexPath.row],
+                cityInfo: weather.city,
                 tempUnit: tempUnit
             )
             navigationController?.show(detailViewController, sender: self)
@@ -115,14 +115,14 @@ extension WeatherViewController: WeatherViewDelegate {
             return
         }
         
-        let info: WeatherJSON
+        let info: WeatherJSONDTO
         do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            info = try jsonDecoder.decode(WeatherJSONDTO.self, from: data)
         } catch {
             print(error.localizedDescription)
             return
         }
         
-        weatherJSON = info
+        weather = info.toEntity()
     }
 }

@@ -1,33 +1,34 @@
 //
-//  WeatherForecast - Weather.swift
-//  Created by yagom.
-//  Copyright © yagom. All rights reserved.
-// 
+//  Weather.swift
+//  WeatherForecast
+//
+//  Created by ChangMin on 2/3/24.
+//
 
 import Foundation
 
 // MARK: - Weather JSON Format
-struct WeatherJSON: Decodable {
+struct Weather {
     let weatherForecast: [WeatherForecastInfo]
-    let city: City
+    let city: CityInfo
 }
 
 // MARK: - List
-struct WeatherForecastInfo: Decodable {
+struct WeatherForecastInfo {
     let dt: TimeInterval
     let main: MainInfo
-    let weather: Weather
+    let weather: WeatherInfo
     let dtTxt: String
 }
 
 // MARK: - MainClass
-struct MainInfo: Decodable {
+struct MainInfo {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
-struct Weather: Decodable {
+struct WeatherInfo {
     let id: Int
     let main: String
     let description: String
@@ -35,7 +36,7 @@ struct Weather: Decodable {
 }
 
 // MARK: - City
-struct City: Decodable {
+struct CityInfo {
     let id: Int
     let name: String
     let coord: Coord
@@ -45,6 +46,6 @@ struct City: Decodable {
 }
 
 // MARK: - Coord
-struct Coord: Decodable {
+struct Coord {
     let lat, lon: Double
 }

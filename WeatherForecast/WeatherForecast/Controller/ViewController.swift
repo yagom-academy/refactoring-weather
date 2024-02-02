@@ -1,8 +1,8 @@
 //
 //  WeatherForecast - ViewController.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
@@ -11,9 +11,8 @@ class ViewController: UIViewController {
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
   let dateFormatter = DateFormatterContext(strategy: DefaultDateFormatterStrategy())
-    
+
     var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
@@ -119,27 +118,15 @@ extension ViewController: UITableViewDataSource {
         
       cell.dateLabel.text = dateFormatter.string(from: weatherForecastInfo.dt)
                 
-        let iconName: String = weatherForecastInfo.weather.icon         
+        let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
+            
+      Task {
+        let image = await ImageProvider.shared.image(url: urlString)
+        if indexPath == tableView.indexPath(for: cell) {
             cell.weatherIcon.image = image
-            return cell
         }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
+      }
         
         return cell
     }
@@ -156,5 +143,3 @@ extension ViewController: UITableViewDelegate {
         navigationController?.show(detailViewController, sender: self)
     }
 }
-
-

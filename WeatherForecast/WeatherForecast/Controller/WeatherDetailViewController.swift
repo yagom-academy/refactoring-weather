@@ -101,18 +101,12 @@ class WeatherDetailViewController: UIViewController {
           sunriseTimeLabel.text = "일출 : \(dateFormatter.string(from: cityInfo.sunrise))"
           sunsetTimeLabel.text = "일몰 : \(dateFormatter.string(from: cityInfo.sunset))"
         }
-        
-        Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
 
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            iconImageView.image = image
-        }
+      Task {
+        let iconName: String = listInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        let image = await ImageProvider.shared.image(url: urlString)
+        iconImageView.image = image
+      }
     }
 }

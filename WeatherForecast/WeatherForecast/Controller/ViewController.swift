@@ -14,7 +14,7 @@ final class ViewController: UIViewController {
   
   private var weatherJSON: WeatherJSON?
   var icons: [UIImage]?
-    
+  
   struct Dependency {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
     let defaultDateFormatter: DateFormatterContextService
@@ -40,12 +40,6 @@ final class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    refresh()
-    initialSetUp()
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
     dependency
       .tempUnitManager
       .subscribe { [weak self] tempUnit in
@@ -53,6 +47,7 @@ final class ViewController: UIViewController {
         self.navigationItem.rightBarButtonItem?.title = tempUnit.character
         self.refresh()
       }
+    initialSetUp()
   }
 }
 
@@ -75,25 +70,30 @@ extension ViewController {
     }
   }
   
-    private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
-        
-        layTable()
-    }
+  private func initialSetUp() {
+    navigationItem.rightBarButtonItem = UIBarButtonItem(
+      title: dependency.tempUnitManager.currentValue.character,
+      image: nil,
+      target: self,
+      action: #selector(changeTempUnit)
+    )
     
-    private func layTable() {
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ])
-    }
+    layTable()
+  }
+  
+  private func layTable() {
+    view.addSubview(tableView)
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    
+    let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
+    
+    NSLayoutConstraint.activate([
+      tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+      tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+      tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+      tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
+    ])
+  }
 }
 
 extension ViewController {
@@ -103,40 +103,40 @@ extension ViewController {
 }
 
 extension ViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
+  func numberOfSections(in tableView: UITableView) -> Int {
+    1
+  }
+  
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    weatherJSON?.weatherForecast.count ?? 0
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+    
+    guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
+          let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+      return cell
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
-    }
+    cell.weatherLabel.text = weatherForecastInfo.weather.main
+    cell.descriptionLabel.text = weatherForecastInfo.weather.description
+    cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(dependency.tempUnitManager.currentValue.expression))"
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
-        
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
-            return cell
-        }
-        
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-      cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(dependency.tempUnitManager.currentValue.expression))"
-        
-      cell.dateLabel.text = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
-                
-        let iconName: String = weatherForecastInfo.weather.icon
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            
-      Task {
-        let image = await ImageProvider.shared.image(url: urlString)
-        if indexPath == tableView.indexPath(for: cell) {
-            cell.weatherIcon.image = image
-        }
+    cell.dateLabel.text = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
+    
+    let iconName: String = weatherForecastInfo.weather.icon
+    let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+    
+    Task {
+      let image = await ImageProvider.shared.image(url: urlString)
+      if indexPath == tableView.indexPath(for: cell) {
+        cell.weatherIcon.image = image
       }
-        
-        return cell
     }
+    
+    return cell
+  }
 }
 
 extension ViewController: UITableViewDelegateWithRefresh {

@@ -39,7 +39,7 @@ final class WeatherTableViewCell: UITableViewCell {
         
         setupWeatherLabel(with: weatherForecastInfo.weather.main)
         setupDescriptionlabel(with: weatherForecastInfo.weather.description)
-        setupTemperatureLabel(with: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)")
+        setupTemperatureLabel(with: "\(weatherForecastInfo.main.temp)\(tempUnit.strategy.expression)")
         setupDateLabel(with: weatherForecastInfo.dt)
         setupWeatherIcon(with: weatherForecastInfo.weather.icon, imageCache: imageCache)
     }

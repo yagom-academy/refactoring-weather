@@ -11,7 +11,7 @@ final class WeatherDetailViewController: UIViewController {
     private let cityInfo: City
     private let tempUnit: TempUnit
     
-    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit = .metric) {
+    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit = .celsius) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit

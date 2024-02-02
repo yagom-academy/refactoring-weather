@@ -25,7 +25,7 @@ final class WeatherDetailView: UIView {
     init(
         weatherForecastInfo: WeatherForecastInfo,
         cityInfo: City,
-        tempUnit: TempUnit = .metric,
+        tempUnit: TempUnit = .celsius,
         imageService: ImageFetchable
     ) {
         self.weatherForecastInfo = weatherForecastInfo
@@ -75,28 +75,28 @@ final class WeatherDetailView: UIView {
     private func setupTemperatureLabel() {
         contentStackView.setupTemperatureLabel(
             with: weatherForecastInfo.main.temp,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupFeelsLikeLabel() {
         contentStackView.setupFeelsLikeLabel(
             with: weatherForecastInfo.main.feelsLike,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupMaximumTemperatureLabel() {
         contentStackView.setupMaximumTemperatureLabel(
             with: weatherForecastInfo.main.tempMax,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupMinimumTemperatureLabel() {
         contentStackView.setupMinimumTemperatureLabel(
             with: weatherForecastInfo.main.tempMin,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     

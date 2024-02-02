@@ -16,7 +16,7 @@ final class WeatherViewController: UIViewController {
     }
     
     private let imageCache: NSCache<NSString, UIImage> = NSCache()
-    private var tempUnit: TempUnit = .metric
+    private var tempUnit: TempUnit = .celsius
     
     override func loadView() {
         weatherView = WeatherView(delegate: self)
@@ -31,17 +31,16 @@ final class WeatherViewController: UIViewController {
 
 extension WeatherViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        tempUnit.toggleTempUnit()
+        navigationItem.rightBarButtonItem?.title = tempUnit.strategy.expressionText
+        
+        updateTemperature()
         weatherView.reloadData()
     }
     
+    private func updateTemperature() {
+        // TODO: 온도 단위에 따라 변환하기 작업 추가 in STEP BONUS
+    }
     
     private func initialSetUp() {
         setupNavigationItem()

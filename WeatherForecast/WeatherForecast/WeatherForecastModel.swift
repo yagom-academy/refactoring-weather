@@ -21,28 +21,12 @@ extension WeatherForecastModel {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
+        let assetConvertor = NSDataAssetConvertor()
+        let decoder = CustomDecoder()
+        guard let data = try? assetConvertor.data("weather"),
+              let response = try? decoder.decode(WeatherJSON.self, data: data)
+        else { return }
         
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-    }
-}
-
-extension WeatherForecastModel {
-    func getCityName() -> String {
-        return weatherJSON.city.name
-    }
-    
-    func getWeatherForecast() -> Int {
-        return weatherJSON.weatherForecast.count
+        weatherJSON = response
     }
 }

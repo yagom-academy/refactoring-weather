@@ -42,7 +42,7 @@ class WeatherDetailView: UIView {
         super.init(frame: .zero)
         
         backgroundColor = .white
-        initialSetUp()
+        initialUIData()
     }
     
     required init?(coder: NSCoder) {
@@ -56,7 +56,7 @@ class WeatherDetailView: UIView {
 
 extension WeatherDetailView {
     
-    private func initialSetUp() {
+    private func initialUIData() {
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
         weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)

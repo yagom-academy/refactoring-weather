@@ -20,7 +20,7 @@ class ImageCache: Cache {
     typealias Key = String
     typealias Value = UIImage
     
-    subscript(key: String) -> UIImage? {
+    subscript(key: Key) -> Value? {
         get {
             return cache.object(forKey: key as NSString)
         }

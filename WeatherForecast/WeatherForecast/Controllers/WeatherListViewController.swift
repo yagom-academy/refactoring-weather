@@ -8,7 +8,8 @@ import UIKit
 
 class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
-    var weatherJSON: WeatherJSON?
+    private let weatherListUseCase: WeatherListUseCase = DefaultWeatherListUseCase()
+    private var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     let dateFormatter: DateFormatter = {
@@ -44,7 +45,9 @@ extension WeatherListViewController {
     }
     
     @objc private func refresh() {
-        fetchWeatherJSON()
+        let url: URL? = Bundle.main.url(forResource: "weather", withExtension: "json")
+        weatherJSON = weatherListUseCase.fetchWeatherList(url: url)
+        navigationItem.title = weatherJSON?.city.name
         weatherListView.reloadTableView()
         weatherListView.endRefreshControlRefreshing()
     }
@@ -59,31 +62,8 @@ extension WeatherListViewController {
     }
 }
 
-extension WeatherListViewController {
-    private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
-    }
-}
 
 extension WeatherListViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }

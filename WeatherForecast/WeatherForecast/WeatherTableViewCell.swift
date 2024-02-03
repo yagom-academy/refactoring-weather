@@ -12,7 +12,15 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
-     
+    var imageChache: NSCache<NSString, UIImage> = NSCache()
+
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -99,5 +107,35 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    func configure(info: WeatherForecastInfo,tempUnit : TempUnit){
+        weatherLabel.text = info.weather.main
+        descriptionLabel.text = info.weather.description
+        temperatureLabel.text = "\(info.main.temp)\(tempUnit.expression)"
+        let date: Date = Date(timeIntervalSince1970: info.dt)
+        dateLabel.text = dateFormatter.string(from: date)
+        loadImage(info)
+    }
+}
+extension WeatherTableViewCell {
+    func loadImage(_ info : WeatherForecastInfo){
+        
+        let iconName: String = info.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+                
+        if let image = imageChache.object(forKey: urlString as NSString) {
+            weatherIcon.image = image
+            return
+        }
+        
+        Task {
+            guard let url: URL = URL(string: urlString),
+                  let (data, _) = try? await URLSession.shared.data(from: url),
+                  let image: UIImage = UIImage(data: data) else {
+                return
+            }
+            weatherIcon.image = image
+            imageChache.setObject(image, forKey: urlString as NSString)
+        }
     }
 }

@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
+    weak var delegate: WeatherForecastInfoDelegate?
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
@@ -117,36 +118,7 @@ extension ViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
-        
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
-        
+        cell.configure(info: weatherForecastInfo, tempUnit: tempUnit)
         return cell
     }
 }
@@ -156,11 +128,16 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        self.delegate = detailViewController
+        guard let weatherInfo = weatherJSON?.weatherForecast[indexPath.row] else { return }
+        guard let cityInfo = weatherJSON?.city else { return }
+        delegate?.updateWeatherInfo(listInfo: weatherInfo,tempUnit: tempUnit)
+        delegate?.updateCityInfo(cityInfo)
         navigationController?.show(detailViewController, sender: self)
     }
 }
 
-
+protocol WeatherForecastInfoDelegate: AnyObject{
+    func updateWeatherInfo(listInfo: WeatherForecastInfo, tempUnit: TempUnit)
+    func updateCityInfo(_ cityInfo: City)
+}

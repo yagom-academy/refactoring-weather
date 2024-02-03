@@ -7,23 +7,27 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var tableView: UITableView!
+    // TODO: - lazy 로 설정해주는게 맞을지 확인 필요
+    lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.refreshControl = refreshControl
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        return tableView
+    }()
+    
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
     
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = .metric // TODO: 이거 딴곳으로 옮겨야하는거 아니야?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialSetUp()
+        setup()
     }
 }
 
@@ -46,28 +50,21 @@ extension ViewController {
         refreshControl.endRefreshing()
     }
     
-    private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
-        
-        layTable()
-        
+    private func setup() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨",
+                                                            image: nil,
+                                                            target: self,
+                                                            action: #selector(changeTempUnit))
         refreshControl.addTarget(self,
                                  action: #selector(refresh),
                                  for: .valueChanged)
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
+        setupTableView()
     }
     
-    private func layTable() {
-        tableView = .init(frame: .zero, style: .plain)
+    // TODO: - 테이블뷰 관련 작업을 다양한 곳에서 처리하고 있어 이를 수정함
+    private func setupTableView() {
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
@@ -79,7 +76,7 @@ extension ViewController {
 
 extension ViewController {
     private func fetchWeatherJSON() {
-        
+
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
@@ -118,34 +115,7 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
+        cell.configure(weatherForecastInfo: weatherForecastInfo)
         
         return cell
     }
@@ -155,10 +125,12 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        // 파라미터를 그대로 던져주는게 가독성이 떨어지는 것 같아 수정. 이런것도 DI 라고 봐야하나?
+        let weatherForecast = weatherJSON?.weatherForecast[indexPath.row]
+        let cityInfo = weatherJSON?.city
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecast,
+                                                                                            cityInfo: cityInfo,
+                                                                                            tempUnit: tempUnit)
         navigationController?.show(detailViewController, sender: self)
     }
 }

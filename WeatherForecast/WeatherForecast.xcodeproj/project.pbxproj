@@ -40,6 +40,8 @@
 		EFF270D52B6D2C9A00D9A0A8 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */; };
 		EFF270D72B6D3D0F00D9A0A8 /* TempUnitManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D62B6D3D0F00D9A0A8 /* TempUnitManagerService.swift */; };
 		EFF270D92B6D3D2300D9A0A8 /* TempUnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */; };
+		EFF270DB2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270DA2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift */; };
+		EFF270DD2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270DC2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +91,8 @@
 		EFF270D42B6D2C9A00D9A0A8 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		EFF270D62B6D3D0F00D9A0A8 /* TempUnitManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnitManagerService.swift; sourceTree = "<group>"; };
 		EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnitManager.swift; sourceTree = "<group>"; };
+		EFF270DA2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCellModel.swift; sourceTree = "<group>"; };
+		EFF270DC2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewControllerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +223,8 @@
 				EFF270C32B6CC03B00D9A0A8 /* JSONDecodeHelper.swift */,
 				EFF270CF2B6D23BA00D9A0A8 /* WeatherRepository.swift */,
 				EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */,
+				EFF270DA2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift */,
+				EFF270DC2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift */,
 			);
 			path = Implement;
 			sourceTree = "<group>";
@@ -348,6 +354,7 @@
 				EFF270D72B6D3D0F00D9A0A8 /* TempUnitManagerService.swift in Sources */,
 				EFF270C82B6CE2A100D9A0A8 /* WeatherTableView.swift in Sources */,
 				EFF270D22B6D23CF00D9A0A8 /* WeatherRepositoryService.swift in Sources */,
+				EFF270DD2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift in Sources */,
 				EF5124192B695ADA00F8AF4F /* DateFormatterContext.swift in Sources */,
 				EFF270CE2B6D1FE700D9A0A8 /* DataAssetProvider.swift in Sources */,
 				EFF270C62B6CD1D900D9A0A8 /* AppDependency.swift in Sources */,
@@ -358,6 +365,7 @@
 				EFF270D52B6D2C9A00D9A0A8 /* Observable.swift in Sources */,
 				EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */,
 				EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */,
+				EFF270DB2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift in Sources */,
 				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,
 				EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */,
 				EF5124112B6945BD00F8AF4F /* DateFormatterCache.swift in Sources */,

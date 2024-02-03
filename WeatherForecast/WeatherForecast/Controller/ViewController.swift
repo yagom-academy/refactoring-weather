@@ -13,7 +13,6 @@ final class ViewController: UIViewController {
   )
   
   private var weatherJSON: WeatherJSON?
-  var icons: [UIImage]?
   
   struct Dependency {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
@@ -40,13 +39,7 @@ final class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    dependency
-      .tempUnitManager
-      .subscribe { [weak self] tempUnit in
-        guard let self = self else { return }
-        self.navigationItem.rightBarButtonItem?.title = tempUnit.character
-        self.refresh()
-      }
+    bind()
     initialSetUp()
   }
 }
@@ -68,6 +61,16 @@ extension ViewController {
         print(error.localizedDescription)
       }
     }
+  }
+  
+  private func bind() {
+    dependency
+      .tempUnitManager
+      .subscribe { [weak self] tempUnit in
+        guard let self = self else { return }
+        self.navigationItem.rightBarButtonItem?.title = tempUnit.character
+        self.refresh()
+      }
   }
   
   private func initialSetUp() {
@@ -112,28 +115,24 @@ extension ViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+    let cell: UITableViewCell = tableView.dequeueReusableCell(
+      withIdentifier: "WeatherCell",
+      for: indexPath
+    )
     
     guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-          let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+          let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.item] else {
       return cell
     }
     
-    cell.weatherLabel.text = weatherForecastInfo.weather.main
-    cell.descriptionLabel.text = weatherForecastInfo.weather.description
-    cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(dependency.tempUnitManager.currentValue.expression))"
-    
-    cell.dateLabel.text = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
-    
-    let iconName: String = weatherForecastInfo.weather.icon
-    let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-    
-    Task {
-      let image = await ImageProvider.shared.image(url: urlString)
-      if indexPath == tableView.indexPath(for: cell) {
-        cell.weatherIcon.image = image
-      }
-    }
+    let weatherTableViewCellModel = WeatherTableViewCellModel(
+      from: weatherForecastInfo,
+      dependency: .init(
+        defaultDataFormatter: dependency.defaultDateFormatter,
+        tempUnitManager: dependency.tempUnitManager
+      )
+    )
+    cell.bind(weatherTableViewCellModel)
     
     return cell
   }
@@ -141,14 +140,28 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegateWithRefresh {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.deselectRow(at: indexPath, animated: true)
-    let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
-      defaultDateFormatter: dependency.defaultDateFormatter,
-      sunsetDateFormatter: dependency.sunsetDateFormatter,
-      weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
-      cityInfo: weatherJSON?.city,
-      tempUnitManager: dependency.tempUnitManager
+    tableView.deselectRow(
+      at: indexPath,
+      animated: true
     )
+
+    guard let weatherJSON = weatherJSON else { return }
+    
+    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel = .init(
+      from: weatherJSON.weatherForecast[indexPath.item],
+      weatherJSON.city,
+      dependency: .init(
+        defaultDateFormatter: dependency.defaultDateFormatter,
+        sunsetDateFormatter: dependency.sunsetDateFormatter,
+        tempUnitManager: dependency.tempUnitManager
+      )
+    )
+    
+    let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
+      weatherDetailViewControllerModel: weatherDetailViewControllerModel,
+      imageProvider: dependency.imageProvider
+    )
+    
     let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
     navigationController?.show(weatherDetailViewController, sender: self)
   }

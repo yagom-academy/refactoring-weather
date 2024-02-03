@@ -7,11 +7,12 @@
 import UIKit
 
 final class WeatherTableViewCell: UITableViewCell {
-  var weatherIcon: UIImageView!
-  var dateLabel: UILabel!
-  var temperatureLabel: UILabel!
-  var weatherLabel: UILabel!
-  var descriptionLabel: UILabel!
+  private var weatherIcon: UIImageView!
+  private var dateLabel: UILabel!
+  private var temperatureLabel: UILabel!
+  private var weatherLabel: UILabel!
+  private var descriptionLabel: UILabel!
+  private var imageLoadingTask: Task<(), Never>?
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -94,10 +95,25 @@ final class WeatherTableViewCell: UITableViewCell {
   }
   
   private func reset() {
+    imageLoadingTask?.cancel()
     weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
     dateLabel.text = "0000-00-00 00:00:00"
     temperatureLabel.text = "00℃"
     weatherLabel.text = "~~~"
     descriptionLabel.text = "~~~~~"
+  }
+}
+
+extension WeatherTableViewCell {
+  public func bind(_ weathertableViewCellModel: WeatherTableViewCellModel) {
+    imageLoadingTask = Task {
+      let image = await ImageProvider.shared.image(url: weathertableViewCellModel.imageURL)
+      weatherIcon.image = image
+    }
+    
+    dateLabel.text = weathertableViewCellModel.date
+    temperatureLabel.text = weathertableViewCellModel.temperature
+    weatherLabel.text = weathertableViewCellModel.weather
+    descriptionLabel.text = weathertableViewCellModel.description
   }
 }

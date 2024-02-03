@@ -22,14 +22,12 @@ final class WeatherDetailViewController: UIViewController {
   private let spacingView: UIView = UIView()
   
   struct Dependency {
-    let defaultDateFormatter: DateFormatterContextService
-    let sunsetDateFormatter: DateFormatterContextService
-    let weatherForecastInfo: WeatherForecastInfo?
-    let cityInfo: City?
-    let tempUnitManager: TempUnitManagerService
+    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel
+    let imageProvider: ImageProviderService
   }
   
   private let dependency: Dependency
+  
   init(dependency: Dependency) {
     self.dependency = dependency
     super.init(
@@ -49,11 +47,8 @@ final class WeatherDetailViewController: UIViewController {
   
   private func initialSetUp() {
     view.backgroundColor = .white
-    
-    guard let listInfo = dependency.weatherForecastInfo else { return }
-    
-    navigationItem.title = dependency.defaultDateFormatter.string(from: listInfo.dt)
-    
+        
+    navigationItem.title = dependency.weatherDetailViewControllerModel.dt
     
     spacingView.backgroundColor = .clear
     spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -104,25 +99,21 @@ final class WeatherDetailViewController: UIViewController {
                                            multiplier: 0.3)
     ])
     
-    weatherGroupLabel.text = listInfo.weather.main
-    weatherDescriptionLabel.text = listInfo.weather.description
-    temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(dependency.tempUnitManager.currentValue.expression)"
-    feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(dependency.tempUnitManager.currentValue.expression)"
-    maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(dependency.tempUnitManager.currentValue.expression)"
-    minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(dependency.tempUnitManager.currentValue.expression)"
-    popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-    humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+    weatherGroupLabel.text = dependency.weatherDetailViewControllerModel.weatherGroup
+    weatherDescriptionLabel.text = dependency.weatherDetailViewControllerModel.weatherDescription
+    temperatureLabel.text = dependency.weatherDetailViewControllerModel.temperature
+    feelsLikeLabel.text = dependency.weatherDetailViewControllerModel.feelsLike
+    maximumTemperatureLable.text = dependency.weatherDetailViewControllerModel.maximumTemperature
+    minimumTemperatureLable.text = dependency.weatherDetailViewControllerModel.minimumTemperature
+    popLabel.text = dependency.weatherDetailViewControllerModel.pop
+    humidityLabel.text = dependency.weatherDetailViewControllerModel.humidity
     
-    if let cityInfo = dependency.cityInfo {
-      let dateFormatter = dependency.sunsetDateFormatter
-      sunriseTimeLabel.text = "일출 : \(dateFormatter.string(from: cityInfo.sunrise))"
-      sunsetTimeLabel.text = "일몰 : \(dateFormatter.string(from: cityInfo.sunset))"
-    }
+    
+    sunriseTimeLabel.text = dependency.weatherDetailViewControllerModel.sunriseTime
+    sunsetTimeLabel.text = dependency.weatherDetailViewControllerModel.sunsetTime
     
     Task {
-      let iconName: String = listInfo.weather.icon
-      let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-      let image = await ImageProvider.shared.image(url: urlString)
+      let image = await dependency.imageProvider.image(url: dependency.weatherDetailViewControllerModel.imageURL)
       iconImageView.image = image
     }
   }

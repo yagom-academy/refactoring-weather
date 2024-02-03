@@ -8,6 +8,13 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
   
+  struct Dependency {
+    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel
+    let imageProvider: ImageProviderService
+  }
+  
+  private let dependency: Dependency
+  
   private let iconImageView: UIImageView = UIImageView()
   private let weatherGroupLabel: UILabel = UILabel()
   private let weatherDescriptionLabel: UILabel = UILabel()
@@ -20,14 +27,7 @@ final class WeatherDetailViewController: UIViewController {
   private let sunriseTimeLabel: UILabel = UILabel()
   private let sunsetTimeLabel: UILabel = UILabel()
   private let spacingView: UIView = UIView()
-  
-  struct Dependency {
-    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel
-    let imageProvider: ImageProviderService
-  }
-  
-  private let dependency: Dependency
-  
+
   init(dependency: Dependency) {
     self.dependency = dependency
     super.init(

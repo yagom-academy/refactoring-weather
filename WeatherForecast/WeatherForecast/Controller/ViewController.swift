@@ -7,13 +7,6 @@
 import UIKit
 
 final class ViewController: UIViewController {
-  private lazy var tableView: UITableView = WeatherTableView(
-    delegate: self,
-    dataSource: self
-  )
-  
-  private var weatherJSON: WeatherJSON?
-  
   struct Dependency {
     let weatherDetailViewControllerFactory: (WeatherDetailViewController.Dependency) -> WeatherDetailViewController
     let defaultDateFormatter: DateFormatterContextService
@@ -24,6 +17,12 @@ final class ViewController: UIViewController {
   }
   
   private let dependency: Dependency
+  private var weatherJSON: WeatherJSON?
+  
+  private lazy var tableView: UITableView = WeatherTableView(
+    delegate: self,
+    dataSource: self
+  )
   
   init(dependency: Dependency) {
     self.dependency = dependency

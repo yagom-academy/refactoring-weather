@@ -88,18 +88,21 @@ class WeatherDetailContentStackView: UIStackView {
     }
     
     private func setupSubviews() {
-        addArrangedSubview(iconImageView)
-        addArrangedSubview(weatherGroupLabel)
-        addArrangedSubview(weatherDescriptionLabel)
-        addArrangedSubview(temperatureLabel)
-        addArrangedSubview(feelsLikeLabel)
-        addArrangedSubview(maximumTemperatureLable)
-        addArrangedSubview(minimumTemperatureLable)
-        addArrangedSubview(popLabel)
-        addArrangedSubview(humidityLabel)
-        addArrangedSubview(sunriseTimeLabel)
-        addArrangedSubview(sunsetTimeLabel)
-        addArrangedSubview(spacingView)
+        let views: [UIView] = [
+            iconImageView,
+            weatherGroupLabel,
+            weatherDescriptionLabel,
+            temperatureLabel,
+            feelsLikeLabel,
+            maximumTemperatureLable,
+            minimumTemperatureLable,
+            popLabel,
+            humidityLabel,
+            sunriseTimeLabel,
+            sunsetTimeLabel,
+            spacingView
+        ]
+        addArrangedSubviews(views)
     }
     
     private func setupLayouts() {
@@ -153,5 +156,13 @@ class WeatherDetailContentStackView: UIStackView {
     
     func setupSunsetTimeLabel(with date: Date) {
         sunsetTimeLabel.text = "일몰 : \(date.toString(type: .none, timeStyle: .short))"
+    }
+}
+
+extension UIStackView {
+    func addArrangedSubviews(_ views: [UIView]) {
+        views.forEach { view in
+            addArrangedSubview(view)
+        }
     }
 }

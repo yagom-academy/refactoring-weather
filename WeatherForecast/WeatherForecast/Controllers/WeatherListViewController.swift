@@ -7,8 +7,7 @@
 import UIKit
 
 class WeatherListViewController: UIViewController {
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private let weatherListView: WeatherListView = WeatherListView()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
@@ -20,6 +19,10 @@ class WeatherListViewController: UIViewController {
     }()
     
     var tempUnit: TempUnit = .metric
+    
+    override func loadView() {
+        view = weatherListView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,38 +45,17 @@ extension WeatherListViewController {
     
     @objc private func refresh() {
         fetchWeatherJSON()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
+        weatherListView.reloadTableView()
+        weatherListView.endRefreshControlRefreshing()
     }
     
     private func initialSetUp() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
-        
-        layTable()
-        
-        refreshControl.addTarget(self,
+        weatherListView.refreshControl.addTarget(self,
                                  action: #selector(refresh),
                                  for: .valueChanged)
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-    
-    private func layTable() {
-        tableView = .init(frame: .zero, style: .plain)
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ])
+        weatherListView.setTableViewDelegate(self)
+        weatherListView.setTableViewDataSource(self)
     }
 }
 

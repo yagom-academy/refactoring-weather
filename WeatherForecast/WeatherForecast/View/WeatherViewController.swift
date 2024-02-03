@@ -17,6 +17,16 @@ final class WeatherViewController: UIViewController {
     
     private let imageCache: NSCache<NSString, UIImage> = NSCache()
     private var tempUnit: TempUnit = .celsius
+    private var networkService: NetworkFetchable
+    
+    init(networkService: NetworkFetchable) {
+        self.networkService = networkService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         weatherView = WeatherView(delegate: self)
@@ -26,6 +36,7 @@ final class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
+        fetchWeatherJSON()
     }
 }
 
@@ -108,21 +119,13 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: WeatherViewDelegate {
     func fetchWeatherJSON() {
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        let result: Result<Weather, Error> = networkService.fetchWeatherJSON()
         
-        guard let data: Data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSONDTO
-        do {
-            info = try jsonDecoder.decode(WeatherJSONDTO.self, from: data)
-        } catch {
+        switch result {
+        case let .success(response):
+            weather = response
+        case let .failure(error):
             print(error.localizedDescription)
-            return
         }
-        
-        weather = info.toEntity()
     }
 }

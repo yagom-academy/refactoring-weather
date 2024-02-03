@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let weatherViewController: WeatherViewController = .init()
+        let networkService: NetworkService = .init()
+        let weatherViewController: WeatherViewController = .init(networkService: networkService)
         let navigationController: UINavigationController = .init(rootViewController: weatherViewController)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

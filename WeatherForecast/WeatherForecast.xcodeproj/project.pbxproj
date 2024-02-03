@@ -10,6 +10,8 @@
 		76A26CBF2B6BF9E9001BC140 /* TempUntiStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A26CBE2B6BF9E9001BC140 /* TempUntiStrategy.swift */; };
 		76A26CC12B6BF9FA001BC140 /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A26CC02B6BF9FA001BC140 /* TempUnit.swift */; };
 		76A26CC52B6D6A4F001BC140 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A26CC42B6D6A4F001BC140 /* Weather.swift */; };
+		76A26CC72B6DDF51001BC140 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A26CC62B6DDF51001BC140 /* NetworkService.swift */; };
+		76A26CCA2B6DE015001BC140 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A26CC92B6DE015001BC140 /* NetworkError.swift */; };
 		76F125E62B68009300A62718 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F125E52B68009300A62718 /* WeatherView.swift */; };
 		76F125EA2B6945AD00A62718 /* DateFormatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F125E92B6945AD00A62718 /* DateFormatType.swift */; };
 		76F125EC2B6946D400A62718 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F125EB2B6946D400A62718 /* Date+Extension.swift */; };
@@ -30,6 +32,8 @@
 		76A26CBE2B6BF9E9001BC140 /* TempUntiStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUntiStrategy.swift; sourceTree = "<group>"; };
 		76A26CC02B6BF9FA001BC140 /* TempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		76A26CC42B6D6A4F001BC140 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		76A26CC62B6DDF51001BC140 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		76A26CC92B6DE015001BC140 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		76F125E52B68009300A62718 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		76F125E92B6945AD00A62718 /* DateFormatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatType.swift; sourceTree = "<group>"; };
 		76F125EB2B6946D400A62718 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -75,6 +79,14 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		76A26CC82B6DDFFB001BC140 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				76A26CC92B6DE015001BC140 /* NetworkError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		76F125F42B6AB8A600A62718 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				76F125EF2B6A954F00A62718 /* ImageService.swift */,
+				76A26CC62B6DDF51001BC140 /* NetworkService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -144,6 +157,7 @@
 				76F125F52B6AB8B200A62718 /* Model */,
 				76F125F72B6AB8E000A62718 /* Extension */,
 				76F125F62B6AB8C600A62718 /* Service */,
+				76A26CC82B6DDFFB001BC140 /* Error */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
@@ -218,6 +232,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A26CCA2B6DE015001BC140 /* NetworkError.swift in Sources */,
 				76F125EA2B6945AD00A62718 /* DateFormatType.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				76F125EE2B6950C100A62718 /* WeatherDetailView.swift in Sources */,
@@ -228,6 +243,7 @@
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* WeatherDTO.swift in Sources */,
 				76F125E62B68009300A62718 /* WeatherView.swift in Sources */,
+				76A26CC72B6DDF51001BC140 /* NetworkService.swift in Sources */,
 				76F125F22B6AA81C00A62718 /* WeatherDetailContentStackView.swift in Sources */,
 				76A26CBF2B6BF9E9001BC140 /* TempUntiStrategy.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,

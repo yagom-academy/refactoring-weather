@@ -131,6 +131,7 @@ extension ViewController: UITableViewDataSource {
         tempUnitManager: dependency.tempUnitManager
       )
     )
+    
     cell.bind(weatherTableViewCellModel)
     
     return cell
@@ -143,9 +144,40 @@ extension ViewController: UITableViewDelegateWithRefresh {
       at: indexPath,
       animated: true
     )
-
-    guard let weatherJSON = weatherJSON else { return }
     
+    let weatherDetailViewController = createWeatherDetailViewController(indexPath)
+    
+    navigationController?.show(
+      weatherDetailViewController,
+      sender: self
+    )
+  }
+  
+  func tableView(_ tableView: UITableView, refresh: Void) {
+    self.refresh()
+  }
+}
+
+// MARK: - Private Function
+extension ViewController {
+  private func createWeatherDetailViewController(_ indexPath: IndexPath) -> UIViewController {
+    guard let weatherJSON = weatherJSON else { return UIViewController() }
+    
+    let weatherDetailViewControllerModel = createWeatherDetailViewControllerModel(
+      weatherJSON,
+      indexPath: indexPath
+    )
+    let weatherDetailViewControllerDependency = createWeatherDetailViewControllerDependency(weatherDetailViewControllerModel)
+    
+    let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
+    
+    return weatherDetailViewController
+  }
+  
+  private func createWeatherDetailViewControllerModel(
+    _ weatherJSON: WeatherJSON,
+    indexPath: IndexPath
+  ) -> WeatherDetailViewControllerModel {
     let weatherDetailViewControllerModel: WeatherDetailViewControllerModel = .init(
       from: weatherJSON.weatherForecast[indexPath.item],
       weatherJSON.city,
@@ -156,16 +188,15 @@ extension ViewController: UITableViewDelegateWithRefresh {
       )
     )
     
+    return weatherDetailViewControllerModel
+  }
+  
+  private func createWeatherDetailViewControllerDependency(_ weatherDetailViewControllerModel: WeatherDetailViewControllerModel) -> WeatherDetailViewController.Dependency {
     let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
       weatherDetailViewControllerModel: weatherDetailViewControllerModel,
       imageProvider: dependency.imageProvider
     )
     
-    let weatherDetailViewController = dependency.weatherDetailViewControllerFactory(weatherDetailViewControllerDependency)
-    navigationController?.show(weatherDetailViewController, sender: self)
-  }
-  
-  func tableView(_ tableView: UITableView, refresh: Void) {
-    self.refresh()
+    return weatherDetailViewControllerDependency
   }
 }

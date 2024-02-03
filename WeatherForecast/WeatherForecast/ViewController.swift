@@ -1,8 +1,8 @@
 //
 //  WeatherForecast - ViewController.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
@@ -20,37 +20,28 @@ class ViewController: UIViewController {
     
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
-    var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
     
+    private var viewModel = WeatherViewModel()
+    
+    var icons: [UIImage]?
+    
+    private var temperatureConverter = TemperatureConverter()
     var tempUnit: TempUnit = .metric // TODO: 이거 딴곳으로 옮겨야하는거 아니야?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         setup()
+    }
+    
+    private func bind() {
+        viewModel.fetchWeatherJSON()
     }
 }
 
 extension ViewController {
-    @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
-        refresh()
-    }
-    
-    @objc private func refresh() {
-        fetchWeatherJSON()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
-    }
-    
     private func setup() {
+        navigationItem.title = viewModel.cityName
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨",
                                                             image: nil,
                                                             target: self,
@@ -59,6 +50,17 @@ extension ViewController {
                                  action: #selector(refresh),
                                  for: .valueChanged)
         setupTableView()
+    }
+    
+    @objc private func changeTempUnit() {
+        navigationItem.rightBarButtonItem?.title = temperatureConverter.toggleTemperature()
+        refresh()
+    }
+    
+    @objc private func refresh() {
+        viewModel.fetchWeatherJSON()
+        tableView.reloadData()
+        refreshControl.endRefreshing()
     }
     
     // TODO: - 테이블뷰 관련 작업을 다양한 곳에서 처리하고 있어 이를 수정함
@@ -74,44 +76,21 @@ extension ViewController {
     }
 }
 
-extension ViewController {
-    private func fetchWeatherJSON() {
-
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
-    }
-}
-
 extension ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        return viewModel.weatherForecast?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo = viewModel.weatherForecast?[indexPath.row] else {
             return cell
         }
         
@@ -126,8 +105,8 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         // 파라미터를 그대로 던져주는게 가독성이 떨어지는 것 같아 수정. 이런것도 DI 라고 봐야하나?
-        let weatherForecast = weatherJSON?.weatherForecast[indexPath.row]
-        let cityInfo = weatherJSON?.city
+        let weatherForecast = viewModel.weatherForecast?[indexPath.row]
+        let cityInfo = viewModel.city
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecast,
                                                                                             cityInfo: cityInfo,
                                                                                             tempUnit: tempUnit)

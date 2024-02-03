@@ -15,9 +15,7 @@ final class WeatherDetailViewController: UIViewController {
   
   private let dependency: Dependency
   
-  private let iconImageView: UIImageView = UIImageView()
-  private let weatherGroupLabel: UILabel = UILabel()
-  private let weatherDescriptionLabel: UILabel = UILabel()
+  private let weatherSituationView = WeatherSituationView()
   private let weatherConditionView = WeatherConditionView()
   private let spacingView: UIView = UIView()
 
@@ -47,24 +45,10 @@ final class WeatherDetailViewController: UIViewController {
     spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
     
     let mainStackView: UIStackView = .init(arrangedSubviews: [
-      iconImageView,
-      weatherGroupLabel,
-      weatherDescriptionLabel,
+      weatherSituationView,
       weatherConditionView,
       spacingView
     ])
-    
-    mainStackView.arrangedSubviews.forEach { subview in
-      guard let subview: UILabel = subview as? UILabel else { return }
-      subview.textColor = .black
-      subview.backgroundColor = .clear
-      subview.numberOfLines = 1
-      subview.textAlignment = .center
-      subview.font = .preferredFont(forTextStyle: .body)
-    }
-    
-    weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
-    weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
     
     mainStackView.axis = .vertical
     mainStackView.alignment = .center
@@ -79,20 +63,10 @@ final class WeatherDetailViewController: UIViewController {
       mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
                                              constant: 16),
       mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                              constant: -16),
-      iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
-      iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
-                                           multiplier: 0.3)
+                                              constant: -16)
     ])
     
-    weatherGroupLabel.text = dependency.weatherDetailViewControllerModel.weatherGroup
-    weatherDescriptionLabel.text = dependency.weatherDetailViewControllerModel.weatherDescription
-    
+    weatherSituationView.update(dependency.weatherDetailViewControllerModel.weatherSituation)
     weatherConditionView.update(dependency.weatherDetailViewControllerModel.weatherConditions)
-    
-    Task {
-      let image = await dependency.imageProvider.image(url: dependency.weatherDetailViewControllerModel.imageURL)
-      iconImageView.image = image
-    }
   }
 }

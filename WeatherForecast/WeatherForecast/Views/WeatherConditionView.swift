@@ -52,9 +52,3 @@ extension WeatherConditionView {
     }
   }
 }
-
-struct WeatherCondition {
-  let title: String
-  let value: String
-}
-

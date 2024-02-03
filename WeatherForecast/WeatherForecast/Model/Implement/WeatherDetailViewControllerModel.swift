@@ -15,10 +15,8 @@ struct WeatherDetailViewControllerModel {
   private let dependency: Dependency
   
   private (set) var dt: String
-  private (set) var weatherGroup: String
-  private (set) var weatherDescription: String
+  private (set) var weatherSituation: WeatherSituation
   private (set) var weatherConditions: [WeatherCondition]
-  private (set) var imageURL: String
   
   init(
     from weatherForecastInfo: WeatherForecastInfo,
@@ -27,8 +25,14 @@ struct WeatherDetailViewControllerModel {
   ) {
     self.dependency = dependency
     self.dt = dependency.defaultDateFormatter.string(from: weatherForecastInfo.dt)
-    self.weatherGroup = weatherForecastInfo.weather.main
-    self.weatherDescription = weatherForecastInfo.weather.description
+    let iconName: String = weatherForecastInfo.weather.icon
+    let imageURL = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+    self.weatherSituation = .init(
+      weatherGroup: weatherForecastInfo.weather.main,
+      weatherDescription: weatherForecastInfo.weather.description,
+      imageURL: imageURL
+    )
+    
     self.weatherConditions = [
       .init(
         title: "현재 기온",
@@ -63,8 +67,5 @@ struct WeatherDetailViewControllerModel {
         value: "\(dependency.sunsetDateFormatter.string(from: cityInfo.sunset))"
       )
     ]
-    
-    let iconName: String = weatherForecastInfo.weather.icon
-    self.imageURL = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
   }
 }

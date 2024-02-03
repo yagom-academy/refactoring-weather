@@ -5,14 +5,15 @@
 // 
 
 import UIKit
+import Combine
+
 
 final class WeatherListViewController: UIViewController {
     
-    var weatherJSON: WeatherJSON?
-    var icons: [UIImage]?
-    var tempUnit: TempUnit = .metric
+    private var viewModel: WeatherListViewModel
+    private let input = PassthroughSubject<WeatherListViewModel.Input, Never>()
     
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -24,18 +25,49 @@ final class WeatherListViewController: UIViewController {
         return tableView
     }()
     
+    init(viewModel: WeatherListViewModel) {
+        self.viewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        input.send(.viewWillAppear)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         makeUI()
         setConstraints()
+        bind()
+    }
+    
+    private func bind() {
+        let output = viewModel.transform(input: input.eraseToAnyPublisher())
+        
+        output
+            .sink { [weak self] event in
+                guard let self else { return }
+                
+                refreshUI()
+            }
+            .store(in: &viewModel.cancellable)
     }
 }
 
 extension WeatherListViewController {
     private func makeUI() {
+        let currentUnit = viewModel.tempUnit
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: Constants.metric,
+            title: currentUnit.title,
             image: nil,
             target: self,
             action: #selector(changeTempUnit)
@@ -43,7 +75,7 @@ extension WeatherListViewController {
         
         refreshControl.addTarget(
             self,
-            action: #selector(refresh),
+            action: #selector(setPullToRefresh),
             for: .valueChanged
         )
     }
@@ -62,66 +94,54 @@ extension WeatherListViewController {
     
     @objc
     private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = Constants.metric
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = Constants.imperial
-        }
-        
-        refresh()
+        let updateUnit: TempUnit = viewModel.tempUnit == .metric ? .imperial: .metric
+        input.send(.updateTempUnit(updateUnit))
     }
     
     @objc
-    private func refresh() {
-        fetchWeatherJSON()
+    private func setPullToRefresh() {
+        input.send(.setRefreshWithTableView)
+    }
+    
+    private func refreshUI() {
+        let weatherInfo = viewModel.weatherInfo
+        let city = weatherInfo?.city
+        navigationItem.title = city?.name
+        
+        let updatedUnit = viewModel.tempUnit
+        navigationItem.rightBarButtonItem?.title = updatedUnit.title
+        
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
 }
 
-extension WeatherListViewController {
-    private func fetchWeatherJSON() {
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: Constants.dataAssetName)?.data else {
-            return
+extension WeatherListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let weatherInfo = viewModel.weatherInfo else {
+            return .zero
         }
         
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
-    }
-}
-
-extension WeatherListViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        Constants.sectionCount
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? .zero
+        let weatherList = weatherInfo.weatherForecast
+        
+        return weatherList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: String("\(WeatherTableViewCell.self)"), for: indexPath)
         
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+        guard 
+            let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
+            let weatherInfo = viewModel.weatherInfo,
+            let weatherForecastInfo = weatherInfo.weatherForecast[safe: indexPath.row]
+        else {
             return cell
         }
         
-        cell.configure(with: weatherForecastInfo, tempUnit: tempUnit)
+        cell.configure(
+            with: weatherForecastInfo,
+            tempUnit: viewModel.tempUnit
+        )
         
         return cell
     }
@@ -131,20 +151,17 @@ extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        guard
+            let weatherInfo = viewModel.weatherInfo,
+            let weatherForecastInfo = weatherInfo.weatherForecast[safe: indexPath.row]
+        else {
+            return
+        }
+        
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        detailViewController.weatherForecastInfo = weatherForecastInfo
+        detailViewController.cityInfo = weatherInfo.city
+        detailViewController.tempUnit = viewModel.tempUnit
         navigationController?.show(detailViewController, sender: self)
-    }
-}
-
-
-extension WeatherListViewController {
-    enum Constants {
-        static let sectionCount: Int = 1
-        static let dataAssetName: String = ""
-        static let metric = "섭씨"
-        static let imperial = "화씨"
     }
 }

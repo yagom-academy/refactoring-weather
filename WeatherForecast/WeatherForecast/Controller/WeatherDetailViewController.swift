@@ -18,14 +18,7 @@ final class WeatherDetailViewController: UIViewController {
   private let iconImageView: UIImageView = UIImageView()
   private let weatherGroupLabel: UILabel = UILabel()
   private let weatherDescriptionLabel: UILabel = UILabel()
-  private let temperatureLabel: UILabel = UILabel()
-  private let feelsLikeLabel: UILabel = UILabel()
-  private let maximumTemperatureLable: UILabel = UILabel()
-  private let minimumTemperatureLable: UILabel = UILabel()
-  private let popLabel: UILabel = UILabel()
-  private let humidityLabel: UILabel = UILabel()
-  private let sunriseTimeLabel: UILabel = UILabel()
-  private let sunsetTimeLabel: UILabel = UILabel()
+  private let weatherConditionView = WeatherConditionView()
   private let spacingView: UIView = UIView()
 
   init(dependency: Dependency) {
@@ -57,14 +50,7 @@ final class WeatherDetailViewController: UIViewController {
       iconImageView,
       weatherGroupLabel,
       weatherDescriptionLabel,
-      temperatureLabel,
-      feelsLikeLabel,
-      maximumTemperatureLable,
-      minimumTemperatureLable,
-      popLabel,
-      humidityLabel,
-      sunriseTimeLabel,
-      sunsetTimeLabel,
+      weatherConditionView,
       spacingView
     ])
     
@@ -101,16 +87,8 @@ final class WeatherDetailViewController: UIViewController {
     
     weatherGroupLabel.text = dependency.weatherDetailViewControllerModel.weatherGroup
     weatherDescriptionLabel.text = dependency.weatherDetailViewControllerModel.weatherDescription
-    temperatureLabel.text = dependency.weatherDetailViewControllerModel.temperature
-    feelsLikeLabel.text = dependency.weatherDetailViewControllerModel.feelsLike
-    maximumTemperatureLable.text = dependency.weatherDetailViewControllerModel.maximumTemperature
-    minimumTemperatureLable.text = dependency.weatherDetailViewControllerModel.minimumTemperature
-    popLabel.text = dependency.weatherDetailViewControllerModel.pop
-    humidityLabel.text = dependency.weatherDetailViewControllerModel.humidity
     
-    
-    sunriseTimeLabel.text = dependency.weatherDetailViewControllerModel.sunriseTime
-    sunsetTimeLabel.text = dependency.weatherDetailViewControllerModel.sunsetTime
+    weatherConditionView.update(dependency.weatherDetailViewControllerModel.weatherConditions)
     
     Task {
       let image = await dependency.imageProvider.image(url: dependency.weatherDetailViewControllerModel.imageURL)

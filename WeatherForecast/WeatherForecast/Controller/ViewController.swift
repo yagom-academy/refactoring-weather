@@ -146,7 +146,7 @@ extension ViewController: UITableViewDelegateWithRefresh {
     )
     
     let weatherDetailViewController = createWeatherDetailViewController(indexPath)
-    
+
     navigationController?.show(
       weatherDetailViewController,
       sender: self

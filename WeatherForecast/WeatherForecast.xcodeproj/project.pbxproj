@@ -42,6 +42,9 @@
 		EFF270D92B6D3D2300D9A0A8 /* TempUnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */; };
 		EFF270DB2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270DA2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift */; };
 		EFF270DD2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270DC2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift */; };
+		EFF270DF2B6E32BA00D9A0A8 /* KeyValueLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270DE2B6E32BA00D9A0A8 /* KeyValueLabel.swift */; };
+		EFF270E12B6E32D200D9A0A8 /* KeyValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270E02B6E32D200D9A0A8 /* KeyValueView.swift */; };
+		EFF270E32B6E3BC800D9A0A8 /* WeatherConditionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF270E22B6E3BC800D9A0A8 /* WeatherConditionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,9 @@
 		EFF270D82B6D3D2300D9A0A8 /* TempUnitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnitManager.swift; sourceTree = "<group>"; };
 		EFF270DA2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCellModel.swift; sourceTree = "<group>"; };
 		EFF270DC2B6E075E00D9A0A8 /* WeatherDetailViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewControllerModel.swift; sourceTree = "<group>"; };
+		EFF270DE2B6E32BA00D9A0A8 /* KeyValueLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueLabel.swift; sourceTree = "<group>"; };
+		EFF270E02B6E32D200D9A0A8 /* KeyValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueView.swift; sourceTree = "<group>"; };
+		EFF270E22B6E3BC800D9A0A8 /* WeatherConditionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherConditionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,9 @@
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
 				EFF270C72B6CE2A100D9A0A8 /* WeatherTableView.swift */,
 				EFF270C92B6CE2C000D9A0A8 /* RefreshControl.swift */,
+				EFF270DE2B6E32BA00D9A0A8 /* KeyValueLabel.swift */,
+				EFF270E02B6E32D200D9A0A8 /* KeyValueView.swift */,
+				EFF270E22B6E3BC800D9A0A8 /* WeatherConditionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -348,6 +357,7 @@
 			files = (
 				EFF270C42B6CC03B00D9A0A8 /* JSONDecodeHelper.swift in Sources */,
 				EF51241B2B695AF100F8AF4F /* DefaultDateFormatterStrategy.swift in Sources */,
+				EFF270E12B6E32D200D9A0A8 /* KeyValueView.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				EFF270BE2B6CBAC600D9A0A8 /* ImageDownLoader.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
@@ -366,11 +376,13 @@
 				EFF270D02B6D23BA00D9A0A8 /* WeatherRepository.swift in Sources */,
 				EF51241D2B695B0100F8AF4F /* SunsetDateFormatterStrategy.swift in Sources */,
 				EFF270DB2B6DFFBB00D9A0A8 /* WeatherTableViewCellModel.swift in Sources */,
+				EFF270DF2B6E32BA00D9A0A8 /* KeyValueLabel.swift in Sources */,
 				EF5124172B695AC200F8AF4F /* DateFormatterContextService.swift in Sources */,
 				EF5124152B695A4F00F8AF4F /* DateFormatterStrategy.swift in Sources */,
 				EF5124112B6945BD00F8AF4F /* DateFormatterCache.swift in Sources */,
 				EFF270CC2B6D1FD500D9A0A8 /* DataAssetProviderService.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
+				EFF270E32B6E3BC800D9A0A8 /* WeatherConditionView.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				EF5124222B695BC300F8AF4F /* DateFormatter+Extensions.swift in Sources */,
 				EFF270C22B6CC02200D9A0A8 /* JSONDecodeHelperProtocol.swift in Sources */,

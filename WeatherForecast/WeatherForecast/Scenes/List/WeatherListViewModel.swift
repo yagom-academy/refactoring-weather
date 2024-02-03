@@ -24,7 +24,7 @@ final class WeatherListViewModel {
     private let weatherService: WeatherService
     
     private(set) var tempUnit: TempUnit = .metric
-    private(set) var weatherInfo: WeatherJSON?
+    private(set) var weatherInfo: WeatherList?
     
     init(weatherService: WeatherService) {
         self.weatherService = weatherService
@@ -51,13 +51,18 @@ extension WeatherListViewModel {
                 
                 switch event {
                 case .setRefreshWithTableView, .viewWillAppear:
-                    let info = weatherService.fetchWeatherService()
+                    let info = weatherService.fetchWeatherService(tempUnit: tempUnit)
                     weatherInfo = info
                     output.send(.fetchWeatherList)
                     
                 case .updateTempUnit(let unit):
                     tempUnit = unit
+                    
+                    let info = weatherService.fetchWeatherService(tempUnit: tempUnit)
+                    weatherInfo = info
+                    
                     output.send(.tempUnit)
+                    output.send(.fetchWeatherList)
                 }
             }
             .store(in: &cancellable)

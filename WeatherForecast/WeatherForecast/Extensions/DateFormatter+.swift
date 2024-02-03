@@ -15,4 +15,12 @@ extension DateFormatter {
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
+    
+    static let city: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter
+    }()
 }

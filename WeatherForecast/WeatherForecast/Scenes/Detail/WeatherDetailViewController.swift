@@ -8,9 +8,9 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
 
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    private var weatherForecastInfo: WeatherForecast
+    private var cityInfo: City
+    private var tempUnit: TempUnit
     
     private let iconImageView: UIImageView = UIImageView()
     private let temperatureLabel: UILabel = UILabel()
@@ -50,6 +50,19 @@ final class WeatherDetailViewController: UIViewController {
         return spacingView
     }()
     
+    init(weatherForecastInfo: WeatherForecast,
+         cityInfo: City,
+         tempUnit: TempUnit) {
+        self.weatherForecastInfo = weatherForecastInfo
+        self.cityInfo = cityInfo
+        self.tempUnit = tempUnit
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,31 +123,19 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     private func setWeatherForecastData() {
-        guard let listInfo = weatherForecastInfo else { return }
+        navigationItem.title = weatherForecastInfo.updatedDate.value
+        weatherGroupLabel.text = weatherForecastInfo.title
+        weatherDescriptionLabel.text = weatherForecastInfo.description
+        temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.temp)"
+        feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.feelsLike)"
+        maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.tempMax)"
+        minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.tempMin)"
+        popLabel.text = "강수 확률 : \(weatherForecastInfo.pop)"
+        humidityLabel.text = "습도 : \(weatherForecastInfo.humidity)"
         
-        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = DateFormatter.default.string(from: date)
+        sunriseTimeLabel.text = "일출 : \(cityInfo.sunrise)"
+        sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset)"
         
-        weatherGroupLabel.text = listInfo.weather.main
-        weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
-        
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
-        }
-        
-        let iconName: String = listInfo.weather.icon
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        iconImageView.loadImage(with: urlString)
+        iconImageView.loadImage(with: weatherForecastInfo.iconUrl.value)
     }
 }

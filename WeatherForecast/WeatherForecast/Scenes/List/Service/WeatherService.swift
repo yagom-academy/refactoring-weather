@@ -9,12 +9,12 @@ import UIKit
 
 
 protocol WeatherService {
-    func fetchWeatherService() -> WeatherJSON?
+    func fetchWeatherService(tempUnit: TempUnit) -> WeatherList?
 }
 
 
 struct WeatherServiceImpl: WeatherService {
-    func fetchWeatherService() -> WeatherJSON? {
+    func fetchWeatherService(tempUnit: TempUnit) -> WeatherList? {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
@@ -22,14 +22,14 @@ struct WeatherServiceImpl: WeatherService {
             return nil
         }
         
-        let info: WeatherJSON
+        let info: WeatherJsonDTO
         do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            info = try jsonDecoder.decode(WeatherJsonDTO.self, from: data)
         } catch {
             print(error.localizedDescription)
             return nil
         }
 
-        return info
+        return info.toDomain(tempUnit: tempUnit)
     }
 }

@@ -158,10 +158,11 @@ extension WeatherListViewController: UITableViewDelegate {
             return
         }
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherForecastInfo
-        detailViewController.cityInfo = weatherInfo.city
-        detailViewController.tempUnit = viewModel.tempUnit
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(
+            weatherForecastInfo: weatherForecastInfo,
+            cityInfo: weatherInfo.city,
+            tempUnit: viewModel.tempUnit
+        )
         navigationController?.show(detailViewController, sender: self)
     }
 }

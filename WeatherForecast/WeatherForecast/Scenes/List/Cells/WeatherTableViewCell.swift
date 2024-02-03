@@ -121,16 +121,11 @@ extension WeatherTableViewCell {
 
 
 extension WeatherTableViewCell {
-    func configure(with info: WeatherForecastInfo, tempUnit: TempUnit) {
-        weatherLabel.text = info.weather.main
-        descriptionLabel.text = info.weather.description
-        temperatureLabel.text = "\(info.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: info.dt)
-        dateLabel.text = DateFormatter.default.string(from: date)
-        
-        let iconName: String = info.weather.icon
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        weatherIcon.loadImage(with: urlString)
+    func configure(with info: WeatherForecast, tempUnit: TempUnit) {
+        weatherLabel.text = info.title
+        descriptionLabel.text = info.description
+        temperatureLabel.text = "\(info.temp)"
+        dateLabel.text = "\(info.updatedDate)"
+        weatherIcon.loadImage(with: info.iconUrl.value)
     }
 }

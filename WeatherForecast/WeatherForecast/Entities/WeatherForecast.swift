@@ -9,8 +9,8 @@ import Foundation
 
 
 struct WeatherForecast {
-    let title: String
-    let description: String
+    let title: Name?
+    let description: Name?
     let temp: Temperature
     let feelsLike: Temperature
     let tempMax: Temperature
@@ -38,7 +38,7 @@ struct Probability: CustomStringConvertible {
     let value: String
     
     init(_ percent: Double) {
-        self.value = String(format: "%.1f%", percent)
+        self.value = String(format: "%.1f%%", percent)
     }
     
     var description: String {

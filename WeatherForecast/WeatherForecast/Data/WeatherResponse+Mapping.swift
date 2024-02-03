@@ -62,8 +62,8 @@ extension WeatherJsonDTO {
 extension WeatherForecastInfoDTO {
     func toDomain(tempUnit: TempUnit) -> WeatherForecast {
         .init(
-            title: weather.main,
-            description: weather.description,
+            title: Name(weather.main),
+            description: Name(weather.description),
             temp: Temperature(main.temp, tempUnit: tempUnit),
             feelsLike: Temperature(main.feelsLike, tempUnit: tempUnit),
             tempMax: Temperature(main.tempMax, tempUnit: tempUnit),
@@ -79,7 +79,7 @@ extension WeatherForecastInfoDTO {
 extension CityDTO {
     func toDomain() -> City {
         .init(
-            name: name,
+            name: Name(name),
             sunrise: Time(sunrise, dateFormatter: .city),
             sunset: Time(sunset, dateFormatter: .city)
         )

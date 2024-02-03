@@ -9,12 +9,24 @@ import Foundation
 
 
 struct City {
-    let name: String
+    let name: Name?
     let sunrise: Time
     let sunset: Time
 }
 
-struct Time {
+struct Name {
+    let value: String?
+    
+    init?(_ value: String) {
+        if value.isEmpty {
+            return nil
+        }
+        
+        self.value = value
+    }
+}
+
+struct Time: CustomStringConvertible {
     let value: String
     
     init(_ interval: TimeInterval, dateFormatter: DateFormatter) {

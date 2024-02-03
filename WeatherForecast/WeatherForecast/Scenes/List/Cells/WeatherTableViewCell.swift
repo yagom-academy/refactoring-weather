@@ -122,8 +122,12 @@ extension WeatherTableViewCell {
 
 extension WeatherTableViewCell {
     func configure(with info: WeatherForecast, tempUnit: TempUnit) {
-        weatherLabel.text = info.title
-        descriptionLabel.text = info.description
+        let title = info.title
+        weatherLabel.text = title?.value ?? ""
+        
+        let description = info.description
+        descriptionLabel.text = description?.value ?? ""
+        
         temperatureLabel.text = "\(info.temp)"
         dateLabel.text = "\(info.updatedDate)"
         weatherIcon.loadImage(with: info.iconUrl.value)

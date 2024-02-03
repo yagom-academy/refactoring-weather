@@ -124,8 +124,13 @@ final class WeatherDetailViewController: UIViewController {
     
     private func setWeatherForecastData() {
         navigationItem.title = weatherForecastInfo.updatedDate.value
-        weatherGroupLabel.text = weatherForecastInfo.title
-        weatherDescriptionLabel.text = weatherForecastInfo.description
+        
+        let title = weatherForecastInfo.title
+        weatherGroupLabel.text = title?.value ?? ""
+        
+        let description = weatherForecastInfo.description
+        weatherDescriptionLabel.text = description?.value ?? ""
+        
         temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.temp)"
         feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.feelsLike)"
         maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.tempMax)"

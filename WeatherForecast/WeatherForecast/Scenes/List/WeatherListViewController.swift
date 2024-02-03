@@ -106,7 +106,8 @@ extension WeatherListViewController {
     private func refreshUI() {
         let weatherInfo = viewModel.weatherInfo
         let city = weatherInfo?.city
-        navigationItem.title = city?.name
+        let cityName = city?.name?.value ?? ""
+        navigationItem.title = cityName
         
         let updatedUnit = viewModel.tempUnit
         navigationItem.rightBarButtonItem?.title = updatedUnit.title

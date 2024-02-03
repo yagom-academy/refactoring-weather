@@ -177,8 +177,8 @@ extension ViewController {
   private func createWeatherDetailViewControllerModel(
     _ weatherJSON: WeatherJSON,
     indexPath: IndexPath
-  ) -> WeatherDetailViewControllerModel {
-    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel = .init(
+  ) -> WeatherDetailModel {
+    let weatherDetailModel: WeatherDetailModel = .init(
       from: weatherJSON.weatherForecast[indexPath.item],
       weatherJSON.city,
       dependency: .init(
@@ -188,12 +188,12 @@ extension ViewController {
       )
     )
     
-    return weatherDetailViewControllerModel
+    return weatherDetailModel
   }
   
-  private func createWeatherDetailViewControllerDependency(_ weatherDetailViewControllerModel: WeatherDetailViewControllerModel) -> WeatherDetailViewController.Dependency {
+  private func createWeatherDetailViewControllerDependency(_ weatherDetailModel: WeatherDetailModel) -> WeatherDetailViewController.Dependency {
     let weatherDetailViewControllerDependency: WeatherDetailViewController.Dependency = .init(
-      weatherDetailViewControllerModel: weatherDetailViewControllerModel,
+      weatherDetailModel: weatherDetailModel,
       imageProvider: dependency.imageProvider
     )
     

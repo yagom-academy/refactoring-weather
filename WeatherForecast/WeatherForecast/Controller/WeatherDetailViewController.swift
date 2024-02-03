@@ -9,15 +9,13 @@ import UIKit
 final class WeatherDetailViewController: UIViewController {
   
   struct Dependency {
-    let weatherDetailViewControllerModel: WeatherDetailViewControllerModel
+    let weatherDetailModel: WeatherDetailModel
     let imageProvider: ImageProviderService
   }
   
   private let dependency: Dependency
   
-  private let weatherSituationView = WeatherSituationView()
-  private let weatherConditionView = WeatherConditionView()
-  private let spacingView: UIView = UIView()
+  private let weatherDetailView = WeatherDetailView()
 
   init(dependency: Dependency) {
     self.dependency = dependency
@@ -39,34 +37,21 @@ final class WeatherDetailViewController: UIViewController {
   private func initialSetUp() {
     view.backgroundColor = .white
         
-    navigationItem.title = dependency.weatherDetailViewControllerModel.dt
-    
-    spacingView.backgroundColor = .clear
-    spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
-    
-    let mainStackView: UIStackView = .init(arrangedSubviews: [
-      weatherSituationView,
-      weatherConditionView,
-      spacingView
-    ])
-    
-    mainStackView.axis = .vertical
-    mainStackView.alignment = .center
-    mainStackView.spacing = 8
-    view.addSubview(mainStackView)
-    mainStackView.translatesAutoresizingMaskIntoConstraints = false
+    navigationItem.title = dependency.weatherDetailModel.dt
+        
+    view.addSubview(weatherDetailView)
+    weatherDetailView.translatesAutoresizingMaskIntoConstraints = false
     
     let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
     NSLayoutConstraint.activate([
-      mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-      mainStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-      mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
+      weatherDetailView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+      weatherDetailView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+      weatherDetailView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
                                              constant: 16),
-      mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
+      weatherDetailView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
                                               constant: -16)
     ])
     
-    weatherSituationView.update(dependency.weatherDetailViewControllerModel.weatherSituation)
-    weatherConditionView.update(dependency.weatherDetailViewControllerModel.weatherConditions)
+    weatherDetailView.update(dependency.weatherDetailModel)
   }
 }

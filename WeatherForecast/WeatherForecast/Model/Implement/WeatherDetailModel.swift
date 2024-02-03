@@ -1,11 +1,11 @@
 //
-//  WeatherDetailViewControllerModel.swift
+//  WeatherDetailModel.swift
 //  WeatherForecast
 //
 //  Created by hyosung on 2/3/24.
 //
 
-struct WeatherDetailViewControllerModel {
+struct WeatherDetailModel {
   struct Dependency {
     let defaultDateFormatter: DateFormatterContextService
     let sunsetDateFormatter: DateFormatterContextService

@@ -27,12 +27,6 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: MainViewDelegate {
-    func refreshTableView() {
-        refresh()
-    }
-}
-
 extension ViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
@@ -79,6 +73,13 @@ extension ViewController {
     }
 }
 
+// MARK: - MainViewDelegate
+extension ViewController: MainViewDelegate {
+    func refreshTableView() {
+        refresh()
+    }
+}
+
 // MARK: - UITableViewDataSource
 extension ViewController: UITableViewDataSource {
     
@@ -94,7 +95,8 @@ extension ViewController: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
+        else {
             return cell
         }
         
@@ -110,11 +112,16 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
+        showDetailViewController(with: weatherForecastInfo)
+    }
+    
+    private func showDetailViewController(with weatherForecastInfo: WeatherForecastInfo?) {
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecastInfo,
+                                                                                            cityInfo: weatherJSON?.city, tempUnit: tempUnit)
+//        detailViewController.weatherForecastInfo = weatherForecastInfo
+//        detailViewController.cityInfo = weatherJSON?.city
+//        detailViewController.tempUnit = tempUnit
         navigationController?.show(detailViewController, sender: self)
     }
 }

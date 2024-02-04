@@ -37,6 +37,8 @@ final class MainView: UIView {
     }
     
     private func initialSetUp() {
+        backgroundColor = .white
+        
         layTable()
         initialTableViewSetUp()
     }

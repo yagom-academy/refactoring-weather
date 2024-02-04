@@ -7,18 +7,18 @@
 
 import UIKit
 
-protocol MainViewDelegate: AnyObject {
+protocol WeatherViewDelegate: AnyObject {
     func refreshTableView()
 }
 
-final class MainView: UIView {
+final class WeatherView: UIView {
     
-    private weak var delegate: MainViewDelegate!
+    private weak var delegate: WeatherViewDelegate!
     
     let tableView: UITableView = .init(frame: .zero, style: .plain)
     let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    init(delegate: MainViewDelegate,
+    init(delegate: WeatherViewDelegate,
          tableViewDelegate: UITableViewDelegate,
          tableViewDataSource: UITableViewDataSource
     ) {

@@ -6,15 +6,15 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
-    private var weatherDataManager: WeatherDataManagerDelegate?
+final class WeatherViewController: UIViewController {
+    private var dataManagerDelegate: WeatherDataManagerDelegate?
     private var weatherJSON: WeatherJSON?
     private let imageCache: NSCache<NSString, UIImage> = NSCache()
     
     private var tempUnit: TempUnit = .metric
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        self.weatherDataManager = WeatherDataManager()
+    init(dataManagerDelegate: WeatherDataManagerDelegate) {
+        self.dataManagerDelegate = dataManagerDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -23,7 +23,7 @@ final class ViewController: UIViewController {
     }
     
     override func loadView() {
-        view = MainView(delegate: self,
+        view = WeatherView(delegate: self,
                         tableViewDelegate: self,
                         tableViewDataSource: self)
     }
@@ -39,7 +39,7 @@ final class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -53,7 +53,7 @@ extension ViewController {
     }
     
     @objc private func refresh() {
-        weatherDataManager?.fetchWeatherData(completion: {[weak self] result in
+        dataManagerDelegate?.fetchWeatherData(completion: {[weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let info):
@@ -68,7 +68,7 @@ extension ViewController {
     
     private func updateUI() {
         navigationItem.title = weatherJSON?.city.name
-        (view as? MainView)?.refreshEnd()
+        (view as? WeatherView)?.refreshEnd()
     }
     
     private func initialSetUp() {
@@ -77,14 +77,14 @@ extension ViewController {
 }
 
 // MARK: - MainViewDelegate
-extension ViewController: MainViewDelegate {
+extension WeatherViewController: WeatherViewDelegate {
     func refreshTableView() {
         refresh()
     }
 }
 
 // MARK: - UITableViewDataSource
-extension ViewController: UITableViewDataSource {
+extension WeatherViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -112,7 +112,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate
-extension ViewController: UITableViewDelegate {
+extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

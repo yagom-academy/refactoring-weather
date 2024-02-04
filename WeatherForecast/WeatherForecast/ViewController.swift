@@ -11,15 +11,7 @@ class ViewController: UIViewController {
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
     weak var delegate: WeatherForecastInfoDelegate?
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
@@ -42,7 +34,7 @@ extension ViewController {
     }
     
     @objc private func refresh() {
-        fetchWeatherJSON()
+        loadJSON()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
@@ -79,24 +71,8 @@ extension ViewController {
 }
 
 extension ViewController {
-    private func fetchWeatherJSON() {
-        
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
+    private func loadJSON() {
+        weatherJSON = NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)
         navigationItem.title = weatherJSON?.city.name
     }
 }
@@ -140,4 +116,25 @@ extension ViewController: UITableViewDelegate {
 protocol WeatherForecastInfoDelegate: AnyObject{
     func updateWeatherInfo(listInfo: WeatherForecastInfo, tempUnit: TempUnit)
     func updateCityInfo(_ cityInfo: City)
+}
+
+class NetworkService {
+    static let shared = NetworkService()
+    private init() {}
+    
+    func fetchWeatherJSON(weatherInfo :WeatherJSON?) -> WeatherJSON?{
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let data = NSDataAsset(name: "weather")?.data else {
+            return nil
+        }
+        let info: WeatherJSON
+        do {
+            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+        return info
+    }
 }

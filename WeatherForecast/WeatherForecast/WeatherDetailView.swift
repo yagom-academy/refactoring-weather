@@ -7,24 +7,20 @@
 
 import UIKit
 
-protocol WeatherDetailViewDelegate: AnyObject {
-    
-}
-
 final class WeatherDetailView: UIView {
     
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
+    private let iconImageView: UIImageView = UIImageView()
+    private let weatherGroupLabel: UILabel = UILabel()
+    private let weatherDescriptionLabel: UILabel = UILabel()
+    private let temperatureLabel: UILabel = UILabel()
+    private let feelsLikeLabel: UILabel = UILabel()
+    private let maximumTemperatureLable: UILabel = UILabel()
+    private let minimumTemperatureLable: UILabel = UILabel()
+    private let popLabel: UILabel = UILabel()
+    private let humidityLabel: UILabel = UILabel()
+    private let sunriseTimeLabel: UILabel = UILabel()
+    private let sunsetTimeLabel: UILabel = UILabel()
+    private let spacingView: UIView = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -86,10 +82,11 @@ final class WeatherDetailView: UIView {
         ])
     }
     
-    func configure(with listInfo: WeatherForecastInfo,
-                    cityInfo: City?,
-                    tempUnit: TempUnit
-    ) {
+    func configure(with weatherDetailInfo: WeatherDetailInfo?) {
+        guard let listInfo: WeatherForecastInfo = weatherDetailInfo?.weatherForecastInfo,
+              let tempUnit: TempUnit = weatherDetailInfo?.tempUnit
+        else { return }
+        
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
         temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
@@ -99,7 +96,7 @@ final class WeatherDetailView: UIView {
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
+        if let cityInfo: City = weatherDetailInfo?.cityInfo {
             let formatter: DateFormatter = DateFormatter()
             formatter.dateFormat = .none
             formatter.timeStyle = .short
@@ -110,15 +107,24 @@ final class WeatherDetailView: UIView {
         
         Task {
             let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
             
-            iconImageView.image = image
+            guard let image = await getIconImage(with: iconName) else { return }
+            
+            DispatchQueue.main.async {[weak self] in
+                self?.iconImageView.image = image
+            }
         }
+    }
+    
+    private func getIconImage(with iconName: String) async -> UIImage? {
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+
+        guard let url: URL = URL(string: urlString),
+              let (data, _) = try? await URLSession.shared.data(from: url)
+        else {
+            return nil
+        }
+        
+        return UIImage(data: data)
     }
 }

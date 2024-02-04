@@ -6,27 +6,18 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+struct WeatherDetailInfo {
+    var weatherForecastInfo: WeatherForecastInfo?
+    var cityInfo: City?
+    var tempUnit: TempUnit = .metric
+}
 
-    private var detailView: WeatherDetailView?
-    private var weatherForecastInfo: WeatherForecastInfo?
-    private var cityInfo: City?
-    private var tempUnit: TempUnit
+final class WeatherDetailViewController: UIViewController {
+
+    private let weatherDetailInfo: WeatherDetailInfo?
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
-    init(weatherForecastInfo: WeatherForecastInfo?,
-         cityInfo: City?,
-         tempUnit: TempUnit = .metric
-    ) {
-        self.weatherForecastInfo = weatherForecastInfo
-        self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
+    init(weatherDetailInfo: WeatherDetailInfo?) {
+        self.weatherDetailInfo = weatherDetailInfo
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,10 +25,8 @@ class WeatherDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func loadView() {
-        detailView = WeatherDetailView()
-        view = detailView
+        view = WeatherDetailView()
     }
     
     override func viewDidLoad() {
@@ -48,13 +37,14 @@ class WeatherDetailViewController: UIViewController {
     private func initialSetUp() {
         view.backgroundColor = .white
         
-        guard let listInfo = weatherForecastInfo else { return }
+        guard let listInfo = weatherDetailInfo?.weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = detailDateFormatter.string(from: date)
        
-        detailView?.configure(with: listInfo,
-                              cityInfo: cityInfo,
-                              tempUnit: tempUnit)                              
+        (view as? WeatherDetailView)?.configure(with: weatherDetailInfo)
     }
 }
+
+// MARK: - DetailDateFormattable
+extension WeatherDetailViewController: DetailDateFormattable { }

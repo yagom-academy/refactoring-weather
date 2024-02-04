@@ -13,7 +13,7 @@ protocol MainViewDelegate: AnyObject {
 
 final class MainView: UIView {
     
-    private var delegate: MainViewDelegate!
+    private weak var delegate: MainViewDelegate!
     
     let tableView: UITableView = .init(frame: .zero, style: .plain)
     let refreshControl: UIRefreshControl = UIRefreshControl()

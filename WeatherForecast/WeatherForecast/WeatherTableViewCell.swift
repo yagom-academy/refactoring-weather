@@ -6,21 +6,14 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+final class WeatherTableViewCell: UITableViewCell {
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
     private var imageCache: NSCache<NSString, UIImage>?
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -124,7 +117,7 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = detailDateFormatter.string(from: date)
         
         setImage(with: weatherForecastInfo)
     }
@@ -139,14 +132,26 @@ class WeatherTableViewCell: UITableViewCell {
         }
         
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
+            guard let image = await getIconImage(with: urlString) else { return }
             
             imageCache?.setObject(image, forKey: urlString as NSString)
-            weatherIcon.image = image
+            DispatchQueue.main.async {[weak self] in
+                self?.weatherIcon.image = image
+            }
         }
     }
+    
+    private func getIconImage(with urlString: String) async -> UIImage? {
+        guard let url: URL = URL(string: urlString),
+              let (data, _) = try? await URLSession.shared.data(from: url)
+        else {
+            return nil
+        }
+        
+        return UIImage(data: data)
+    }
+    
 }
+
+// MARK: - DetailDateFormattable
+extension WeatherTableViewCell: DetailDateFormattable { }

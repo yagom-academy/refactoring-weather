@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+final class WeatherDetailViewController: UIViewController {
     
     let iconImageView: UIImageView = UIImageView()
     let weatherGroupLabel: UILabel = UILabel()
@@ -20,7 +20,8 @@ class WeatherDetailViewController: UIViewController {
     let sunriseTimeLabel: UILabel = UILabel()
     let sunsetTimeLabel: UILabel = UILabel()
     let spacingView: UIView = UIView()
-    
+    weak var delegate: WeatherForeCastDelegate?
+    var weahterJSON: WeatherJSON!
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
@@ -31,6 +32,7 @@ class WeatherDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
+        setupData()
     }
     
     private func initialSetUp() {
@@ -84,10 +86,18 @@ class WeatherDetailViewController: UIViewController {
                                                  multiplier: 0.3)
         ])
     }
-    
+    func setupData(){
+        guard let weatherInfo = delegate?.fetchWeatherInfo(),
+              let cityInfo = delegate?.fetchCityInfo(),
+              let tempUnit = delegate?.fetchTempUnit()
+              else { return }
+        updateWeatherInfo(listInfo: weatherInfo, tempUnit: tempUnit)
+        updateCityInfo(cityInfo)
+        updateWeatherIcon(iconName: weatherInfo.weather.icon)
+    }
 }
 
-extension WeatherDetailViewController: WeatherForecastInfoDelegate {
+extension WeatherDetailViewController {
     
     func updateWeatherInfo(listInfo: WeatherForecastInfo, tempUnit: TempUnit){
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
@@ -100,21 +110,16 @@ extension WeatherDetailViewController: WeatherForecastInfoDelegate {
         minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
-
+    }
+    func updateWeatherIcon(iconName: String){
         Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+            if let iconImage = await NetworkService.shared.fetchWeatherIconImage(iconName: iconName) {
+                DispatchQueue.main.async {
+                    self.iconImageView.image = iconImage
+                }
             }
-            
-            iconImageView.image = image
         }
     }
-    
     func updateCityInfo(_ cityInfo: City) {
         let formatter: DateFormatter = DateFormatter()
         formatter.dateFormat = .none

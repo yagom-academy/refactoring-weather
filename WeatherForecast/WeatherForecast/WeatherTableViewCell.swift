@@ -114,28 +114,18 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "\(info.main.temp)\(tempUnit.expression)"
         let date: Date = Date(timeIntervalSince1970: info.dt)
         dateLabel.text = dateFormatter.string(from: date)
-        loadImage(info)
+        loadImage(info.weather.icon)
     }
 }
 extension WeatherTableViewCell {
-    func loadImage(_ info : WeatherForecastInfo){
-        
-        let iconName: String = info.weather.icon
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            weatherIcon.image = image
-            return
-        }
-        
+    
+    func loadImage(_ iconName: String){
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+            if let iconImage = await NetworkService.shared.fetchWeatherIconImage(iconName: iconName) {
+                DispatchQueue.main.async {
+                    self.weatherIcon.image = iconImage
+                }
             }
-            weatherIcon.image = image
-            imageChache.setObject(image, forKey: urlString as NSString)
         }
     }
 }

@@ -6,14 +6,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
-    weak var delegate: WeatherForecastInfoDelegate?
     var tempUnit: TempUnit = .metric
-    
+    var selectIndex : IndexPath!
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -89,7 +88,6 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
-        
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
@@ -102,39 +100,22 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        selectIndex = indexPath
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        self.delegate = detailViewController
-        guard let weatherInfo = weatherJSON?.weatherForecast[indexPath.row] else { return }
-        guard let cityInfo = weatherJSON?.city else { return }
-        delegate?.updateWeatherInfo(listInfo: weatherInfo,tempUnit: tempUnit)
-        delegate?.updateCityInfo(cityInfo)
+        detailViewController.delegate = self
         navigationController?.show(detailViewController, sender: self)
     }
 }
 
-protocol WeatherForecastInfoDelegate: AnyObject{
-    func updateWeatherInfo(listInfo: WeatherForecastInfo, tempUnit: TempUnit)
-    func updateCityInfo(_ cityInfo: City)
-}
-
-class NetworkService {
-    static let shared = NetworkService()
-    private init() {}
-    
-    func fetchWeatherJSON(weatherInfo :WeatherJSON?) -> WeatherJSON?{
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return nil
-        }
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return nil
-        }
-        return info
+extension ViewController: WeatherForeCastDelegate{
+   
+    func fetchWeatherInfo() -> WeatherForecastInfo {
+        return (NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)?.weatherForecast[selectIndex.row])! // 선택한 셀의 정보 넘기기
+    }
+    func fetchCityInfo() -> City {
+        return (NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)?.city)!
+    }
+    func fetchTempUnit() -> TempUnit {
+        return tempUnit
     }
 }

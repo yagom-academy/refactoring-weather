@@ -29,12 +29,3 @@ final class DefaultWeatherListUseCase: WeatherListUseCase {
         return info
     }
 }
-
-struct JSONDecoderCreator {
-    static func createSnakeCaseDecoder() -> JSONDecoder {
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        return jsonDecoder
-    }
-}

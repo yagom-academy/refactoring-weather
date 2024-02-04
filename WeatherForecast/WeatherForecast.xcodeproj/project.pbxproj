@@ -19,6 +19,8 @@
 		EE80876C2B6E4AFA004D91C2 /* WeatherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80876B2B6E4AFA004D91C2 /* WeatherListView.swift */; };
 		EE80876F2B6E5720004D91C2 /* WeatherListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80876E2B6E5720004D91C2 /* WeatherListUseCase.swift */; };
 		EE8087732B6E59CD004D91C2 /* weather.json in Resources */ = {isa = PBXBuildFile; fileRef = EE8087722B6E59CD004D91C2 /* weather.json */; };
+		EE8087762B6F5882004D91C2 /* JSONDecoderCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087752B6F5882004D91C2 /* JSONDecoderCreator.swift */; };
+		EE8087782B6F588C004D91C2 /* DateFormatterCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087772B6F588C004D91C2 /* DateFormatterCreator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		EE80876B2B6E4AFA004D91C2 /* WeatherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListView.swift; sourceTree = "<group>"; };
 		EE80876E2B6E5720004D91C2 /* WeatherListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListUseCase.swift; sourceTree = "<group>"; };
 		EE8087722B6E59CD004D91C2 /* weather.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weather.json; sourceTree = "<group>"; };
+		EE8087752B6F5882004D91C2 /* JSONDecoderCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderCreator.swift; sourceTree = "<group>"; };
+		EE8087772B6F588C004D91C2 /* DateFormatterCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterCreator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +72,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				EE8087742B6F5873004D91C2 /* Utils */,
 				EE80876D2B6E570E004D91C2 /* UseCases */,
 				EE8087652B6C02A2004D91C2 /* App */,
 				EE8087662B6C02CD004D91C2 /* Models */,
@@ -123,6 +128,15 @@
 				EE80876E2B6E5720004D91C2 /* WeatherListUseCase.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		EE8087742B6F5873004D91C2 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				EE8087752B6F5882004D91C2 /* JSONDecoderCreator.swift */,
+				EE8087772B6F588C004D91C2 /* DateFormatterCreator.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,6 +213,8 @@
 			files = (
 				EE80876F2B6E5720004D91C2 /* WeatherListUseCase.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
+				EE8087762B6F5882004D91C2 /* JSONDecoderCreator.swift in Sources */,
+				EE8087782B6F588C004D91C2 /* DateFormatterCreator.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,

@@ -10,16 +10,9 @@ class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
     private let weatherListUseCase: WeatherListUseCase = DefaultWeatherListUseCase()
     private var weatherJSON: WeatherJSON?
-    var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
-    var tempUnit: TempUnit = .metric
+    private let dateFormatter: DateFormatter
+    private let imageChache: NSCache<NSString, UIImage> = NSCache()
+    private var tempUnit: TempUnit = .metric
     
     override func loadView() {
         view = weatherListView

@@ -12,6 +12,14 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
+    private var imageCache: NSCache<NSString, UIImage>?
+    
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,5 +107,42 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    
+    func configure(with weatherForecastInfo: WeatherForecastInfo, 
+                   tempUnit: TempUnit,
+                   imageCache: NSCache<NSString, UIImage>
+    ) {
+        self.imageCache = imageCache
+        
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = dateFormatter.string(from: date)
+        
+        setImage(with: weatherForecastInfo)
+    }
+    
+    private func setImage(with weatherForecastInfo: WeatherForecastInfo) {
+        let iconName: String = weatherForecastInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+                
+        if let image = imageCache?.object(forKey: urlString as NSString) {
+            weatherIcon.image = image
+            return
+        }
+        
+        Task {
+            guard let url: URL = URL(string: urlString),
+                  let (data, _) = try? await URLSession.shared.data(from: url),
+                  let image: UIImage = UIImage(data: data) else {
+                return
+            }
+            
+            imageCache?.setObject(image, forKey: urlString as NSString)
+            weatherIcon.image = image
+        }
     }
 }

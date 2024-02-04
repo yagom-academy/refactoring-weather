@@ -7,16 +7,25 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
-     
+    
+    // MARK: - Properties
+    static let cellId               : String = "WeatherCell"
+    private var dateLabel           : CustomCellLabel = CustomCellLabel()
+    private var temperatureLabel    : CustomCellLabel = CustomCellLabel()
+    private var weatherLabel        : CustomCellLabel = CustomCellLabel()
+    private var dashLabel           : CustomCellLabel = CustomCellLabel()
+    private var descriptionLabel    : CustomCellLabel = CustomCellLabel()
+    private var weatherStackView    : UIStackView!
+    private var verticalStackView   : UIStackView!
+    private var contentsStackView   : UIStackView!
+    private var weatherIcon         : UIImageView = UIImageView()
+    private var defaultImage        : UIImage? = UIImage(systemName: "arrow.down.circle.dotted")
+    
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
-        reset()
+        setUpLayout()
+        resetCell()
     }
     
     required init?(coder: NSCoder) {
@@ -25,26 +34,19 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        reset()
+        resetCell()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
-        
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
-        
-        labels.forEach { label in
-            label.textColor = .black
-            label.font = .preferredFont(forTextStyle: .body)
-            label.numberOfLines = 1
-        }
-        
-        let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
+    
+    // MARK: - SetupUI
+    private func setUpLayout() {
+        layoutWeatherStackView()
+        layoutVerticalStackView()
+        layoutContentStackView()
+    }
+    
+    private func layoutWeatherStackView() {
+        weatherStackView = UIStackView(arrangedSubviews: [
             weatherLabel,
             dashLabel,
             descriptionLabel
@@ -57,9 +59,10 @@ class WeatherTableViewCell: UITableViewCell {
         weatherStackView.spacing = 8
         weatherStackView.alignment = .center
         weatherStackView.distribution = .fill
-        
-        
-        let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [
+    }
+    
+    private func layoutVerticalStackView() {
+        verticalStackView = UIStackView(arrangedSubviews: [
             dateLabel,
             temperatureLabel,
             weatherStackView
@@ -69,8 +72,10 @@ class WeatherTableViewCell: UITableViewCell {
         verticalStackView.spacing = 8
         verticalStackView.distribution = .fill
         verticalStackView.alignment = .leading
-        
-        let contentsStackView: UIStackView = UIStackView(arrangedSubviews: [
+    }
+    
+    private func layoutContentStackView() {
+        contentsStackView = UIStackView(arrangedSubviews: [
             weatherIcon,
             verticalStackView
         ])
@@ -93,11 +98,29 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func reset() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
+    private func resetCell() {
+        weatherIcon.image = defaultImage
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
+    
+    // MARK: - UI Update Method
+    func updateCellUI(with weatherForecastInfo: WeatherForecastInfo, tempUnit: TemperatureUnit, imageManager: ImageManagerProtocol) {
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = date.formattedStringFromDate()
+        
+        let iconName: String = weatherForecastInfo.weather.icon
+        imageManager.fetchImage(of: iconName) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.weatherIcon.image = image
+            }
+        }
+    }
+    
 }

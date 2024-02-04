@@ -46,6 +46,7 @@ extension WeatherListViewController {
     }
     
     private func initialSetUp() {
+        view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(navigationRightBarButtonAction))
         
         layTable()

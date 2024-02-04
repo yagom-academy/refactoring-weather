@@ -42,7 +42,12 @@ final class WeatherViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.fetchWeatherData()
+        Task {
+            await viewModel.fetchWeatherData()
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
     }
 }
 
@@ -65,9 +70,13 @@ extension WeatherViewController {
     }
     
     @objc private func refresh() {
-        viewModel.fetchWeatherData()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
+        Task {
+            await viewModel.fetchWeatherData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
     
     private func setupTableView() {

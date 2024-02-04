@@ -7,12 +7,11 @@
 
 import UIKit
 
-
 protocol WeatherViewModelProtocol {
     var city: City? { get }
     var cityName: String { get }
     var weatherForecast: [WeatherForecastInfo]? { get }
-    func fetchWeatherData()
+    func fetchWeatherData() async
 }
 
 final class WeatherViewModel: WeatherViewModelProtocol {
@@ -31,7 +30,7 @@ final class WeatherViewModel: WeatherViewModelProtocol {
         return weatherData?.city.name ?? ""
     }
     
-    func fetchWeatherData() {
+    func fetchWeatherData() async {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         

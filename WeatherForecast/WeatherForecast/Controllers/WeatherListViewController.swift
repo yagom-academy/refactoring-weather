@@ -8,7 +8,7 @@ import UIKit
 
 class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
-    private let weatherListUseCase: WeatherListUseCase = DefaultWeatherListUseCase()
+    private let weatherListUseCase: WeatherListUseCase
     private var weatherJSON: WeatherJSON?
     private let dateFormatter: DateFormatter
     private let imageChache: NSCache<NSString, UIImage> = NSCache()
@@ -21,6 +21,23 @@ class WeatherListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
+    }
+    
+    init(useCase: WeatherListUseCase, dateFormatter: DateFormatter) {
+        self.weatherListUseCase = useCase
+        self.dateFormatter = dateFormatter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience init() {
+        self.init(useCase: DefaultWeatherListUseCase(),
+                  dateFormatter: DateFormatterCreator.createKoreanDateFormatter())
+    }
+    
+    required init?(coder: NSCoder) {
+        self.weatherListUseCase = DefaultWeatherListUseCase()
+        self.dateFormatter = DateFormatterCreator.createKoreanDateFormatter()
+        super.init(coder: coder)
     }
 }
 

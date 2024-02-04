@@ -7,7 +7,7 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-class WeatherJSON: Decodable {
+class WeatherData: Decodable {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
@@ -59,4 +59,3 @@ enum TempUnit: String {
         }
     }
 }
-

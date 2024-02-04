@@ -6,8 +6,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    // TODO: - lazy 로 설정해주는게 맞을지 확인 필요
+final class WeatherViewController: UIViewController {
+    
+    private var viewModel: WeatherViewModelProtocol
+    private var temperatureConverter: TemperatureConverterProtocol
+    let refreshControl: UIRefreshControl
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -18,15 +22,18 @@ class ViewController: UIViewController {
         return tableView
     }()
     
-    let refreshControl: UIRefreshControl = UIRefreshControl()
-    var weatherJSON: WeatherJSON?
+    init(viewModel: WeatherViewModelProtocol,
+         temperatureConverter: TemperatureConverterProtocol,
+         refreshControl: UIRefreshControl) {
+        self.viewModel = viewModel
+        self.temperatureConverter = temperatureConverter
+        self.refreshControl = refreshControl
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    private var viewModel = WeatherViewModel()
-    
-    var icons: [UIImage]?
-    
-    private var temperatureConverter = TemperatureConverter()
-    var tempUnit: TempUnit = .metric // TODO: 이거 딴곳으로 옮겨야하는거 아니야?
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,14 +42,14 @@ class ViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.fetchWeatherJSON()
+        viewModel.fetchWeatherData()
     }
 }
 
-extension ViewController {
+extension WeatherViewController {
     private func setup() {
         navigationItem.title = viewModel.cityName
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨",
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UI.imperial,
                                                             image: nil,
                                                             target: self,
                                                             action: #selector(changeTempUnit))
@@ -58,12 +65,11 @@ extension ViewController {
     }
     
     @objc private func refresh() {
-        viewModel.fetchWeatherJSON()
+        viewModel.fetchWeatherData()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
-    // TODO: - 테이블뷰 관련 작업을 다양한 곳에서 처리하고 있어 이를 수정함
     private func setupTableView() {
         view.addSubview(tableView)
         let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
@@ -76,7 +82,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -100,18 +106,15 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        // 파라미터를 그대로 던져주는게 가독성이 떨어지는 것 같아 수정. 이런것도 DI 라고 봐야하나?
         let weatherForecast = viewModel.weatherForecast?[indexPath.row]
         let cityInfo = viewModel.city
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecast,
                                                                                             cityInfo: cityInfo,
-                                                                                            tempUnit: tempUnit)
+                                                                                            tempUnit: temperatureConverter.tempUnit)
         navigationController?.show(detailViewController, sender: self)
     }
 }
-
-

@@ -7,23 +7,31 @@
 
 import UIKit
 
-final class WeatherViewModel {
+
+protocol WeatherViewModelProtocol {
+    var city: City? { get }
+    var cityName: String { get }
+    var weatherForecast: [WeatherForecastInfo]? { get }
+    func fetchWeatherData()
+}
+
+final class WeatherViewModel: WeatherViewModelProtocol {
     
-    private var weatherJSON: WeatherJSON?
+    private var weatherData: WeatherData?
     
     var weatherForecast: [WeatherForecastInfo]? {
-        return weatherJSON?.weatherForecast
+        return weatherData?.weatherForecast
     }
     
     var city: City? {
-        return weatherJSON?.city ?? nil
+        return weatherData?.city ?? nil
     }
     
     var cityName: String {
-        return weatherJSON?.city.name ?? ""
+        return weatherData?.city.name ?? ""
     }
     
-    func fetchWeatherJSON() {
+    func fetchWeatherData() {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
@@ -32,7 +40,7 @@ final class WeatherViewModel {
         }
         
         do {
-            self.weatherJSON = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            self.weatherData = try jsonDecoder.decode(WeatherData.self, from: data)
         } catch {
             print(error.localizedDescription)
             return

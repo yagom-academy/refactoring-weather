@@ -7,14 +7,14 @@
 
 import Foundation
 
-class TemperatureConverter {
+protocol TemperatureConverterProtocol {
+    var tempUnit: TempUnit { get }
+    func toggleTemperature() -> String
+}
+
+class TemperatureConverter: TemperatureConverterProtocol {
     
-    enum UI {
-        static let metric = "섭씨"
-        static let imperial = "화씨"
-    }
-    
-    private var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = .metric
     
     func toggleTemperature() -> String {
         switch tempUnit {

@@ -7,17 +7,29 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private var mainView: MainView?
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageCache: NSCache<NSString, UIImage> = NSCache()
     
     var tempUnit: TempUnit = .metric
     
+    override func loadView() {
+        mainView = MainView(delegate: self,
+                        tableViewDelegate: self,
+                        tableViewDataSource: self)
+        view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
+    }
+}
+
+extension ViewController: MainViewDelegate {
+    func refreshTableView() {
+        refresh()
     }
 }
 
@@ -36,38 +48,11 @@ extension ViewController {
     
     @objc private func refresh() {
         fetchWeatherJSON()
-        tableView.reloadData()
-        refreshControl.endRefreshing()
+        mainView?.refreshEnd()
     }
     
     private func initialSetUp() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
-        
-        layTable()
-        
-        refreshControl.addTarget(self,
-                                 action: #selector(refresh),
-                                 for: .valueChanged)
-        
-        tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-    
-    private func layTable() {
-        tableView = .init(frame: .zero, style: .plain)
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let safeArea: UILayoutGuide = view.safeAreaLayoutGuide
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
-        ])
     }
 }
 

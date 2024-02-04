@@ -15,10 +15,24 @@ extension Date {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: self)
     }
+    
+    func toString(timeStyle: DateFormatter.Style) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: "ko_KR")
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: self)
+    }
 }
 
 extension Data {
     func toUIImage() -> UIImage? {
         return UIImage(data: self)
+    }
+}
+
+extension TimeInterval {
+    
+    func toDate() -> Date {
+        return Date(timeIntervalSince1970: self)
     }
 }

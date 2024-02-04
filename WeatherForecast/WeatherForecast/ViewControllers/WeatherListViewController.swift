@@ -175,9 +175,10 @@ extension WeatherListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherListDetailViewController = WeatherListDetailViewController()
-        detailViewController.weatherForecastInfo = model.weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = model.weatherJSON?.city
-        detailViewController.tempUnit = model.tempUnit
+        detailViewController.model.setWeatherForecastInfo(model.weatherJSON?.weatherForecast[indexPath.row])
+        detailViewController.model.setCityInfo(model.weatherJSON?.city)
+        detailViewController.model.setTempUnit(model.tempUnit)
+
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 }

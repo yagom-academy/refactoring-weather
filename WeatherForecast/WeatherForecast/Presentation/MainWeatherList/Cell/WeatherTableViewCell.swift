@@ -7,12 +7,18 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
+    // MARK: - Properties
+    static let identifier = String(describing: WeatherTableViewCell.self)
+    private var imageService: NetworkService?
+    
+    // MARK: - View
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
      
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -28,6 +34,7 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
+    // MARK: - Layout
     private func layViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
@@ -99,5 +106,14 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    
+    func configureCell(weatherInfo: WeatherForecastInfo,
+                       imageService: NetworkService) async {
+        weatherIcon.image = try? await imageService.fetchImage(iconName: weatherInfo.weather.icon, urlSession: URLSession.shared)
+        dateLabel.text = weatherInfo.dtTxt
+        temperatureLabel.text = "\(weatherInfo.main.temp)"
+        weatherLabel.text = weatherInfo.weather.main
+        descriptionLabel.text = weatherInfo.weather.description
     }
 }

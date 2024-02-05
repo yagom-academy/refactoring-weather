@@ -105,7 +105,7 @@ final class WeatherTableViewCell: UITableViewCell {
 }
 
 extension WeatherTableViewCell {
-  public func bind(_ weathertableViewCellModel: WeatherTableViewCellModel) {
+  public func bind(_ weathertableViewCellModel: WeatherTableViewCellModel) { 
     imageLoadingTask = Task {
       let image = await ImageProvider.shared.image(url: weathertableViewCellModel.imageURL)
       weatherIcon.image = image

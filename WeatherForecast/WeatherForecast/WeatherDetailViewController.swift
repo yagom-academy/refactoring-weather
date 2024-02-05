@@ -7,17 +7,21 @@
 import UIKit
 
 struct WeatherDetailInfo {
-    var weatherForecastInfo: WeatherForecastInfo?
+    var weatherForecastInfo: WeatherForecastInfo
     var cityInfo: City?
     var tempUnit: TempUnit = .metric
 }
 
 final class WeatherDetailViewController: UIViewController {
 
-    private let weatherDetailInfo: WeatherDetailInfo?
+    private let weatherDetailInfo: WeatherDetailInfo
+    private let networkManager: NetworkManager
     
-    init(weatherDetailInfo: WeatherDetailInfo?) {
+    init(weatherDetailInfo: WeatherDetailInfo,
+         networkManager: NetworkManager
+    ) {
         self.weatherDetailInfo = weatherDetailInfo
+        self.networkManager = networkManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -26,7 +30,7 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     override func loadView() {
-        view = WeatherDetailView()
+        view = WeatherDetailView(networkManager: self.networkManager)
     }
     
     override func viewDidLoad() {
@@ -37,14 +41,14 @@ final class WeatherDetailViewController: UIViewController {
     private func initialSetUp() {
         view.backgroundColor = .white
         
-        guard let listInfo = weatherDetailInfo?.weatherForecastInfo else { return }
+        let listInfo = weatherDetailInfo.weatherForecastInfo
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = detailDateFormatter.string(from: date)
+        let formatter: CustomDateFormatter = .init(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
+        let title: String = formatter.string(from: date)
+        
+        navigationItem.title = title
        
         (view as? WeatherDetailView)?.configure(with: weatherDetailInfo)
     }
 }
-
-// MARK: - DetailDateFormattable
-extension WeatherDetailViewController: DetailDateFormattable { }

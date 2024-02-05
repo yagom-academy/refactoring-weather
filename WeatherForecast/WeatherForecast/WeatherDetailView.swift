@@ -9,20 +9,22 @@ import UIKit
 
 final class WeatherDetailView: UIView {
     
-    private let iconImageView: UIImageView = UIImageView()
-    private let weatherGroupLabel: UILabel = UILabel()
-    private let weatherDescriptionLabel: UILabel = UILabel()
-    private let temperatureLabel: UILabel = UILabel()
-    private let feelsLikeLabel: UILabel = UILabel()
-    private let maximumTemperatureLable: UILabel = UILabel()
-    private let minimumTemperatureLable: UILabel = UILabel()
-    private let popLabel: UILabel = UILabel()
-    private let humidityLabel: UILabel = UILabel()
-    private let sunriseTimeLabel: UILabel = UILabel()
-    private let sunsetTimeLabel: UILabel = UILabel()
-    private let spacingView: UIView = UIView()
-
-    override init(frame: CGRect) {
+    private let iconImageView: UIImageView = .init()
+    private let weatherGroupLabel: UILabel = .init()
+    private let weatherDescriptionLabel: UILabel = .init()
+    private let temperatureLabel: UILabel = .init()
+    private let feelsLikeLabel: UILabel = .init()
+    private let maximumTemperatureLable: UILabel = .init()
+    private let minimumTemperatureLable: UILabel = .init()
+    private let popLabel: UILabel = .init()
+    private let humidityLabel: UILabel = .init()
+    private let sunriseTimeLabel: UILabel = .init()
+    private let sunsetTimeLabel: UILabel = .init()
+    private let spacingView: UIView = .init()
+    private var networkManager: NetworkManager
+    
+    init(networkManager: NetworkManager) {
+        self.networkManager = networkManager
         super.init(frame: .zero)
         initialSettings()
     }
@@ -97,34 +99,22 @@ final class WeatherDetailView: UIView {
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
         if let cityInfo: City = weatherDetailInfo?.cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+            let formatter: CustomDateFormatter = .init(timeStyle: .short)
+            let sunriseDate: Date = .init(timeIntervalSince1970: cityInfo.sunrise)
+            let sunsetDate: Date = .init(timeIntervalSince1970: cityInfo.sunset)
+            
+            sunriseTimeLabel.text = "일출 : \(formatter.string(from: sunriseDate)))"
+            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: sunsetDate)))"
         }
         
-        Task {
+        Task {[weak self] in
             let iconName: String = listInfo.weather.icon
             
-            guard let image = await getIconImage(with: iconName) else { return }
+            guard let image = await self?.networkManager.getIconImage(byName: iconName) else { return }
             
-            DispatchQueue.main.async {[weak self] in
+            await MainActor.run {
                 self?.iconImageView.image = image
             }
         }
-    }
-    
-    private func getIconImage(with iconName: String) async -> UIImage? {
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-        guard let url: URL = URL(string: urlString),
-              let (data, _) = try? await URLSession.shared.data(from: url)
-        else {
-            return nil
-        }
-        
-        return UIImage(data: data)
     }
 }

@@ -7,15 +7,6 @@
 
 import Foundation
 
-protocol DetailDateFormattable: AnyObject {
-    
-}
-
-extension DetailDateFormattable {
-    var detailDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }
+protocol DetailDateFormattable {
+    func string(from date: Date) -> String
 }

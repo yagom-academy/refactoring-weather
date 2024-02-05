@@ -1,15 +1,14 @@
 //
 //  WeatherForecast - ViewController.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
 final class WeatherViewController: UIViewController {
-    private var dataManagerDelegate: WeatherDataManagerDelegate?
+    private var dataManagerDelegate: WeatherDataManagerDelegate
     private var weatherJSON: WeatherJSON?
-    private let imageCache: NSCache<NSString, UIImage> = NSCache()
     
     private var tempUnit: TempUnit = .metric
     
@@ -24,8 +23,8 @@ final class WeatherViewController: UIViewController {
     
     override func loadView() {
         view = WeatherView(delegate: self,
-                        tableViewDelegate: self,
-                        tableViewDataSource: self)
+                           tableViewDelegate: self,
+                           tableViewDataSource: self)
     }
     
     override func viewDidLoad() {
@@ -53,7 +52,12 @@ extension WeatherViewController {
     }
     
     @objc private func refresh() {
-        dataManagerDelegate?.fetchWeatherData(completion: {[weak self] result in
+        let jsonDecoder: JSONDecoder = .init()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        dataManagerDelegate.fetchWeatherData(jsonDecoder: jsonDecoder,
+                                             dataAsset: "weather"
+        ) { [weak self] (result: Result<WeatherJSON, Error>) in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let info):
@@ -63,7 +67,7 @@ extension WeatherViewController {
                     print(error.localizedDescription)
                 }
             }
-        })
+        }
     }
     
     private func updateUI() {
@@ -105,7 +109,7 @@ extension WeatherViewController: UITableViewDataSource {
         
         cell.configure(with: weatherForecastInfo,
                        tempUnit: tempUnit,
-                       imageCache: imageCache)
+                       networkManager: NetworkManager())
         
         return cell
     }
@@ -116,16 +120,23 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        guard let weatherJSON,
+              let weatherForecast = weatherJSON.weatherForecast[safe: indexPath.row]
+        else { return }
+        
         let weatherDetailInfo: WeatherDetailInfo = .init(
-            weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
-            cityInfo: weatherJSON?.city,
+            weatherForecastInfo: weatherForecast,
+            cityInfo: weatherJSON.city,
             tempUnit: tempUnit)
         
         showDetailViewController(with: weatherDetailInfo)
     }
     
-    private func showDetailViewController(with weatherDetailInfo: WeatherDetailInfo?) {
-        let detailViewController: WeatherDetailViewController = .init(weatherDetailInfo: weatherDetailInfo)
+    private func showDetailViewController(with weatherDetailInfo: WeatherDetailInfo) {
+        let networkManger: NetworkManager = .init()
+        let detailViewController: WeatherDetailViewController = .init(
+            weatherDetailInfo: weatherDetailInfo,
+            networkManager: networkManger)
         navigationController?.show(detailViewController, sender: self)
     }
 }

@@ -12,7 +12,7 @@ final class WeatherTableViewCell: UITableViewCell {
     private var temperatureLabel: UILabel!
     private var weatherLabel: UILabel!
     private var descriptionLabel: UILabel!
-    private var imageCache: NSCache<NSString, UIImage>?
+    private var networkManager: NetworkManager?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -108,16 +108,19 @@ final class WeatherTableViewCell: UITableViewCell {
     
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
-                   imageCache: NSCache<NSString, UIImage>
+                   networkManager: NetworkManager
     ) {
-        self.imageCache = imageCache
-        
+        self.networkManager = networkManager
+
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = detailDateFormatter.string(from: date)
+        let formatter: CustomDateFormatter = .init(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
+        let dateText: String = formatter.string(from: date)
+        
+        dateLabel.text = dateText
         
         setImage(with: weatherForecastInfo)
     }
@@ -126,32 +129,19 @@ final class WeatherTableViewCell: UITableViewCell {
         let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
-        if let image = imageCache?.object(forKey: urlString as NSString) {
+        if let image = ImageCacheManager.shared.getImage(forKey: urlString) {
             weatherIcon.image = image
             return
         }
         
-        Task {
-            guard let image = await getIconImage(with: urlString) else { return }
+        Task {[weak self] in
+            guard let image = await self?.networkManager?.getIconImage(with: urlString) else { return }
             
-            imageCache?.setObject(image, forKey: urlString as NSString)
-            DispatchQueue.main.async {[weak self] in
+            ImageCacheManager.shared.setImage(image, forKey: urlString)
+            
+            await MainActor.run {
                 self?.weatherIcon.image = image
             }
         }
     }
-    
-    private func getIconImage(with urlString: String) async -> UIImage? {
-        guard let url: URL = URL(string: urlString),
-              let (data, _) = try? await URLSession.shared.data(from: url)
-        else {
-            return nil
-        }
-        
-        return UIImage(data: data)
-    }
-    
 }
-
-// MARK: - DetailDateFormattable
-extension WeatherTableViewCell: DetailDateFormattable { }

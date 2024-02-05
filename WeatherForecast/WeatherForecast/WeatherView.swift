@@ -15,8 +15,8 @@ final class WeatherView: UIView {
     
     private weak var delegate: WeatherViewDelegate!
     
-    let tableView: UITableView = .init(frame: .zero, style: .plain)
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private let tableView: UITableView = .init(frame: .zero, style: .plain)
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     init(delegate: WeatherViewDelegate,
          tableViewDelegate: UITableViewDelegate,

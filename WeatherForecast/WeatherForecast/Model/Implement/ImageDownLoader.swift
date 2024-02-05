@@ -12,9 +12,7 @@ struct ImageDownLoader: ImageDownLoaderService {
   func image(url: String) async -> Result<UIImage, Error> {
     var result: Result<UIImage, Error>
     
-    guard let url = URL(string: url),
-          let (data, _) = try? await URLSession.shared.data(from: url)
-    else {
+    guard let url = URL(string: url) else {
       result = .failure(NSError())
       return result
     }
@@ -24,6 +22,9 @@ struct ImageDownLoader: ImageDownLoaderService {
     await withTaskGroup(of: UIImage?.self) { imageTaskGroup in
       imageTaskGroup.addTask(
         priority: .background) {
+          guard let (data, _) = try? await URLSession.shared.data(from: url) else {
+            return nil
+          }
           return UIImage(data: data)
         }
       

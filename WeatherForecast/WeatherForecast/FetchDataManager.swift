@@ -8,28 +8,27 @@
 import UIKit
 
 protocol FetchDataManagerProtocol {
-    func fetchWeatherData(completion: @escaping (WeatherData?) -> ())
+    func fetchWeatherData() async -> WeatherData?
 }
 
 struct FetchDataManager: FetchDataManagerProtocol {
     
-    func fetchWeatherData(completion: @escaping (WeatherData?) -> ()) {
+    func fetchWeatherData() async -> WeatherData? {
         
-        let info: WeatherData
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard let data = NSDataAsset(name: "weather")?.data else {
-            completion(nil)
-            return
+            return nil
         }
         
         do {
-            info = try jsonDecoder.decode(WeatherData.self, from: data)
-            completion(info)
+            let info: WeatherData = try jsonDecoder.decode(WeatherData.self, from: data)
+            return info
         } catch {
-            print(error.localizedDescription)
-            completion(nil)
+            print("Could not decode data \(error.localizedDescription)")
+            return nil
         }
+
     }
 }

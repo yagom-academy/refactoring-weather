@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomDetailLabel: UILabel {
+final class DetailViewWeatherInfoLabel: UILabel {
 
     init(with uiFont: UIFont = .preferredFont(forTextStyle: .body)) {
         super.init(frame: .zero)

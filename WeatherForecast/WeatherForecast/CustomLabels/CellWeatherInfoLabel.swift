@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomCellLabel: UILabel {
+final class CellWeatherInfoLabel: UILabel {
     
     init() {
         super.init(frame: .zero)

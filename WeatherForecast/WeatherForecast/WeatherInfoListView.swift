@@ -19,20 +19,18 @@ final class WeatherInfoListView: UIView {
     private var weatherData: WeatherData?
     private var tempUnit: TemperatureUnit = .metric
     private var tableView: UITableView!
+    private var weatherInfoListDataSource: WeatherInfoListDataSource!
     private let refreshControl: UIRefreshControl = UIRefreshControl()
-    
     weak var delegate: WeatherInfoListViewProtocol?
     
-    var imageManager: ImageManagerProtocol
-    
     // MARK: - Init
-    init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol, imageManager: ImageManagerProtocol) {
+    init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol) {
         self.delegate = delegate
         self.fetchDataManager = fetchDataManager
-        self.imageManager = imageManager
         super.init(frame: .zero)
         layoutTableView()
         setUpTableView()
+        setUpTableViewDataSource()
     }
     
     required init?(coder: NSCoder) {
@@ -59,8 +57,14 @@ final class WeatherInfoListView: UIView {
         tableView.refreshControl = refreshControl
         
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.cellId)
-        tableView.dataSource = self
         tableView.delegate = self
+    }
+    
+    private func setUpTableViewDataSource() {
+        weatherInfoListDataSource = .init(weatherData: weatherData, 
+                                          tempUnit: tempUnit,
+                                          imageManager: ImageManager())
+        tableView.dataSource = weatherInfoListDataSource
     }
     
     // MARK: - Methods
@@ -69,43 +73,18 @@ final class WeatherInfoListView: UIView {
     }
     
     @objc func refresh() {
-        fetchDataManager.fetchWeatherData { [weak self] weatherData in
-            if let data = weatherData {
-                self?.weatherData = data
-                self?.tableView.reloadData()
-                self?.delegate?.fetchCityName(data.city.name)
+        Task {
+            let fetchedData = await fetchDataManager.fetchWeatherData()
+            if let data = fetchedData {
+                weatherData = data
+                weatherInfoListDataSource.updateWeatherData(with: data)
+                tableView.reloadData()
+                delegate?.fetchCityName(data.city.name)
             } else {
                 print("Fetching weather data failed! Try refreshing again.")
             }
+            refreshControl.endRefreshing()
         }
-        refreshControl.endRefreshing()
-    }
-}
-
-// MARK: - UITableViewDataSource method
-extension WeatherInfoListView: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherData?.weatherForecast.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
-        
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherData?.weatherForecast[indexPath.row] else {
-            return cell
-        }
-        
-        DispatchQueue.main.async {
-            cell.updateCellUI(with: weatherForecastInfo, tempUnit: self.tempUnit, imageManager: self.imageManager)
-        }
-        
-        return cell
     }
 }
 

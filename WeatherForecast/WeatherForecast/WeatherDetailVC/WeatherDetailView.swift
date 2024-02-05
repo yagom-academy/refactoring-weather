@@ -12,16 +12,16 @@ final class WeatherDetailView: UIView {
     // MARK: - Properties
     private var mainStackView           : UIStackView!
     private let iconImageView           : UIImageView = UIImageView()
-    private let weatherGroupLabel       : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
-    private let weatherDescriptionLabel : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
-    private let temperatureLabel        : CustomDetailLabel = CustomDetailLabel()
-    private let feelsLikeLabel          : CustomDetailLabel = CustomDetailLabel()
-    private let maximumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
-    private let minimumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
-    private let popLabel                : CustomDetailLabel = CustomDetailLabel()
-    private let humidityLabel           : CustomDetailLabel = CustomDetailLabel()
-    private let sunriseTimeLabel        : CustomDetailLabel = CustomDetailLabel()
-    private let sunsetTimeLabel         : CustomDetailLabel = CustomDetailLabel()
+    private let weatherGroupLabel       : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let weatherDescriptionLabel  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let temperatureLabel        : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let feelsLikeLabel          : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let maximumTemperatureLable  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let minimumTemperatureLable  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let popLabel                : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let humidityLabel            : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let sunriseTimeLabel         : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let sunsetTimeLabel          : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
     private let spacingView             : UIView = UIView()
 
     private var imageManager            : ImageManagerProtocol
@@ -117,9 +117,7 @@ final class WeatherDetailView: UIView {
     
     private func updateImage(with iconName: String) {
         imageManager.fetchImage(of: iconName) { [weak self] image in
-            DispatchQueue.main.async {
-                self?.iconImageView.image = image
-            }
+            self?.iconImageView.image = image
         }
     }
 }

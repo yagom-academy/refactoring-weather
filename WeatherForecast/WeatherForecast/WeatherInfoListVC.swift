@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherInfoListVC: UIViewController {
+final class WeatherInfoListVC: UIViewController {
     
     // MARK: - Properties
     private var tempUnit: TemperatureUnit = .metric
@@ -36,8 +36,7 @@ class WeatherInfoListVC: UIViewController {
     
     private func setupWeatherInfoListView() {
         weatherInfoListView = .init(delegate: self,
-                                    fetchDataManager: FetchDataManager(),
-                                    imageManager: ImageManager())
+                                    fetchDataManager: FetchDataManager())
         view.addSubview(weatherInfoListView)
         weatherInfoListView.translatesAutoresizingMaskIntoConstraints = false
         

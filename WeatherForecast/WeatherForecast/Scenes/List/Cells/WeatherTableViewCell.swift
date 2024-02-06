@@ -128,7 +128,8 @@ extension WeatherTableViewCell {
         let description = info.description
         descriptionLabel.text = description?.value ?? ""
         
-        temperatureLabel.text = "\(info.temp)"
+        let temperature = info.temp
+        temperatureLabel.text = temperature.displayValue(with: tempUnit)
         dateLabel.text = "\(info.updatedDate)"
         weatherIcon.loadImage(with: info.iconUrl.value)
     }

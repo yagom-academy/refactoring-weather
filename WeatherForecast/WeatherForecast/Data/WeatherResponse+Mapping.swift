@@ -51,23 +51,23 @@ struct CoordinateDTO: Decodable {
 
 // MARK: - Mapping to domain
 extension WeatherJsonDTO {
-    func toDomain(tempUnit: TempUnit) -> WeatherList {
+    func toDomain() -> WeatherList {
         .init(
-            weatherForecast: weatherForecast.map { $0.toDomain(tempUnit: tempUnit) },
+            weatherForecast: weatherForecast.map { $0.toDomain() },
             city: city.toDomain()
         )
     }
 }
 
 extension WeatherForecastInfoDTO {
-    func toDomain(tempUnit: TempUnit) -> WeatherForecast {
+    func toDomain() -> WeatherForecast {
         .init(
             title: Name(weather.main),
             description: Name(weather.description),
-            temp: Temperature(main.temp, tempUnit: tempUnit),
-            feelsLike: Temperature(main.feelsLike, tempUnit: tempUnit),
-            tempMax: Temperature(main.tempMax, tempUnit: tempUnit),
-            tempMin: Temperature(main.tempMin, tempUnit: tempUnit),
+            temp: Temperature(main.temp),
+            feelsLike: Temperature(main.feelsLike),
+            tempMax: Temperature(main.tempMax),
+            tempMin: Temperature(main.tempMin),
             pop: Probability(main.pop * 100),
             humidity: Probability(main.humidity),
             iconUrl: WeatherIcon(weather.icon),

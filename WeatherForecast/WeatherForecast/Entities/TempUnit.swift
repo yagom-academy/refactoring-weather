@@ -26,14 +26,4 @@ enum TempUnit: String {
             "화씨"
         }
     }
-    
-    func convert(celsius: Double) -> Double {
-        switch self {
-        case .metric:
-            return celsius
-        case .imperial:
-            let fahrenheit = (celsius * 9 / 5) + 32
-            return fahrenheit
-        }
-    }
 }

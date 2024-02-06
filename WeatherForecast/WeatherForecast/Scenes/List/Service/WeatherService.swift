@@ -30,6 +30,6 @@ struct WeatherServiceImpl: WeatherService {
             return nil
         }
 
-        return info.toDomain(tempUnit: tempUnit)
+        return info.toDomain()
     }
 }

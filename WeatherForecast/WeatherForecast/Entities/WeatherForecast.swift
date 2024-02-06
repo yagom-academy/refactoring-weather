@@ -21,16 +21,25 @@ struct WeatherForecast {
     let updatedDate: Time
 }
 
-struct Temperature: CustomStringConvertible {
-    let value: String
+struct Temperature {
+    private let celsius: Double
     
-    init(_ celsius: Double, tempUnit: TempUnit) {
-        let temperature = tempUnit.convert(celsius: celsius)
-        self.value = "\(temperature)\(tempUnit.expression)"
+    init(_ celsius: Double) {
+        self.celsius = celsius
     }
     
-    var description: String {
-        value
+    func displayValue(with tempUnit: TempUnit) -> String {
+        let value: Double
+        
+        switch tempUnit {
+        case .metric:
+            value = celsius
+        case .imperial:
+            let fahrenheit = (celsius * 9 / 5) + 32
+            value = fahrenheit
+        }
+        
+        return "\(value)\(tempUnit.expression)"
     }
 }
 

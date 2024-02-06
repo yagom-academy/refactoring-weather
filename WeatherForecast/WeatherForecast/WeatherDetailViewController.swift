@@ -8,31 +8,47 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
-    weak var delegate: WeatherForeCastDelegate?
-    var weahterJSON: WeatherJSON!
+    let iconImageView: UIImageView = .init()
+    let weatherGroupLabel: UILabel = .init()
+    let weatherDescriptionLabel: UILabel = .init()
+    let temperatureLabel: UILabel = .init()
+    let feelsLikeLabel: UILabel = .init()
+    let maximumTemperatureLable: UILabel = .init()
+    let minimumTemperatureLable: UILabel = .init()
+    let popLabel: UILabel = .init()
+    let humidityLabel: UILabel = .init()
+    let sunriseTimeLabel: UILabel = .init()
+    let sunsetTimeLabel: UILabel = .init()
+    let spacingView: UIView = .init()
+    var weatherInfo: WeatherDetailInfo
+    var cityInfo: CityDetailInfo
+    var tempUnit: TempUnit
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
+  
+    init(weatherInfo: WeatherDetailInfo, cityInfo: CityDetailInfo, tempUnit: TempUnit) {
+        self.weatherInfo = weatherInfo
+        self.cityInfo = cityInfo
+        self.tempUnit = tempUnit
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
-        setupData()
+        updateWeatherInfo(listInfo: weatherInfo, tempUnit: tempUnit)
+        updateCityInfo(cityInfo)
+        Task {
+            await updateWeatherIcon(iconName: weatherInfo.iconImageUrl)
+        }
     }
     
     private func initialSetUp() {
@@ -86,47 +102,32 @@ final class WeatherDetailViewController: UIViewController {
                                                  multiplier: 0.3)
         ])
     }
-    func setupData(){
-        guard let weatherInfo = delegate?.fetchWeatherInfo(),
-              let cityInfo = delegate?.fetchCityInfo(),
-              let tempUnit = delegate?.fetchTempUnit()
-              else { return }
-        updateWeatherInfo(listInfo: weatherInfo, tempUnit: tempUnit)
-        updateCityInfo(cityInfo)
-        updateWeatherIcon(iconName: weatherInfo.weather.icon)
-    }
+   
 }
 
 extension WeatherDetailViewController {
     
-    func updateWeatherInfo(listInfo: WeatherForecastInfo, tempUnit: TempUnit){
-        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
-        weatherGroupLabel.text = listInfo.weather.main
-        weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+    func updateWeatherInfo(listInfo: WeatherDetailInfo, tempUnit: TempUnit){
+        
+        navigationItem.title = listInfo.date
+        weatherGroupLabel.text = listInfo.mainWeather
+        weatherDescriptionLabel.text = listInfo.description
+        temperatureLabel.text = "현재 기온 : \(listInfo.currentTemp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(listInfo.feelsLikeTemp)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.maxTemp)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.minTemp)\(tempUnit.expression)"
+        popLabel.text = "강수 확률 : \(listInfo.pop * 100)%"
+        humidityLabel.text = "습도 : \(listInfo.humidity)%"
     }
-    func updateWeatherIcon(iconName: String){
-        Task {
-            if let iconImage = await NetworkService.shared.fetchWeatherIconImage(iconName: iconName) {
-                DispatchQueue.main.async {
-                    self.iconImageView.image = iconImage
-                }
-            }
+    @MainActor
+    func updateWeatherIcon(iconName: String) async {
+        if let iconImage = await TransforJSON.shared.fetchWeatherIconImage(iconName: iconName) {
+            self.iconImageView.image = iconImage
         }
     }
-    func updateCityInfo(_ cityInfo: City) {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = .none
-        formatter.timeStyle = .short
-        formatter.locale = .init(identifier: "ko_KR")
-        sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-        sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+    func updateCityInfo(_ cityInfo: CityDetailInfo) {
+        sunriseTimeLabel.text = "일출 : \(cityInfo.sunrise)"
+        sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset)"
     }
    
 }

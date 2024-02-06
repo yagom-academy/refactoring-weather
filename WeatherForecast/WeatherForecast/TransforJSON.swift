@@ -4,13 +4,12 @@
 //
 //  Created by 김정원 on 2/4/24.
 //
-import Foundation
 import UIKit
-final class NetworkService {
-    static let shared = NetworkService()
+final class TransforJSON {
+    static let shared = TransforJSON()
     private init() {}
     
-    func fetchWeatherJSON(weatherInfo :WeatherJSON?) -> WeatherJSON?{
+    func fetchWeatherJSON(weatherInfo: WeatherJSON?) -> WeatherJSON?{
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let data = NSDataAsset(name: "weather")?.data else {

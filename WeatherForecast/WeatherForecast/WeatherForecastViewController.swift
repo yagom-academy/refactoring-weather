@@ -6,20 +6,25 @@
 
 import UIKit
 
-final class ViewController: UIViewController {
+final class WeatherForecastViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     var tempUnit: TempUnit = .metric
-    var selectIndex : IndexPath!
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
     }
 }
 
-extension ViewController {
+extension WeatherForecastViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -69,14 +74,14 @@ extension ViewController {
     }
 }
 
-extension ViewController {
+extension WeatherForecastViewController {
     private func loadJSON() {
-        weatherJSON = NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)
+        weatherJSON = TransforJSON.shared.fetchWeatherJSON(weatherInfo: weatherJSON)
         navigationItem.title = weatherJSON?.city.name
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherForecastViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -92,30 +97,78 @@ extension ViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
-        cell.configure(info: weatherForecastInfo, tempUnit: tempUnit)
+        let weatherDetailInfo = WeatherDetailInfo(weatherForecast: weatherForecastInfo)
+        cell.configure(info: weatherDetailInfo, tempUnit: tempUnit)
         return cell
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        selectIndex = indexPath
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.delegate = self
+        guard let weatherForecast = weatherJSON?.weatherForecast[indexPath.row],let cityInfo = weatherJSON?.city else {return}
+        
+        let weatherDetailInfo = WeatherDetailInfo(
+            weatherForecast: weatherForecast)
+        let cityDetailInfo = CityDetailInfo(city: cityInfo)
+        
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherInfo: weatherDetailInfo, cityInfo: cityDetailInfo, tempUnit: tempUnit)
         navigationController?.show(detailViewController, sender: self)
     }
+    
 }
-
-extension ViewController: WeatherForeCastDelegate{
-   
-    func fetchWeatherInfo() -> WeatherForecastInfo {
-        return (NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)?.weatherForecast[selectIndex.row])! // 선택한 셀의 정보 넘기기
+struct WeatherDetailInfo {
+    let dateFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = .init(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+        return formatter
+    }()
+    
+    var weatherForecast: WeatherForecastInfo
+    var mainWeather: String
+    var currentTemp: Double
+    var feelsLikeTemp: Double
+    var maxTemp: Double
+    var minTemp: Double
+    var pop: Double
+    var humidity: Double
+    var description: String
+    var date: String
+    var iconImageUrl: String
+    
+    init(weatherForecast: WeatherForecastInfo) {
+        self.weatherForecast = weatherForecast
+        self.mainWeather = weatherForecast.weather.main
+        self.currentTemp = weatherForecast.main.temp
+        self.feelsLikeTemp = weatherForecast.main.feelsLike
+        self.maxTemp = weatherForecast.main.tempMax
+        self.minTemp = weatherForecast.main.tempMin
+        self.pop = weatherForecast.main.pop
+        self.humidity = weatherForecast.main.humidity
+        self.description = weatherForecast.weather.description
+        self.date = dateFormatter.string(from: Date(timeIntervalSince1970: weatherForecast.dt))
+        self.iconImageUrl = weatherForecast.weather.icon
     }
-    func fetchCityInfo() -> City {
-        return (NetworkService.shared.fetchWeatherJSON(weatherInfo: weatherJSON)?.city)!
+}
+struct CityDetailInfo {
+    
+    let formatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter
+    }()
+    
+    var city: City
+    var sunrise: String {
+        return "\(formatter.string(from: Date(timeIntervalSince1970: city.sunrise)))"
     }
-    func fetchTempUnit() -> TempUnit {
-        return tempUnit
+    var sunset: String {
+        return "\(formatter.string(from: Date(timeIntervalSince1970: city.sunset)))"
+    }
+    init(city: City) {
+        self.city = city
     }
 }

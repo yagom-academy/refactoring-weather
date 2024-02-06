@@ -108,20 +108,19 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
-    func configure(info: WeatherForecastInfo,tempUnit : TempUnit){
-        weatherLabel.text = info.weather.main
-        descriptionLabel.text = info.weather.description
-        temperatureLabel.text = "\(info.main.temp)\(tempUnit.expression)"
-        let date: Date = Date(timeIntervalSince1970: info.dt)
-        dateLabel.text = dateFormatter.string(from: date)
-        loadImage(info.weather.icon)
+    func configure(info: WeatherDetailInfo,tempUnit: TempUnit){
+        weatherLabel.text = info.mainWeather
+        descriptionLabel.text = info.description
+        temperatureLabel.text = "\(info.currentTemp)\(tempUnit.expression)"
+        dateLabel.text = info.date
+        loadImage(info.iconImageUrl)
     }
 }
 extension WeatherTableViewCell {
     
     func loadImage(_ iconName: String){
         Task {
-            if let iconImage = await NetworkService.shared.fetchWeatherIconImage(iconName: iconName) {
+            if let iconImage = await TransforJSON.shared.fetchWeatherIconImage(iconName: iconName) {
                 DispatchQueue.main.async {
                     self.weatherIcon.image = iconImage
                 }

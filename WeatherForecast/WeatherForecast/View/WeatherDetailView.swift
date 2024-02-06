@@ -7,8 +7,8 @@
 
 import UIKit
 
-class WeatherDetailView: UIView {
-    var contentStackView: WeatherDetailContentStackView = {
+final class WeatherDetailView: UIView {
+    private let contentStackView: WeatherDetailContentStackView = {
         let stackView: WeatherDetailContentStackView = .init()
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -17,15 +17,15 @@ class WeatherDetailView: UIView {
         return stackView
     }()
 
-    let weatherForecastInfo: WeatherForecastInfo
-    let cityInfo: City
-    let tempUnit: TempUnit
-    let imageService: ImageFetchable
+    private let weatherForecastInfo: WeatherForecastInfo
+    private let cityInfo: CityInfo
+    private let tempUnit: TempUnit
+    private let imageService: ImageFetchable
     
     init(
         weatherForecastInfo: WeatherForecastInfo,
-        cityInfo: City,
-        tempUnit: TempUnit = .metric,
+        cityInfo: CityInfo,
+        tempUnit: TempUnit = .celsius,
         imageService: ImageFetchable
     ) {
         self.weatherForecastInfo = weatherForecastInfo
@@ -75,28 +75,28 @@ class WeatherDetailView: UIView {
     private func setupTemperatureLabel() {
         contentStackView.setupTemperatureLabel(
             with: weatherForecastInfo.main.temp,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupFeelsLikeLabel() {
         contentStackView.setupFeelsLikeLabel(
             with: weatherForecastInfo.main.feelsLike,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupMaximumTemperatureLabel() {
         contentStackView.setupMaximumTemperatureLabel(
             with: weatherForecastInfo.main.tempMax,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     
     private func setupMinimumTemperatureLabel() {
         contentStackView.setupMinimumTemperatureLabel(
             with: weatherForecastInfo.main.tempMin,
-            expression: tempUnit.expression
+            expression: tempUnit.strategy.expression
         )
     }
     

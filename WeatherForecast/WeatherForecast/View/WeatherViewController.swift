@@ -6,17 +6,27 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     private var weatherView: WeatherView!
     
-    var weatherJSON: WeatherJSON? {
+    private var weather: Weather? {
         didSet {
-            navigationItem.title = weatherJSON?.city.name
+            navigationItem.title = weather?.city.name
         }
     }
     
-    let imageCache: NSCache<NSString, UIImage> = NSCache()
-    var tempUnit: TempUnit = .metric
+    private let imageCache: NSCache<NSString, UIImage> = NSCache()
+    private var tempUnit: TempUnit = .celsius
+    private var networkService: NetworkFetchable
+    
+    init(networkService: NetworkFetchable) {
+        self.networkService = networkService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         weatherView = WeatherView(delegate: self)
@@ -26,22 +36,22 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
+        fetchWeatherJSON()
     }
 }
 
 extension WeatherViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        tempUnit.toggleTempUnit()
+        navigationItem.rightBarButtonItem?.title = tempUnit.strategy.expressionText
+        
+        updateTemperature()
         weatherView.reloadData()
     }
     
+    private func updateTemperature() {
+        // TODO: 온도 단위에 따라 변환하기 작업 추가 in STEP BONUS
+    }
     
     private func initialSetUp() {
         setupNavigationItem()
@@ -66,14 +76,18 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        if let count: Int = weather?.weatherForecast.count {
+            return count
+        }
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo: WeatherForecastInfo = weather?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -91,10 +105,10 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let weatherJSON {
+        if let weather {
             let detailViewController: WeatherDetailViewController = .init(
-                weatherForecastInfo: weatherJSON.weatherForecast[indexPath.row],
-                cityInfo: weatherJSON.city,
+                weatherForecastInfo: weather.weatherForecast[indexPath.row],
+                cityInfo: weather.city,
                 tempUnit: tempUnit
             )
             navigationController?.show(detailViewController, sender: self)
@@ -105,21 +119,13 @@ extension WeatherViewController: UITableViewDelegate {
 
 extension WeatherViewController: WeatherViewDelegate {
     func fetchWeatherJSON() {
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        let result: Result<Weather, Error> = networkService.fetchWeatherJSON()
         
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
+        switch result {
+        case let .success(response):
+            weather = response
+        case let .failure(error):
             print(error.localizedDescription)
-            return
         }
-        
-        weatherJSON = info
     }
 }

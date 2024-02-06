@@ -11,7 +11,7 @@ protocol ImageFetchable {
     func fetchIconImage(urlString: String) async -> UIImage?
 }
 
-class ImageService: ImageFetchable {
+final class ImageService: ImageFetchable {
     
     func fetchIconImage(urlString: String) async -> UIImage? {        
         guard let url: URL = URL(string: urlString),

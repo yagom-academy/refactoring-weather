@@ -13,7 +13,6 @@ final class WeatherTableViewCell: UITableViewCell {
     private var weatherLabel: UILabel!
     private var descriptionLabel: UILabel!
     private var networkManager: NetworkManagerDelegate?
-    private var diskCacheManager: ImageCacheable?
     private var dateFormatter: DateFormattable?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -111,11 +110,9 @@ final class WeatherTableViewCell: UITableViewCell {
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
                    networkManager: NetworkManagerDelegate,
-                   diskCacheManager: ImageCacheable?,
                    dateFormatter: DateFormattable
     ) {
         self.networkManager = networkManager
-        self.diskCacheManager = diskCacheManager
         self.dateFormatter = dateFormatter
 
         weatherLabel.text = weatherForecastInfo.weather.main
@@ -134,25 +131,6 @@ final class WeatherTableViewCell: UITableViewCell {
         let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
-        if let imageFromMemory = MemoryCacheManager.shared.getImage(forKey: urlString) {
-            weatherIcon.image = imageFromMemory
-            return
-        }
-        
-        if let imageFromDisk = diskCacheManager?.getImage(forKey: urlString) {
-            weatherIcon.image = imageFromDisk
-            return
-        }
-        
-        Task {[weak self] in
-            guard let image = await self?.networkManager?.getIconImage(with: urlString) else { return }
-            
-            MemoryCacheManager.shared.setImage(image, forKey: urlString)
-            self?.diskCacheManager?.setImage(image, forKey: urlString)
-            
-            await MainActor.run {
-                self?.weatherIcon.image = image
-            }
-        }
+        weatherIcon.setImage(from: urlString, with: networkManager)
     }
 }

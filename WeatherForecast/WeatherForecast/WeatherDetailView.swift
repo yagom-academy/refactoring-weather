@@ -110,15 +110,8 @@ final class WeatherDetailView: UIView {
             sunsetTimeLabel.text = "일몰 : \(dateformatter.string(from: sunsetDate)))"
         }
         
-        Task {[weak self] in
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            
-            guard let image = await self?.networkManager.getIconImage(with: urlString) else { return }
-            
-            await MainActor.run {
-                self?.iconImageView.image = image
-            }
-        }
+        let iconName: String = listInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        iconImageView.setImage(from: urlString, with: networkManager)
     }
 }

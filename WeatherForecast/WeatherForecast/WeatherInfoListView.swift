@@ -17,6 +17,7 @@ final class WeatherInfoListView: UIView {
     // MARK: - Properties
     private var fetchDataManager: FetchDataManagerProtocol
     private var weatherInfo: WeatherInfoProtocol?
+    private var tempUnit: TemperatureUnit
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     weak var delegate: WeatherInfoListViewProtocol?
     
@@ -25,9 +26,10 @@ final class WeatherInfoListView: UIView {
     private var weatherInfoListDataSource: WeatherInfoListDataSource!
     
     // MARK: - Init
-    init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol) {
+    init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol, tempUnit: TemperatureUnit) {
         self.delegate = delegate
         self.fetchDataManager = fetchDataManager
+        self.tempUnit = tempUnit
         super.init(frame: .zero)
         layoutTableView()
         setUpTableView()
@@ -69,7 +71,7 @@ final class WeatherInfoListView: UIView {
     
     // MARK: - Methods
     func changeTempUnit(to tempUnit: TemperatureUnit) {
-        weatherInfo?.temperatureUnit = tempUnit
+        self.tempUnit = tempUnit
     }
     
     @objc func refresh() {
@@ -78,7 +80,7 @@ final class WeatherInfoListView: UIView {
             if let data = fetchedData {
                 weatherInfo = WeatherInfo(weatherForecast: data.weatherForecast,
                                           city: CityInfo(city: data.city),
-                                          temperatureUnit: TemperatureUnit.metric)
+                                          temperatureUnit: self.tempUnit)
                 weatherInfoListDataSource.updateWeatherData(with: weatherInfo)
                 tableView.reloadData()
                 delegate?.fetchCityName(data.city.name)

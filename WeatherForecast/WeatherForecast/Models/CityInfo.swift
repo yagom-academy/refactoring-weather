@@ -10,6 +10,14 @@ import Foundation
 class CityInfo {
     
     private var city: City
+    private var formatter: DateFormatter {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter
+    }
+            
     
     init(city: City) {
         self.city = city
@@ -20,10 +28,12 @@ class CityInfo {
     }
     
     var sunriseTime: String {
-        return "일출 : \(city.sunrise.stringFromTimeInterval())"
+        let date = Date(timeIntervalSince1970: city.sunrise)
+        return "일출 : \(formatter.string(from: date))"
     }
     
     var sunsetTime: String {
-        return "일몰 : \(city.sunset.stringFromTimeInterval())"
+        let date = Date(timeIntervalSince1970: city.sunset)
+        return "일몰 : \(formatter.string(from: date))"
     }
 }

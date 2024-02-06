@@ -17,24 +17,33 @@ class WeatherForecast {
         self.temperatureUnit = temperatureUnit
     }
     
+    private func convertTemp(temp: Double) -> String {
+        if temperatureUnit == .metric {
+            return "\(temp)\(temperatureUnit.expression)"
+        }
+        let convertedTemp: Double = (temp * 9 / 5) + 32
+        let formattedTemp: String = String(format: "%.2f", convertedTemp)
+        return "\(formattedTemp)\(temperatureUnit.expression)"
+    }
+    
     var temperature: String {
-        return "\(weatherForecastInfo.main.temp)\(temperatureUnit.expression)"
+        return convertTemp(temp: weatherForecastInfo.main.temp)
     }
     
     var currentTemperature: String {
-        return "현재 기온 : \(weatherForecastInfo.main.temp)\(temperatureUnit.expression)"
+        return "현재 기온 : \(convertTemp(temp: weatherForecastInfo.main.temp))"
     }
     
     var feelsLikeTemperature: String {
-        return "체감 기온 : \(weatherForecastInfo.main.feelsLike)\(temperatureUnit.expression)"
+        return "체감 기온 : \(convertTemp(temp: weatherForecastInfo.main.feelsLike))"
     }
     
     var maxTemperature: String {
-        return "최고 기온 : \(weatherForecastInfo.main.tempMax)\(temperatureUnit.expression)"
+        return "최고 기온 : \(convertTemp(temp: weatherForecastInfo.main.tempMax))"
     }
     
     var minTemperature: String {
-        return "최저 기온 : \(weatherForecastInfo.main.tempMin)\(temperatureUnit.expression)"
+        return "최저 기온 : \(convertTemp(temp: weatherForecastInfo.main.tempMin))"
     }
     
     var precipitation: String {

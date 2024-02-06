@@ -1,19 +1,28 @@
 //
 //  WeatherForecast - WeatherTableViewCell.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+final class WeatherTableViewCell: UITableViewCell {
+    // MARK: - Properties
+    static let identifier = String(describing: WeatherTableViewCell.self)
+    
+    // MARK: - UI
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var imageLoadingTask: Task<(), Never>?
      
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    // MARK: - Init
+    override init(
+        style: UITableViewCell.CellStyle,
+        reuseIdentifier: String?
+    ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
         reset()
@@ -28,6 +37,7 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
+    // MARK: - Layout
     private func layViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
@@ -39,9 +49,7 @@ class WeatherTableViewCell: UITableViewCell {
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
         labels.forEach { label in
-            label.textColor = .black
-            label.font = .preferredFont(forTextStyle: .body)
-            label.numberOfLines = 1
+            label.makeLabel()
         }
         
         let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
@@ -92,12 +100,29 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
+
     private func reset() {
+        imageLoadingTask?.cancel()
         weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    
+    func configureCell(
+        weatherInfo: WeatherForecastInfo,
+        tempUnitManager: TempUnitManagerService,
+        imageService: NetworkService
+    ) {
+        imageLoadingTask = Task {
+            let image = try? await imageService.fetchImage(iconName: weatherInfo.weather.icon, urlSession: URLSession.shared)
+            weatherIcon.image = image
+        }
+
+        dateLabel.text = weatherInfo.dtTxt
+        temperatureLabel.text = "\(weatherInfo.main.temp)\(tempUnitManager.tempUnit.expression)"
+        weatherLabel.text = weatherInfo.weather.main
+        descriptionLabel.text = weatherInfo.weather.description
     }
 }

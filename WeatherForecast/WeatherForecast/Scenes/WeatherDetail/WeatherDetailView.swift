@@ -8,7 +8,6 @@
 import UIKit
 
 final class WeatherDetailView: UIView {
-
     let iconImageView: UIImageView = UIImageView()
     let weatherGroupLabel: UILabel = UILabel()
     let weatherDescriptionLabel: UILabel = UILabel()

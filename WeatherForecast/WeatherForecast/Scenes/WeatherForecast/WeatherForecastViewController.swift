@@ -9,12 +9,20 @@ import UIKit
 final class WeatherForecastViewController: UIViewController {
     private var tableView: UITableView!
     private let imageCache: ImageCache = ImageCache()
-    private var model: WeatherForecastModel!
+    private let model: WeatherForecastModel
     private var tempUnit: TempUnit = .celsius
+    
+    init(model: WeatherForecastModel) {
+        self.model = model
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        model = WeatherForecastModel()
         initialSetUp()
     }
 }
@@ -33,9 +41,10 @@ extension WeatherForecastViewController {
     }
     
     private func initialSetUp() {
+        view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
         
-        layTable()
+        layoutTable()
         
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self,
@@ -46,7 +55,7 @@ extension WeatherForecastViewController {
         tableView.delegate = self
     }
     
-    private func layTable() {
+    private func layoutTable() {
         tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false

@@ -8,8 +8,8 @@
 import Foundation
 
 extension Date {
-    func toString() -> String {
-        let dateFormatterKR = DateFormatterKR(dateFormat: "yyyy-MM-dd(EEEEE) a HH:mm")
+    func toString(dateFormat: String = DateFormatterKR.defaultFormat) -> String {
+        let dateFormatterKR = DateFormatterKR(dateFormat: dateFormat)
         return dateFormatterKR.string(from: self)
     }
 }

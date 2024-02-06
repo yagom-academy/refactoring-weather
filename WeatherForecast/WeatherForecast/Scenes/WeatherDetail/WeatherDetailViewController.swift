@@ -7,7 +7,6 @@
 import UIKit
 
 final class WeatherDetailViewController: UIViewController {
-
     private var weatherForecastInfo: WeatherForecastInfo?
     private var cityInfo: City?
     private var tempUnit: TempUnit = .celsius

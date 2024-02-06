@@ -18,9 +18,6 @@ final class WeatherForecastModel {
 extension WeatherForecastModel {
     private func fetchWeatherJSON() {
         
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
         let assetConvertor = NSDataAssetConvertor()
         let decoder = CustomDecoder()
         guard let data = try? assetConvertor.data("weather"),

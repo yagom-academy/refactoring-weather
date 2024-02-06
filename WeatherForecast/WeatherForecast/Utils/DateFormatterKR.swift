@@ -8,6 +8,7 @@
 import Foundation
 
 struct DateFormatterKR {
+    static let defaultFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
     private let dateFormatter: DateFormatter = DateFormatter()
     private let dateFormat: String
     

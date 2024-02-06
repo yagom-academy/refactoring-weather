@@ -7,7 +7,6 @@
 import UIKit
 
 final class WeatherTableViewCell: UITableViewCell {
-    
     static let reuseIdentifier: String = String(describing: WeatherTableViewCell.self)
     
     private var weatherIcon: UIImageView!
@@ -18,7 +17,7 @@ final class WeatherTableViewCell: UITableViewCell {
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        layoutViews()
         reset()
     }
     
@@ -45,7 +44,7 @@ final class WeatherTableViewCell: UITableViewCell {
         weatherIcon.image = image
     }
     
-    private func layViews() {
+    private func layoutViews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
         temperatureLabel = UILabel()

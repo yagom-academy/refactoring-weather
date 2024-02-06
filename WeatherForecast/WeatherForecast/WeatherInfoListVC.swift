@@ -35,8 +35,7 @@ final class WeatherInfoListVC: UIViewController {
     }
     
     private func setupWeatherInfoListView() {
-        weatherInfoListView = .init(delegate: self,
-                                    fetchDataManager: FetchDataManager())
+        weatherInfoListView = .init(delegate: self, fetchDataManager: FetchDataManager())
         view.addSubview(weatherInfoListView)
         weatherInfoListView.translatesAutoresizingMaskIntoConstraints = false
         

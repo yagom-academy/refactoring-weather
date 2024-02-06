@@ -25,17 +25,15 @@ final class WeatherDetailView: UIView {
     private let spacingView             : UIView = UIView()
 
     private var imageManager            : ImageManagerProtocol
-    var weatherForecastInfo             : WeatherForecastInfo?
-    var cityInfo                        : City?
-    var tempUnit                        : TemperatureUnit = .metric
+    var weatherForecastInfo             : WeatherForecast?
+    var cityInfo                        : CityInfo?
     
     
     // MARK: - Init
-    init(imageManager: ImageManagerProtocol, weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TemperatureUnit) {
+    init(imageManager: ImageManagerProtocol, weatherForecastInfo: WeatherForecast?, cityInfo: CityInfo?) {
         self.imageManager = imageManager
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
         
         super.init(frame: .zero)
         
@@ -97,21 +95,21 @@ final class WeatherDetailView: UIView {
     
     private func updateUI() {
         
-        guard let weatherInfo = weatherForecastInfo, let cityInfo = cityInfo else { return }
+        guard let weatherItem = weatherForecastInfo, let cityInfo = cityInfo else { return }
         
-        weatherGroupLabel.text = weatherInfo.weather.main
-        weatherDescriptionLabel.text = weatherInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(weatherInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(weatherInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(weatherInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(weatherInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(weatherInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(weatherInfo.main.humidity)%"
+        weatherGroupLabel.text = weatherItem.weatherMainDescription
+        weatherDescriptionLabel.text = weatherItem.weatherDetailDescription
+        temperatureLabel.text = weatherItem.currentTemperature
+        feelsLikeLabel.text = weatherItem.feelsLikeTemperature
+        maximumTemperatureLable.text = weatherItem.maxTemperature
+        minimumTemperatureLable.text = weatherItem.minTemperature
+        popLabel.text = weatherItem.precipitation
+        humidityLabel.text = weatherItem.humidity
         
-        sunriseTimeLabel.text = "일출 : \(cityInfo.sunrise.stringFromTimeInterval())"
-        sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset.stringFromTimeInterval())"
+        sunriseTimeLabel.text = cityInfo.sunriseTime
+        sunsetTimeLabel.text = cityInfo.sunsetTime
         
-        let iconName: String = weatherInfo.weather.icon
+        let iconName: String = weatherItem.weatherIcon
         updateImage(with: iconName)
     }
     

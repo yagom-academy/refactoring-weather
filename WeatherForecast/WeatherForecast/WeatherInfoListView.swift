@@ -16,12 +16,13 @@ final class WeatherInfoListView: UIView {
 
     // MARK: - Properties
     private var fetchDataManager: FetchDataManagerProtocol
-    private var weatherData: WeatherData?
-    private var tempUnit: TemperatureUnit = .metric
-    private var tableView: UITableView!
-    private var weatherInfoListDataSource: WeatherInfoListDataSource!
+    private var weatherInfo: WeatherInfoProtocol?
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     weak var delegate: WeatherInfoListViewProtocol?
+    
+    // MARK: - UI
+    private var tableView: UITableView!
+    private var weatherInfoListDataSource: WeatherInfoListDataSource!
     
     // MARK: - Init
     init(delegate: WeatherInfoListViewProtocol, fetchDataManager: FetchDataManagerProtocol) {
@@ -61,23 +62,24 @@ final class WeatherInfoListView: UIView {
     }
     
     private func setUpTableViewDataSource() {
-        weatherInfoListDataSource = .init(weatherData: weatherData, 
-                                          tempUnit: tempUnit,
+        weatherInfoListDataSource = .init(weatherInfo: weatherInfo,
                                           imageManager: ImageManager())
         tableView.dataSource = weatherInfoListDataSource
     }
     
     // MARK: - Methods
     func changeTempUnit(to tempUnit: TemperatureUnit) {
-        self.tempUnit = tempUnit
+        weatherInfo?.temperatureUnit = tempUnit
     }
     
     @objc func refresh() {
         Task {
             let fetchedData = await fetchDataManager.fetchWeatherData()
             if let data = fetchedData {
-                weatherData = data
-                weatherInfoListDataSource.updateWeatherData(with: data)
+                weatherInfo = WeatherInfo(weatherForecast: data.weatherForecast,
+                                          city: CityInfo(city: data.city),
+                                          temperatureUnit: TemperatureUnit.metric)
+                weatherInfoListDataSource.updateWeatherData(with: weatherInfo)
                 tableView.reloadData()
                 delegate?.fetchCityName(data.city.name)
             } else {
@@ -91,13 +93,13 @@ final class WeatherInfoListView: UIView {
 // MARK: - UITableViewDelegate method
 extension WeatherInfoListView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let weatherData = weatherData else { return }
+        guard let weatherInfo = weatherInfo else { return }
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailVC = WeatherDetailVC(weatherForecastInfo: weatherData.weatherForecast[indexPath.row],
-                                                                    cityInfo: weatherData.city,
-                                                                    tempUnit: tempUnit)
+        let detailViewController: WeatherDetailVC = WeatherDetailVC(
+            weatherForecastInfo: weatherInfo.fetchWeatherForecastItem(at: indexPath.item),
+            cityInfo: weatherInfo.city)
         
         delegate?.fetchWeatherDetailVC(detailViewController)
     }

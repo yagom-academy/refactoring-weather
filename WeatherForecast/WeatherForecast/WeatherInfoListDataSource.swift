@@ -10,20 +10,20 @@ import UIKit
 final class WeatherInfoListDataSource: NSObject, UITableViewDataSource {
     
     // MARK: - Properties
-    private var weatherData: WeatherData?
-    private var tempUnit: TemperatureUnit
+    private var weatherInfo: WeatherInfoProtocol?
     private var imageManager: ImageManagerProtocol
+    private var tempUnit: TemperatureUnit?
     
     // MARK: - Init
-    init(weatherData: WeatherData?, tempUnit: TemperatureUnit, imageManager: ImageManagerProtocol) {
-        self.weatherData = weatherData
-        self.tempUnit = tempUnit
+    init(weatherInfo: WeatherInfoProtocol?, imageManager: ImageManagerProtocol) {
+        self.weatherInfo = weatherInfo
         self.imageManager = imageManager
+        self.tempUnit = weatherInfo?.temperatureUnit
     }
     
     // MARK: - Methods
-    func updateWeatherData(with data: WeatherData) {
-        self.weatherData = data
+    func updateWeatherData(with data: WeatherInfoProtocol?) {
+        self.weatherInfo = data
     }
     
     // MARK: - TableView delegate methods
@@ -32,21 +32,19 @@ final class WeatherInfoListDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherData?.weatherForecast.count ?? 0
+        weatherInfo?.weatherForecastInfo.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell: WeatherTableViewCell = tableView.dequeueReusableCell(for: indexPath)
         
-        guard let weatherForecastInfo = weatherData?.weatherForecast,
-                indexPath.row < weatherForecastInfo.count else {
+        guard let weatherForecastInfo = weatherInfo?.fetchWeatherForecastItem(at: indexPath.item) else {
             return cell
         }
         
         DispatchQueue.main.async {
-            cell.updateCellUI(with: weatherForecastInfo[indexPath.row],
-                              tempUnit: self.tempUnit,
+            cell.updateCellUI(with: weatherForecastInfo,
                               fetchImage: self.imageManager.fetchImage)
         }
         

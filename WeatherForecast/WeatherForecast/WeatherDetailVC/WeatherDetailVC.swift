@@ -9,15 +9,13 @@ import UIKit
 final class WeatherDetailVC: UIViewController {
     
     // MARK: - Properties
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TemperatureUnit = .metric
+    var weatherForecastInfo: WeatherForecast?
+    var cityInfo: CityInfo?
     
     // MARK: - Init
-    init(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TemperatureUnit) {
+    init(weatherForecastInfo: WeatherForecast?, cityInfo: CityInfo?) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -30,8 +28,7 @@ final class WeatherDetailVC: UIViewController {
     override func loadView() {
         view = WeatherDetailView(imageManager: ImageManager(),
                                  weatherForecastInfo: weatherForecastInfo,
-                                 cityInfo: cityInfo,
-                                 tempUnit: tempUnit)
+                                 cityInfo: cityInfo)
     }
     
     override func viewDidLoad() {
@@ -44,8 +41,7 @@ final class WeatherDetailVC: UIViewController {
     
     private func initialSetUp() {
         if let info = weatherForecastInfo {
-            let date: Date = Date(timeIntervalSince1970: info.dt)
-            navigationItem.title = date.formattedStringFromDate()
+            navigationItem.title = info.longFormattedDate
         }
     }
 }

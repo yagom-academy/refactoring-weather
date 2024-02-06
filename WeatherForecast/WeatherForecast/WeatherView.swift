@@ -63,7 +63,7 @@ final class WeatherView: UIView {
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.cellId)
     }
         
     @objc private func refreshStart() {

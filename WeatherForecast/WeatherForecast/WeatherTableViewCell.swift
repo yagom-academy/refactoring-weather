@@ -6,6 +6,10 @@
 
 import UIKit
 
+protocol ReusableCell: AnyObject {
+    static var cellId: String { get }
+}
+
 final class WeatherTableViewCell: UITableViewCell {
     private var weatherIcon: UIImageView!
     private var dateLabel: UILabel!
@@ -132,5 +136,11 @@ final class WeatherTableViewCell: UITableViewCell {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
         weatherIcon.setImage(from: urlString, with: networkManager)
+    }
+}
+
+extension WeatherTableViewCell: ReusableCell {
+    static var cellId: String {
+        return "WeatherCell"
     }
 }

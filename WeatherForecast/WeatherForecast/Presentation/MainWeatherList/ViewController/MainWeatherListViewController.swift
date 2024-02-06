@@ -11,7 +11,7 @@ final class MainWeatherListViewController: UIViewController {
     private var weatherJSON: WeatherJSON?
     private var tempUnit: TempUnit = .metric
 
-    // MARK: - View
+    // MARK: - UI
     private let mainWeatherListView: MainWeatherListView!
     
     init(mainWeatherListView: MainWeatherListView) {

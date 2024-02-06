@@ -18,7 +18,7 @@ final class MainWeatherListView: UIView {
     private let weatherJsonService: JsonService
     private var weatherJSON: WeatherJSON?
     
-    // MARK: - View
+    // MARK: - UI
     private var tableView: UITableView!
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     
@@ -103,18 +103,19 @@ extension MainWeatherListView: UITableViewDelegate, UITableViewDataSource {
             return WeatherTableViewCell()
         }
         
-        Task {
-            await cell.configureCell(weatherInfo: weatherForcast,
-                                     imageService: WeatherIconImageService())
-            return cell
-        }
+        cell.configureCell(weatherInfo: weatherForcast,
+                                 imageService: WeatherIconImageService())
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let weatherDetailVC = WeatherDetailViewController()
+        guard indexPath.row < (weatherJSON?.weatherForecast.count ?? 0), let weatherForcast = weatherJSON?.weatherForecast[indexPath.row] else {
+            return
+        }
+        
+        let weatherDetailVC = WeatherDetailViewController(weatherForecastInfo: weatherForcast, tempUnit: .metric)
         
         delegate?.showWeatherDetailInfo(detailVC: weatherDetailVC)
     }

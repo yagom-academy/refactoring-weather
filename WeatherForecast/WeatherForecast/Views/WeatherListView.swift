@@ -8,13 +8,13 @@
 import UIKit
 
 class WeatherListView: UIView {
+    var delegate: WeatherListViewDelegate?
     private var tableView: UITableView = UITableView(frame: .zero, style: .plain)
     let refreshControl: UIRefreshControl = UIRefreshControl()
     
     init() {
         super.init(frame: .zero)
         configureTableView()
-      
     }
     
     required init?(coder: NSCoder) {
@@ -26,6 +26,14 @@ class WeatherListView: UIView {
         tableView.refreshControl = refreshControl
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.id)
         layoutTableView()
+    }
+    
+    private func configureRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    @objc func refresh() {
+        delegate?.refresh()
     }
     
     private func layoutTableView() {

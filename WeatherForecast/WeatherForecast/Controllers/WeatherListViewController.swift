@@ -23,15 +23,6 @@ class WeatherListViewController: UIViewController {
         }
     }
     
-    override func loadView() {
-        view = weatherListView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        initialSetUp()
-    }
-    
     init(useCase: WeatherListUseCase, dateFormatter: DateFormatter) {
         self.weatherListUseCase = useCase
         self.dateFormatter = dateFormatter
@@ -48,31 +39,46 @@ class WeatherListViewController: UIViewController {
         self.dateFormatter = DateFormatterCreator.createKoreanDateFormatter()
         super.init(coder: coder)
     }
+    
+    override func loadView() {
+        view = weatherListView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureUI()
+    }
 }
 
 extension WeatherListViewController {
+    private func configureUI() {
+        configureNavigationItems()
+        configureDelegate()
+    }
+    
+    private func configureNavigationItems() {
+        navigationItem.rightBarButtonItem =  UIBarButtonItem(title: tempUnit.strategy.unitExpression, image: nil, target: self, action: #selector(changeTempUnit))
+    }
+    
     @objc private func changeTempUnit() {
         tempUnit = tempUnit.change()
     }
     
-    @objc private func refresh() {
-        let url: URL? = Bundle.main.url(forResource: "weather", withExtension: "json")
-        weatherJSON = weatherListUseCase.fetchWeatherList(url: url)
-        navigationItem.title = weatherJSON?.city.name
-        weatherListView.reloadTableView()
-        weatherListView.endRefreshControlRefreshing()
-    }
-    
-    private func initialSetUp() {
-        navigationItem.rightBarButtonItem =  UIBarButtonItem(title: tempUnit.strategy.unitExpression, image: nil, target: self, action: #selector(changeTempUnit))
-        weatherListView.refreshControl.addTarget(self,
-                                 action: #selector(refresh),
-                                 for: .valueChanged)
+    private func configureDelegate() {
+        weatherListView.delegate = self
         weatherListView.setTableViewDelegate(self)
         weatherListView.setTableViewDataSource(self)
     }
 }
 
+extension WeatherListViewController: WeatherListViewDelegate {
+    func refresh() {
+        let url: URL? = Bundle.main.url(forResource: "weather", withExtension: "json")
+        cityWeather = weatherListUseCase.fetchWeatherList(url: url)
+        weatherListView.reloadTableView()
+        weatherListView.endRefreshControlRefreshing()
+    }
+}
 
 extension WeatherListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {

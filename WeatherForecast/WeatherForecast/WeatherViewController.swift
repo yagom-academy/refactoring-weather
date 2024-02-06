@@ -109,7 +109,8 @@ extension WeatherViewController: UITableViewDataSource {
         
         cell.configure(with: weatherForecastInfo,
                        tempUnit: tempUnit,
-                       networkManager: NetworkManager())
+                       networkManager: NetworkManager(),
+                       diskCacheManager: DiskCacheManager())
         
         return cell
     }

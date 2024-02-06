@@ -13,6 +13,7 @@ final class WeatherTableViewCell: UITableViewCell {
     private var weatherLabel: UILabel!
     private var descriptionLabel: UILabel!
     private var networkManager: NetworkManagerDelegate?
+    private var diskCacheManager: ImageCacheable?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -108,9 +109,11 @@ final class WeatherTableViewCell: UITableViewCell {
     
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
-                   networkManager: NetworkManagerDelegate
+                   networkManager: NetworkManagerDelegate,
+                   diskCacheManager: ImageCacheable?
     ) {
         self.networkManager = networkManager
+        self.diskCacheManager = diskCacheManager
 
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
@@ -129,15 +132,21 @@ final class WeatherTableViewCell: UITableViewCell {
         let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
-        if let image = ImageCacheManager.shared.getImage(forKey: urlString) {
-            weatherIcon.image = image
+        if let imageFromMemory = MemoryCacheManager.shared.getImage(forKey: urlString) {
+            weatherIcon.image = imageFromMemory
+            return
+        }
+        
+        if let imageFromDisk = diskCacheManager?.getImage(forKey: urlString) {
+            weatherIcon.image = imageFromDisk
             return
         }
         
         Task {[weak self] in
             guard let image = await self?.networkManager?.getIconImage(with: urlString) else { return }
             
-            ImageCacheManager.shared.setImage(image, forKey: urlString)
+            MemoryCacheManager.shared.setImage(image, forKey: urlString)
+            self?.diskCacheManager?.setImage(image, forKey: urlString)
             
             await MainActor.run {
                 self?.weatherIcon.image = image

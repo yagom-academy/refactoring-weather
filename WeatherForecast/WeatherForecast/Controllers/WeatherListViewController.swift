@@ -12,7 +12,12 @@ class WeatherListViewController: UIViewController {
     private var weatherJSON: WeatherJSON?
     private let dateFormatter: DateFormatter
     private let imageChache: NSCache<NSString, UIImage> = NSCache()
-    private var tempUnit: TempUnit = .metric
+    private var tempUnit: TemperatureUnit = .metric {
+        didSet {
+            navigationItem.rightBarButtonItem?.title = tempUnit.strategy.unitExpression
+            refresh()
+        }
+    }
     
     override func loadView() {
         view = weatherListView
@@ -43,15 +48,7 @@ class WeatherListViewController: UIViewController {
 
 extension WeatherListViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
-        refresh()
+        tempUnit = tempUnit.change()
     }
     
     @objc private func refresh() {
@@ -63,7 +60,7 @@ extension WeatherListViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem =  UIBarButtonItem(title: tempUnit.strategy.unitExpression, image: nil, target: self, action: #selector(changeTempUnit))
         weatherListView.refreshControl.addTarget(self,
                                  action: #selector(refresh),
                                  for: .valueChanged)
@@ -92,7 +89,7 @@ extension WeatherListViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        cell.temperatureLabel.text = "\(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.temp))"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = dateFormatter.string(from: date)

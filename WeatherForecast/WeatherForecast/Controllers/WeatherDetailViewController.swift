@@ -7,10 +7,9 @@
 import UIKit
 
 class WeatherDetailViewController: UIViewController {
-
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TemperatureUnit = .metric
     
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -95,10 +94,10 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(tempUnit.strategy.convertTemperature(listInfo.main.temp))"
+        feelsLikeLabel.text = "체감 기온 :\(tempUnit.strategy.convertTemperature(listInfo.main.feelsLike))"
+        maximumTemperatureLable.text = "최고 기온 : \(tempUnit.strategy.convertTemperature(listInfo.main.tempMax))"
+        minimumTemperatureLable.text = "최저 기온 : \(tempUnit.strategy.convertTemperature(listInfo.main.tempMin))"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

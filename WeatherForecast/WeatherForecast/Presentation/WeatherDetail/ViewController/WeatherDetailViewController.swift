@@ -1,31 +1,26 @@
 //
 //  WeatherForecast - WeatherDetailViewController.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     // MARK: - Properties
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    struct Dependency {
+        let weatherDetailViewFactory: (WeatherDetailView.Dependency) -> WeatherDetailView
+        let weatherDetailInfo: WeatherDetailInfo
+        let imageService: NetworkService
+    }
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
+    private let dependency: Dependency
+        
     // MARK: - Init
-    init(weatherForecastInfo: WeatherForecastInfo? = nil,
-         cityInfo: City? = nil,
-         tempUnit: TempUnit) {
-        self.weatherForecastInfo = weatherForecastInfo
-        self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
+    init(
+        dependency: Dependency
+    ) {
+        self.dependency = dependency
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,10 +30,7 @@ final class WeatherDetailViewController: UIViewController {
     
     // MARK: - Lifecycle
     override func loadView() {
-        view = WeatherDetailView(weatherForcastInfo: weatherForecastInfo,
-                                 cityInfo: cityInfo,
-                                 tempUnit: tempUnit,
-                                 imageService: WeatherIconImageService())
+        view = createWeatherDetailView()
     }
     
     override func viewDidLoad() {
@@ -47,6 +39,25 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.title = weatherForecastInfo?.dtTxt
+        navigationItem.title = dependency.weatherDetailInfo.date
+    }
+}
+
+extension WeatherDetailViewController {
+    private func createWeatherDetailView() -> UIView {
+        let weatherDetailViewDependency = createWeatherDetailViewDependency()
+        
+        let weatherDetailView = dependency.weatherDetailViewFactory(weatherDetailViewDependency)
+        
+        return weatherDetailView
+    }
+    
+    private func createWeatherDetailViewDependency() -> WeatherDetailView.Dependency {
+        let weatherDetailViewDependency: WeatherDetailView.Dependency = .init(
+            imageService: dependency.imageService,
+            weatherDetailInfo: dependency.weatherDetailInfo
+        )
+        
+        return weatherDetailViewDependency
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 final class WeatherJsonService: JsonService {
-    func fetchWeatherJSON() -> Result<WeatherJSON, JsonError> {
+    func fetchWeather() async -> Result<WeatherJSON, JsonError> {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 

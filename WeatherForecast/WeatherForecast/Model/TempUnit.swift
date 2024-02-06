@@ -18,4 +18,13 @@ enum TempUnit: String {
         case .imperial: return "℉"
         }
     }
+    
+    var strOpposite: String {
+        switch self {
+        case .metric:
+            return "화씨"
+        case .imperial:
+            return "섭씨"
+        }
+    }
 }

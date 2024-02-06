@@ -7,11 +7,15 @@
 
 import UIKit
 
-class WeatherDetailView: UIView {
+final class WeatherDetailView: UIView {
     // MARK: - Properties
-    private var weatherDetailInfo: WeatherDetailInfo?
-    private let imageService: NetworkService
+    struct Dependency {
+        let imageService: NetworkService
+        let weatherDetailInfo: WeatherDetailInfo
+    }
     
+    private let dependency: Dependency
+        
     // MARK: - UI
     private let iconImageView: UIImageView = UIImageView()
     private let weatherGroupLabel: UILabel = UILabel()
@@ -27,10 +31,10 @@ class WeatherDetailView: UIView {
     private let spacingView: UIView = UIView()
     
     // MARK: - Init
-    init(weatherDetailInfo: WeatherDetailInfo?,
-         imageService: NetworkService) {
-        self.weatherDetailInfo = weatherDetailInfo
-        self.imageService = imageService
+    init(
+        dependency: Dependency
+    ) {
+        self.dependency = dependency
         super.init(frame: .zero)
         layoutView()
         updateLabel()
@@ -97,21 +101,21 @@ class WeatherDetailView: UIView {
     }
     
     private func updateLabel() {
-        weatherGroupLabel.text = weatherForcastInfo?.weather.main
-        weatherDescriptionLabel.text = weatherForcastInfo?.weather.description
-        temperatureLabel.text = "현재 기온 : \(String(describing: main.temp))\(String(describing: tempUnit.expression))"
-        feelsLikeLabel.text = "체감 기온 : \(String(describing: main.feelsLike))\(String(describing: tempUnit.expression))"
-        maximumTemperatureLabel.text = "최고 기온 : \(String(describing: main.tempMax))\(String(describing: tempUnit.expression))"
-        minimumTemperatureLabel.text = "최저 기온 : \(String(describing: main.tempMin))\(String(describing: tempUnit.expression))"
-        popLabel.text = "강수 확률 : \(String(describing: main.pop))"
-        humidityLabel.text = "습도 : \(String(describing: main.humidity))"
-        sunriseTimeLabel.text = "일출 : \(String(describing: cityInfo.sunrise))"
-        sunsetTimeLabel.text = "일몰 : \(String(describing: cityInfo.sunset))"
+        weatherGroupLabel.text = dependency.weatherDetailInfo.weatherMain
+        weatherDescriptionLabel.text = dependency.weatherDetailInfo.description
+        temperatureLabel.text = "현재 기온 : \(String(describing: dependency.weatherDetailInfo.temp))"
+        feelsLikeLabel.text = "체감 기온 : \(String(describing: dependency.weatherDetailInfo.feelsLike))"
+        maximumTemperatureLabel.text = "최고 기온 : \(String(describing: dependency.weatherDetailInfo.tempMax))"
+        minimumTemperatureLabel.text = "최저 기온 : \(String(describing: dependency.weatherDetailInfo.tempMin))"
+        popLabel.text = "강수 확률 : \(String(describing: dependency.weatherDetailInfo.pop))"
+        humidityLabel.text = "습도 : \(String(describing: dependency.weatherDetailInfo.humidity))"
+        sunriseTimeLabel.text = "일출 : \(String(describing: dependency.weatherDetailInfo.sunrise))"
+        sunsetTimeLabel.text = "일몰 : \(String(describing: dependency.weatherDetailInfo.sunset))"
     }
     
     private func updateIcon() {
         Task {
-            iconImageView.image = try? await imageService.fetchImage(iconName: weatherForcastInfo?.weather.icon ?? "", urlSession: URLSession.shared)
+            iconImageView.image = try? await dependency.imageService.fetchImage(iconName: dependency.weatherDetailInfo.iconName, urlSession: URLSession.shared)
         }
 
     }

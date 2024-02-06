@@ -8,5 +8,5 @@
 import Foundation
 
 protocol JsonService {
-    func fetchWeatherJSON() -> Result<WeatherJSON, JsonError>
+    func fetchWeather() async -> Result<WeatherJSON, JsonError>
 }

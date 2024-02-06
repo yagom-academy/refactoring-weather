@@ -1,21 +1,28 @@
 //
 //  WeatherForecast - ViewController.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
 final class MainWeatherListViewController: UIViewController {
     // MARK: - Properties
-    private var weatherJSON: WeatherJSON?
-    private var tempUnit: TempUnit = .metric
-
-    // MARK: - UI
-    private let mainWeatherListView: MainWeatherListView!
+    struct Dependency {
+        let mainWeatherListViewFactory: (MainWeatherListView.Dependency) -> MainWeatherListView
+        let weatherJsonService: JsonService
+        let imageService: NetworkService
+        let tempUnitManager: TempUnitManagerService
+    }
     
-    init(mainWeatherListView: MainWeatherListView) {
-        self.mainWeatherListView = mainWeatherListView
+    private let dependency: Dependency
+    
+    // MARK: - UI
+    private var mainWeatherListView: MainWeatherListView!
+    
+    // MARK: - Init
+    init(dependency: Dependency) {
+        self.dependency = dependency
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,22 +61,53 @@ extension MainWeatherListViewController: MainWeatherListViewDelete {
     }
     
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        dependency.tempUnitManager.update()
+        navigationItem.rightBarButtonItem?.title = dependency.tempUnitManager.tempUnit
+            .strOpposite
         
         mainWeatherListView.refresh()
     }
     
     private func initialSetUp() {
+        mainWeatherListView = (createMainWeatherListView() as! MainWeatherListView)
+        
         view.backgroundColor = .systemBackground
         mainWeatherListView.delegate = self
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: dependency.tempUnitManager.tempUnit.strOpposite,
+            image: nil,
+            target: self,
+            action: #selector(changeTempUnit)
+        )
     }
 }
 
+extension MainWeatherListViewController {
+    private func createMainWeatherListView() -> UIView {
+        let mainWeatherListViewDependency = createMainWeatherListViewDependency()
+        
+        let mainWeatherListView = dependency.mainWeatherListViewFactory(mainWeatherListViewDependency)
+        
+        return mainWeatherListView
+    }
+    
+    private func createMainWeatherListViewDependency() -> MainWeatherListView.Dependency {
+        let weatherDetailViewControllerFactory = { dependency in
+          WeatherDetailViewController(dependency: dependency)
+        }
+        
+        let weatherDetailViewFactory = { dependency in
+            WeatherDetailView(dependency: dependency)
+        }
+        
+        let mainWeatherListViewDependency: MainWeatherListView.Dependency = .init(
+            weatherDetailViewControllerFactory: weatherDetailViewControllerFactory,
+            weatherDetailViewFactory: weatherDetailViewFactory,
+            weatherJsonService: dependency.weatherJsonService,
+            imageService: dependency.imageService,
+            tempUnitManager: dependency.tempUnitManager
+        )
+      
+      return mainWeatherListViewDependency
+    }
+}

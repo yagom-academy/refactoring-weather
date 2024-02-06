@@ -1,8 +1,8 @@
 //
 //  WeatherForecast - SceneDelegate.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
@@ -18,8 +18,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        let weatherUIFactory = ConcreteWeatherUIFactory()
-        let vc = weatherUIFactory.createMainWeatherListViewController()
+        
+        let imageService: NetworkService = WeatherIconImageService()
+        let weatherJsonService: JsonService = WeatherJsonService()
+        let tempUnitManager: TempUnitManagerService = TempUnitManager()
+        
+        let mainWeatherListViewFactory = { dependency in
+          MainWeatherListView(dependency: dependency)
+        }
+        
+        let vc = MainWeatherListViewController(
+            dependency: .init(
+                mainWeatherListViewFactory: mainWeatherListViewFactory,
+                weatherJsonService: weatherJsonService,
+                imageService: imageService,
+                tempUnitManager: tempUnitManager
+            )
+        )
+        
         let nav = UINavigationController(rootViewController: vc)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()

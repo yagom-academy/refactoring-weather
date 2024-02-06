@@ -1,25 +1,28 @@
 //
 //  WeatherForecast - WeatherTableViewCell.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     // MARK: - Properties
     static let identifier = String(describing: WeatherTableViewCell.self)
-    private var imageService: NetworkService?
     
     // MARK: - UI
-    private var weatherIcon: UIImageView = UIImageView()
-    private var dateLabel: UILabel = UILabel()
-    private var temperatureLabel: UILabel = UILabel()
-    private var weatherLabel: UILabel = UILabel()
-    private var descriptionLabel: UILabel = UILabel()
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var imageLoadingTask: Task<(), Never>?
      
     // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    override init(
+        style: UITableViewCell.CellStyle,
+        reuseIdentifier: String?
+    ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
         reset()
@@ -36,10 +39,22 @@ class WeatherTableViewCell: UITableViewCell {
     
     // MARK: - Layout
     private func layViews() {
-        makeLabel()
+        weatherIcon = UIImageView()
+        dateLabel = UILabel()
+        temperatureLabel = UILabel()
+        weatherLabel = UILabel()
+        let dashLabel: UILabel = UILabel()
+        descriptionLabel = UILabel()
+        
+        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
+        
+        labels.forEach { label in
+            label.makeLabel()
+        }
         
         let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
             weatherLabel,
+            dashLabel,
             descriptionLabel
         ])
         
@@ -85,16 +100,9 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
-    private func makeLabel() {
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, descriptionLabel]
-        
-        labels.forEach { label in
-            label.makeLabel()
-        }
-    }
-    
+
     private func reset() {
+        imageLoadingTask?.cancel()
         weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"
@@ -102,14 +110,18 @@ class WeatherTableViewCell: UITableViewCell {
         descriptionLabel.text = "~~~~~"
     }
     
-    func configureCell(weatherInfo: WeatherForecastInfo,
-                       imageService: NetworkService) {
-        Task {
-            weatherIcon.image = try? await imageService.fetchImage(iconName: weatherInfo.weather.icon, urlSession: URLSession.shared)
+    func configureCell(
+        weatherInfo: WeatherForecastInfo,
+        tempUnitManager: TempUnitManagerService,
+        imageService: NetworkService
+    ) {
+        imageLoadingTask = Task {
+            let image = try? await imageService.fetchImage(iconName: weatherInfo.weather.icon, urlSession: URLSession.shared)
+            weatherIcon.image = image
         }
-        
+
         dateLabel.text = weatherInfo.dtTxt
-        temperatureLabel.text = "\(weatherInfo.main.temp)"
+        temperatureLabel.text = "\(weatherInfo.main.temp)\(tempUnitManager.tempUnit.expression)"
         weatherLabel.text = weatherInfo.weather.main
         descriptionLabel.text = weatherInfo.weather.description
     }

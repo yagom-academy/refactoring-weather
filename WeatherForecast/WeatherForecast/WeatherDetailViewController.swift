@@ -22,6 +22,7 @@ final class WeatherDetailViewController: UIViewController {
     let spacingView: UIView = .init()
     var weatherInfo: WeatherDetailInfo
     var cityInfo: CityDetailInfo
+    var mainInfo: MainDetailInfo
     var tempUnit: TempUnit
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -30,8 +31,9 @@ final class WeatherDetailViewController: UIViewController {
         return formatter
     }()
   
-    init(weatherInfo: WeatherDetailInfo, cityInfo: CityDetailInfo, tempUnit: TempUnit) {
+    init(weatherInfo: WeatherDetailInfo, mainInfo: MainDetailInfo, cityInfo: CityDetailInfo, tempUnit: TempUnit) {
         self.weatherInfo = weatherInfo
+        self.mainInfo = mainInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
         super.init(nibName: nil, bundle: nil)
@@ -44,7 +46,7 @@ final class WeatherDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
-        updateWeatherInfo(listInfo: weatherInfo, tempUnit: tempUnit)
+        updateWeatherInfo(listInfo: weatherInfo, mainInfo: mainInfo, tempUnit: tempUnit)
         updateCityInfo(cityInfo)
         Task {
             await updateWeatherIcon(iconName: weatherInfo.iconImageUrl)
@@ -107,17 +109,17 @@ final class WeatherDetailViewController: UIViewController {
 
 extension WeatherDetailViewController {
     
-    func updateWeatherInfo(listInfo: WeatherDetailInfo, tempUnit: TempUnit){
+    func updateWeatherInfo(listInfo: WeatherDetailInfo, mainInfo: MainDetailInfo,tempUnit: TempUnit){
         
         navigationItem.title = listInfo.date
         weatherGroupLabel.text = listInfo.mainWeather
         weatherDescriptionLabel.text = listInfo.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.currentTemp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.feelsLikeTemp)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.maxTemp)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.minTemp)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.humidity)%"
+        temperatureLabel.text = "현재 기온 : \(mainInfo.currentTemp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(mainInfo.feelsLikeTemp)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(mainInfo.maxTemp)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(mainInfo.minTemp)\(tempUnit.expression)"
+        popLabel.text = "강수 확률 : \(mainInfo.pop * 100)%"
+        humidityLabel.text = "습도 : \(mainInfo.humidity)%"
     }
     @MainActor
     func updateWeatherIcon(iconName: String) async {

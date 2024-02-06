@@ -17,7 +17,7 @@
 		C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */; };
 		C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */; };
 		FFC9B6D92B6FB0DD00BBFBE1 /* TransforJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9B6D82B6FB0DD00BBFBE1 /* TransforJSON.swift */; };
-		FFC9B6DB2B6FB11F00BBFBE1 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC9B6DA2B6FB11F00BBFBE1 /* Protocol.swift */; };
+		FFD4BC672B72E19D008F83F1 /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD4BC662B72E19D008F83F1 /* InfoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +33,7 @@
 		C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
 		FFC9B6D82B6FB0DD00BBFBE1 /* TransforJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransforJSON.swift; sourceTree = "<group>"; };
-		FFC9B6DA2B6FB11F00BBFBE1 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
+		FFD4BC662B72E19D008F83F1 /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +69,7 @@
 				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
 				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
-				FFC9B6DA2B6FB11F00BBFBE1 /* Protocol.swift */,
+				FFD4BC662B72E19D008F83F1 /* InfoModel.swift */,
 				FFC9B6D82B6FB0DD00BBFBE1 /* TransforJSON.swift */,
 				C7743D902B21C38100DF0D09 /* WeatherForecastViewController.swift */,
 				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
@@ -156,11 +156,11 @@
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherForecastViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
-				FFC9B6DB2B6FB11F00BBFBE1 /* Protocol.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				FFC9B6D92B6FB0DD00BBFBE1 /* TransforJSON.swift in Sources */,
+				FFD4BC672B72E19D008F83F1 /* InfoModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

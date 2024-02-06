@@ -98,7 +98,8 @@ extension WeatherForecastViewController: UITableViewDataSource {
             return cell
         }
         let weatherDetailInfo = WeatherDetailInfo(weatherForecast: weatherForecastInfo)
-        cell.configure(info: weatherDetailInfo, tempUnit: tempUnit)
+        let mainDetailInfo = MainDetailInfo(mainInfo: weatherForecastInfo.main)
+        cell.configure(info: weatherDetailInfo, mainInfo: mainDetailInfo, tempUnit: tempUnit)
         return cell
     }
 }
@@ -110,65 +111,11 @@ extension WeatherForecastViewController: UITableViewDelegate {
         
         let weatherDetailInfo = WeatherDetailInfo(
             weatherForecast: weatherForecast)
+        let mainDetailInfo = MainDetailInfo(mainInfo: weatherForecast.main)
         let cityDetailInfo = CityDetailInfo(city: cityInfo)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherInfo: weatherDetailInfo, cityInfo: cityDetailInfo, tempUnit: tempUnit)
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherInfo: weatherDetailInfo, mainInfo: mainDetailInfo, cityInfo: cityDetailInfo, tempUnit: tempUnit)
         navigationController?.show(detailViewController, sender: self)
     }
     
-}
-struct WeatherDetailInfo {
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
-    var weatherForecast: WeatherForecastInfo
-    var mainWeather: String
-    var currentTemp: Double
-    var feelsLikeTemp: Double
-    var maxTemp: Double
-    var minTemp: Double
-    var pop: Double
-    var humidity: Double
-    var description: String
-    var date: String
-    var iconImageUrl: String
-    
-    init(weatherForecast: WeatherForecastInfo) {
-        self.weatherForecast = weatherForecast
-        self.mainWeather = weatherForecast.weather.main
-        self.currentTemp = weatherForecast.main.temp
-        self.feelsLikeTemp = weatherForecast.main.feelsLike
-        self.maxTemp = weatherForecast.main.tempMax
-        self.minTemp = weatherForecast.main.tempMin
-        self.pop = weatherForecast.main.pop
-        self.humidity = weatherForecast.main.humidity
-        self.description = weatherForecast.weather.description
-        self.date = dateFormatter.string(from: Date(timeIntervalSince1970: weatherForecast.dt))
-        self.iconImageUrl = weatherForecast.weather.icon
-    }
-}
-struct CityDetailInfo {
-    
-    let formatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = .none
-        formatter.timeStyle = .short
-        formatter.locale = .init(identifier: "ko_KR")
-        return formatter
-    }()
-    
-    var city: City
-    var sunrise: String {
-        return "\(formatter.string(from: Date(timeIntervalSince1970: city.sunrise)))"
-    }
-    var sunset: String {
-        return "\(formatter.string(from: Date(timeIntervalSince1970: city.sunset)))"
-    }
-    init(city: City) {
-        self.city = city
-    }
 }

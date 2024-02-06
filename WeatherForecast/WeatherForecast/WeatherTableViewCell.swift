@@ -12,7 +12,6 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
-    var imageChache: NSCache<NSString, UIImage> = NSCache()
 
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -108,23 +107,21 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
-    func configure(info: WeatherDetailInfo,tempUnit: TempUnit){
+    func configure(info: WeatherDetailInfo, mainInfo: MainDetailInfo, tempUnit: TempUnit){
         weatherLabel.text = info.mainWeather
         descriptionLabel.text = info.description
-        temperatureLabel.text = "\(info.currentTemp)\(tempUnit.expression)"
+        temperatureLabel.text = "\(mainInfo.currentTemp)\(tempUnit.expression)"
         dateLabel.text = info.date
-        loadImage(info.iconImageUrl)
+        Task {
+            await loadImage(info.iconImageUrl)
+        }
     }
 }
 extension WeatherTableViewCell {
-    
-    func loadImage(_ iconName: String){
-        Task {
-            if let iconImage = await TransforJSON.shared.fetchWeatherIconImage(iconName: iconName) {
-                DispatchQueue.main.async {
-                    self.weatherIcon.image = iconImage
-                }
-            }
+    @MainActor
+    func loadImage(_ iconName: String) async{
+        if let iconImage = await TransforJSON.shared.fetchWeatherIconImage(iconName: iconName) {
+            self.weatherIcon.image = iconImage
         }
     }
 }

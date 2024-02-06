@@ -24,7 +24,7 @@ class WeatherListView: UIView {
     
     private func configureTableView() {
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.id)
         layoutTableView()
     }
     

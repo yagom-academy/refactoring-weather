@@ -84,7 +84,7 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.id, for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
               let weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row] else {

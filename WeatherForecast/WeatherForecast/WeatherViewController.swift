@@ -110,7 +110,8 @@ extension WeatherViewController: UITableViewDataSource {
         cell.configure(with: weatherForecastInfo,
                        tempUnit: tempUnit,
                        networkManager: NetworkManager(),
-                       diskCacheManager: DiskCacheManager())
+                       diskCacheManager: DiskCacheManager(),
+                       dateFormatter: CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm"))
         
         return cell
     }

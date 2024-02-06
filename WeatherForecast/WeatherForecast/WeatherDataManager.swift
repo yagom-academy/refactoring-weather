@@ -24,9 +24,8 @@ final class WeatherDataManager: WeatherDataManagerDelegate {
             return
         }
         
-        let info: T
         do {
-            info = try jsonDecoder.decode(T.self, from: data)
+            let info: T = try jsonDecoder.decode(T.self, from: data)
             completion(.success(info))
         } catch {
             completion(.failure(error))

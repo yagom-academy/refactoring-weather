@@ -22,9 +22,13 @@ final class WeatherDetailView: UIView {
     private let sunsetTimeLabel: UILabel = .init()
     private let spacingView: UIView = .init()
     private var networkManager: NetworkManagerDelegate
+    private let dateformatter: DateFormattable
     
-    init(networkManager: NetworkManagerDelegate) {
+    init(networkManager: NetworkManagerDelegate,
+         dateformatter: DateFormattable
+    ) {
         self.networkManager = networkManager
+        self.dateformatter = dateformatter
         super.init(frame: .zero)
         initialSettings()
     }
@@ -99,12 +103,11 @@ final class WeatherDetailView: UIView {
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
         if let cityInfo: City = weatherDetailInfo?.cityInfo {
-            let formatter: CustomDateFormatter = .init(timeStyle: .short)
             let sunriseDate: Date = .init(timeIntervalSince1970: cityInfo.sunrise)
             let sunsetDate: Date = .init(timeIntervalSince1970: cityInfo.sunset)
             
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: sunriseDate)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: sunsetDate)))"
+            sunriseTimeLabel.text = "일출 : \(dateformatter.string(from: sunriseDate)))"
+            sunsetTimeLabel.text = "일몰 : \(dateformatter.string(from: sunsetDate)))"
         }
         
         Task {[weak self] in

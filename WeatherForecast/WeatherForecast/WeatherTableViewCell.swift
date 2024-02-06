@@ -14,6 +14,7 @@ final class WeatherTableViewCell: UITableViewCell {
     private var descriptionLabel: UILabel!
     private var networkManager: NetworkManagerDelegate?
     private var diskCacheManager: ImageCacheable?
+    private var dateFormatter: DateFormattable?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -110,18 +111,19 @@ final class WeatherTableViewCell: UITableViewCell {
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
                    networkManager: NetworkManagerDelegate,
-                   diskCacheManager: ImageCacheable?
+                   diskCacheManager: ImageCacheable?,
+                   dateFormatter: DateFormattable
     ) {
         self.networkManager = networkManager
         self.diskCacheManager = diskCacheManager
+        self.dateFormatter = dateFormatter
 
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        let formatter: CustomDateFormatter = .init(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
-        let dateText: String = formatter.string(from: date)
+        let dateText: String? = dateFormatter.string(from: date)
         
         dateLabel.text = dateText
         

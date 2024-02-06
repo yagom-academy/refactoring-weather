@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CustomDateFormatter: DetailDateFormattable {
+struct CustomDateFormatter: DateFormattable {
     private let dateFormatter: DateFormatter
     
     init(dateFormat: String? = nil,

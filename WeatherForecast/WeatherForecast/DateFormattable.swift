@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol DetailDateFormattable {
+protocol DateFormattable {
     func string(from date: Date) -> String
 }

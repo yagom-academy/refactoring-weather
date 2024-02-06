@@ -30,7 +30,8 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     override func loadView() {
-        view = WeatherDetailView(networkManager: self.networkManager)
+        view = WeatherDetailView(networkManager: self.networkManager,
+                                 dateformatter: CustomDateFormatter(timeStyle: .short))
     }
     
     override func viewDidLoad() {

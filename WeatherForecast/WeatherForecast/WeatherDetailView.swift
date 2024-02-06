@@ -21,9 +21,9 @@ final class WeatherDetailView: UIView {
     private let sunriseTimeLabel: UILabel = .init()
     private let sunsetTimeLabel: UILabel = .init()
     private let spacingView: UIView = .init()
-    private var networkManager: NetworkManager
+    private var networkManager: NetworkManagerDelegate
     
-    init(networkManager: NetworkManager) {
+    init(networkManager: NetworkManagerDelegate) {
         self.networkManager = networkManager
         super.init(frame: .zero)
         initialSettings()
@@ -109,8 +109,9 @@ final class WeatherDetailView: UIView {
         
         Task {[weak self] in
             let iconName: String = listInfo.weather.icon
+            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
             
-            guard let image = await self?.networkManager.getIconImage(byName: iconName) else { return }
+            guard let image = await self?.networkManager.getIconImage(with: urlString) else { return }
             
             await MainActor.run {
                 self?.iconImageView.image = image

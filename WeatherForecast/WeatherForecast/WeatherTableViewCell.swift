@@ -12,7 +12,7 @@ final class WeatherTableViewCell: UITableViewCell {
     private var temperatureLabel: UILabel!
     private var weatherLabel: UILabel!
     private var descriptionLabel: UILabel!
-    private var networkManager: NetworkManager?
+    private var networkManager: NetworkManagerDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -108,7 +108,7 @@ final class WeatherTableViewCell: UITableViewCell {
     
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
-                   networkManager: NetworkManager
+                   networkManager: NetworkManagerDelegate
     ) {
         self.networkManager = networkManager
 

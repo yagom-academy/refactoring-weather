@@ -8,19 +8,19 @@
 import Foundation
 
 protocol WeatherListUseCase {
-    func fetchWeatherList(url: URL?) -> WeatherJSON?
+    func fetchWeatherList(url: URL?) -> CityWeather?
 }
 
 final class DefaultWeatherListUseCase: WeatherListUseCase {
-    func fetchWeatherList(url: URL?) -> WeatherJSON? {
+    func fetchWeatherList(url: URL?) -> CityWeather? {
         let jsonDecoder: JSONDecoder = JSONDecoderCreator.createSnakeCaseDecoder()
 
         guard let url: URL = url else { return nil }
-        let info: WeatherJSON
+        let info: CityWeather
         
         do {
             let data: Data = try Data(contentsOf: url)
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
+            info = try jsonDecoder.decode(CityWeather.self, from: data)
         } catch {
             print(error.localizedDescription)
             return nil

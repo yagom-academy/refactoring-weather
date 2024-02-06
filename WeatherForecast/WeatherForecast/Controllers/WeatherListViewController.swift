@@ -9,7 +9,11 @@ import UIKit
 class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
     private let weatherListUseCase: WeatherListUseCase
-    private var weatherJSON: WeatherJSON?
+    private var cityWeather: CityWeather? {
+        didSet {
+            navigationItem.title = cityWeather?.city.name
+        }
+    }
     private let dateFormatter: DateFormatter
     private let imageChache: NSCache<NSString, UIImage> = NSCache()
     private var tempUnit: TemperatureUnit = .metric {
@@ -76,14 +80,14 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        cityWeather?.weatherForecast.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+              let weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -125,11 +129,9 @@ extension WeatherListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
+        detailViewController.weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row]
+        detailViewController.cityInfo = cityWeather?.city
         detailViewController.tempUnit = tempUnit
         navigationController?.show(detailViewController, sender: self)
     }
 }
-
-

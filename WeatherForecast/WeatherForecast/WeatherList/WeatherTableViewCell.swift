@@ -14,6 +14,8 @@ class WeatherTableViewCell: UITableViewCell {
     var weatherLabel: UILabel!
     var dashLabel: UILabel!
     var descriptionLabel: UILabel!
+    
+    private var imageTask: Task<Void, Never>?
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -107,6 +109,7 @@ extension WeatherTableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+        imageTask?.cancel()
     }
     
     public func setData(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit) {
@@ -122,9 +125,13 @@ extension WeatherTableViewCell {
         self.dateLabel.text = dateFormatter.string(from: date)
     }
     
-    public func setImage(image: UIImage) {
-        DispatchQueue.main.async {
-            self.weatherIcon.image = image
+    public func setImage(urlString: String) {
+        self.imageTask = Task {
+            await ImageLoader.shared.performImageLoad(urlString: urlString) { [weak self] image in
+                DispatchQueue.main.async {
+                    self?.weatherIcon.image = image
+                }
+            }
         }
     }
 }

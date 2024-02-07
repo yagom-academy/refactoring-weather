@@ -12,6 +12,7 @@ protocol WeatherAPI {
     var imageLoader: ImageLoader { get }
     func fetchData(_ completion: @escaping (WeatherJSON) -> Void)
     func fetchImage(iconName: String, _ completion: @escaping (UIImage) -> Void)
+    func iconImageUrlString(iconName: String) -> String
 }
 
 class OpenWeatherAPI: WeatherAPI {
@@ -38,7 +39,11 @@ class OpenWeatherAPI: WeatherAPI {
     }
     
     func fetchImage(iconName: String, _ completion: @escaping (UIImage) -> Void) {
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        let urlString: String = iconImageUrlString(iconName: iconName)
         imageLoader.fetchImage(urlString: urlString, completion)
+    }
+    
+    func iconImageUrlString(iconName: String) -> String {
+        return "https://openweathermap.org/img/wn/\(iconName)@2x.png"
     }
 }

@@ -69,9 +69,9 @@ extension WeatherListViewController: UITableViewDataSource {
         cell.setData(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit)
         
         let iconName: String = weatherForecastInfo.weather.icon
-        weatherAPI.fetchImage(iconName: iconName) { image in
-            cell.setImage(image: image)
-        }
+        let imageUrlString = weatherAPI.iconImageUrlString(iconName: iconName)
+        cell.setImage(urlString: imageUrlString)
+        
         return cell
     }
 }

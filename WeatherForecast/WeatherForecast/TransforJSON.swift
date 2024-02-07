@@ -9,7 +9,7 @@ final class TransforJSON {
     static let shared = TransforJSON()
     private init() {}
     
-    func fetchWeatherJSON(weatherInfo: WeatherJSON?) -> WeatherJSON?{
+    func fetchWeatherJSON() -> WeatherJSON?{
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let data = NSDataAsset(name: "weather")?.data else {

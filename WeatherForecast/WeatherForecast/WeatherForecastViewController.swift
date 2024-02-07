@@ -76,7 +76,7 @@ extension WeatherForecastViewController {
 
 extension WeatherForecastViewController {
     private func loadJSON() {
-        weatherJSON = TransforJSON.shared.fetchWeatherJSON(weatherInfo: weatherJSON)
+        weatherJSON = TransforJSON.shared.fetchWeatherJSON()
         navigationItem.title = weatherJSON?.city.name
     }
 }

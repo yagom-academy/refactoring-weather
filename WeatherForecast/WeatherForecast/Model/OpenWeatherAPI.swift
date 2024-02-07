@@ -9,13 +9,14 @@ import Foundation
 import UIKit
 
 protocol WeatherAPI {
+    var imageLoader: ImageLoader { get }
     func fetchData(_ completion: @escaping (WeatherJSON) -> Void)
     func fetchImage(iconName: String, _ completion: @escaping (UIImage) -> Void)
 }
 
 class OpenWeatherAPI: WeatherAPI {
     
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    let imageLoader: ImageLoader = ImageLoader.shared
     
     func fetchData(_ completion: @escaping (WeatherJSON) -> Void) {
         let jsonDecoder: JSONDecoder = .init()
@@ -38,21 +39,6 @@ class OpenWeatherAPI: WeatherAPI {
     
     func fetchImage(iconName: String, _ completion: @escaping (UIImage) -> Void) {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            completion(image)
-            return
-        }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            completion(image)
-        }
+        imageLoader.fetchImage(urlString: urlString, completion)
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D504EF02B73CA7400C22CEA /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D504EEF2B73CA7400C22CEA /* ImageLoader.swift */; };
 		7DD3E0352B6D306600F906D5 /* WeatherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E0342B6D306600F906D5 /* WeatherListView.swift */; };
 		7DD3E0372B6D3EF300F906D5 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E0362B6D3EF300F906D5 /* WeatherDetailView.swift */; };
 		7DD3E03A2B6D556400F906D5 /* OpenWeatherAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E0392B6D556400F906D5 /* OpenWeatherAPI.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D504EEF2B73CA7400C22CEA /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		7DD3E0342B6D306600F906D5 /* WeatherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListView.swift; sourceTree = "<group>"; };
 		7DD3E0362B6D3EF300F906D5 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		7DD3E0392B6D556400F906D5 /* OpenWeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherAPI.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			children = (
 				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
 				7DD3E0392B6D556400F906D5 /* OpenWeatherAPI.swift */,
+				7D504EEF2B73CA7400C22CEA /* ImageLoader.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			files = (
 				7DD3E03A2B6D556400F906D5 /* OpenWeatherAPI.swift in Sources */,
 				7DD3E0372B6D3EF300F906D5 /* WeatherDetailView.swift in Sources */,
+				7D504EF02B73CA7400C22CEA /* ImageLoader.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,

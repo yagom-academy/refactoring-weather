@@ -9,9 +9,20 @@ import Foundation
 
 protocol WeatherListUseCase {
     func fetchWeatherList(url: URL?) -> CityWeather?
+    func fetchWeatherImage(url: String) async -> ImageCache?
 }
 
 final class DefaultWeatherListUseCase: WeatherListUseCase {
+    private var imageCacheService: ImageChacheService
+    
+    init(imageCacheService: ImageChacheService) {
+        self.imageCacheService = imageCacheService
+    }
+    
+    convenience init() {
+        self.init(imageCacheService: DefaultImageChacheService.shared)
+    }
+    
     func fetchWeatherList(url: URL?) -> CityWeather? {
         let jsonDecoder: JSONDecoder = JSONDecoderCreator.createSnakeCaseDecoder()
 
@@ -27,5 +38,9 @@ final class DefaultWeatherListUseCase: WeatherListUseCase {
         }
         
         return info
+    }
+    
+    func fetchWeatherImage(url: String) async -> ImageCache? {
+        await imageCacheService.fetchImage(urlString: url)
     }
 }

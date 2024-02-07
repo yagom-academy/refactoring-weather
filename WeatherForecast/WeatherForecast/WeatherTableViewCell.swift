@@ -6,13 +6,19 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
-     
+protocol ReusableCell: AnyObject {
+    static var cellId: String { get }
+}
+
+final class WeatherTableViewCell: UITableViewCell {
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var networkManager: NetworkManagerDelegate?
+    private var dateFormatter: DateFormattable?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -36,7 +42,11 @@ class WeatherTableViewCell: UITableViewCell {
         let dashLabel: UILabel = UILabel()
         descriptionLabel = UILabel()
         
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
+        let labels: [UILabel] = [dateLabel, 
+                                 temperatureLabel,
+                                 weatherLabel,
+                                 dashLabel,
+                                 descriptionLabel]
         
         labels.forEach { label in
             label.textColor = .black
@@ -99,5 +109,38 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    
+    func configure(with weatherForecastInfo: WeatherForecastInfo, 
+                   tempUnit: TempUnit,
+                   networkManager: NetworkManagerDelegate,
+                   dateFormatter: DateFormattable
+    ) {
+        self.networkManager = networkManager
+        self.dateFormatter = dateFormatter
+
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        let dateText: String? = dateFormatter.string(from: date)
+        
+        dateLabel.text = dateText
+        
+        setImage(with: weatherForecastInfo)
+    }
+    
+    private func setImage(with weatherForecastInfo: WeatherForecastInfo) {
+        let iconName: String = weatherForecastInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+                
+        weatherIcon.setImage(from: urlString, with: networkManager)
+    }
+}
+
+extension WeatherTableViewCell: ReusableCell {
+    static var cellId: String {
+        return "WeatherCell"
     }
 }

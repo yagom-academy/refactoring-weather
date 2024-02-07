@@ -140,13 +140,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		814BC1A92B71092800B830C2 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
 		C7743D802B21C38100DF0D09 = {
 			isa = PBXGroup;
 			children = (
@@ -171,7 +164,6 @@
 				C7743D952B21C38200DF0D09 /* Assets.xcassets */,
 				C7743D972B21C38200DF0D09 /* LaunchScreen.storyboard */,
 				C7743D9A2B21C38200DF0D09 /* Info.plist */,
-				814BC1A92B71092800B830C2 /* Utils */,
 				814BC1A42B6BD6E900B830C2 /* Extensions */,
 				814BC1A12B6BB4A700B830C2 /* CustomLabels */,
 				814BC19A2B6A916400B830C2 /* Models */,

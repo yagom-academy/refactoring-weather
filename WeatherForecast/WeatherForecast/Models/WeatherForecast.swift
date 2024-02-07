@@ -7,7 +7,7 @@
 
 import Foundation
 
-class WeatherForecast {
+final class WeatherForecast {
     
     private let weatherForecastInfo: WeatherForecastInfo
     private let temperatureUnit: TemperatureUnit

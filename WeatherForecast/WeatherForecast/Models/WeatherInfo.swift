@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol WeatherInfoProtocol {
+protocol WeatherInfoProtocol: AnyObject {
     var weatherForecastInfo: [WeatherForecastInfo] { get }
     var city: CityInfo { get }
     var temperatureUnit: TemperatureUnit { get set }

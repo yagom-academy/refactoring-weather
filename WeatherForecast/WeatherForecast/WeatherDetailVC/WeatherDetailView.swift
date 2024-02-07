@@ -25,8 +25,8 @@ final class WeatherDetailView: UIView {
     private let spacingView             : UIView = UIView()
 
     private var imageManager            : ImageManagerProtocol
-    var weatherForecastInfo             : WeatherForecast?
-    var cityInfo                        : CityInfo?
+    private var weatherForecastInfo      : WeatherForecast?
+    private var cityInfo                 : CityInfo?
     
     
     // MARK: - Init
@@ -78,7 +78,7 @@ final class WeatherDetailView: UIView {
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func layoutMainStackView() {
+    private func layoutMainStackView() {
         let safeArea: UILayoutGuide = safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),

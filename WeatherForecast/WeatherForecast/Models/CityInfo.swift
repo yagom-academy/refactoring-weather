@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CityInfo {
+final class CityInfo {
     
     private var city: City
     private var formatter: DateFormatter {

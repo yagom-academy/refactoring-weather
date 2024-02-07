@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
     private let weatherListUseCase: WeatherListUseCase
     private var cityWeather: CityWeather? {
@@ -14,8 +14,6 @@ class WeatherListViewController: UIViewController {
             navigationItem.title = cityWeather?.city.name
         }
     }
-    private let dateFormatter: DateFormatter
-    private let imageChache: NSCache<NSString, UIImage> = NSCache()
     private var tempUnit: TemperatureUnit = .metric {
         didSet {
             navigationItem.rightBarButtonItem?.title = tempUnit.strategy.unitExpression
@@ -23,20 +21,17 @@ class WeatherListViewController: UIViewController {
         }
     }
     
-    init(useCase: WeatherListUseCase, dateFormatter: DateFormatter) {
+    init(useCase: WeatherListUseCase) {
         self.weatherListUseCase = useCase
-        self.dateFormatter = dateFormatter
         super.init(nibName: nil, bundle: nil)
     }
     
     convenience init() {
-        self.init(useCase: DefaultWeatherListUseCase(),
-                  dateFormatter: DateFormatterCreator.createKoreanDateFormatter())
+        self.init(useCase: DefaultWeatherListUseCase())
     }
     
     required init?(coder: NSCoder) {
         self.weatherListUseCase = DefaultWeatherListUseCase()
-        self.dateFormatter = DateFormatterCreator.createKoreanDateFormatter()
         super.init(coder: coder)
     }
     
@@ -91,51 +86,38 @@ extension WeatherListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.id, for: indexPath)
-        
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
               let weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row] else {
             return cell
         }
         
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.temp))"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
+        cell.configure(with: weatherForecastInfo, using: tempUnit)
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
+            await configureWeatherIcon(with: weatherForecastInfo.weather.icon, to: cell)
         }
         
         return cell
+    }
+    
+    private func configureWeatherIcon(with name: String, to cell: WeatherTableViewCell) async {
+        Task {
+            let imageURLString: String = "https://openweathermap.org/img/wn/\(name)@2x.png"
+            guard let imageData = await weatherListUseCase.fetchWeatherImage(url: imageURLString),
+            let image = UIImage(data: imageData.data) else { return }
+            cell.configure(image: image)
+        }
     }
 }
 
 extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        showDetailVC(with: cityWeather?.weatherForecast[indexPath.row])
+    }
+    
+    private func showDetailVC(with weatherForecastInfo: WeatherForecastInfo?) {
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row]
+        detailViewController.weatherForecastInfo = weatherForecastInfo
         detailViewController.cityInfo = cityWeather?.city
         detailViewController.tempUnit = tempUnit
         navigationController?.show(detailViewController, sender: self)

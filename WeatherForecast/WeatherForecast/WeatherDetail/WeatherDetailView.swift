@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-protocol WeatherDetailDelegate {
+protocol WeatherDetailDelegate: AnyObject {
     var navigationItem: UINavigationItem { get }
 }
 
 class WeatherDeatilView: UIView {
-    private var delegate: WeatherDetailDelegate
+    private weak var delegate: WeatherDetailDelegate?
     private var weatherAPI: WeatherAPI
     
     let dateFormatter: DateFormatter = {
@@ -132,7 +132,7 @@ extension WeatherDeatilView {
         
         if let timeInterval = weatherForecastInfo?.dt {
             let date = Date(timeIntervalSince1970: timeInterval)
-            delegate.navigationItem.title = dateFormatter.string(from: date)
+            delegate?.navigationItem.title = dateFormatter.string(from: date)
         }
     }
     

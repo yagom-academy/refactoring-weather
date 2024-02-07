@@ -108,9 +108,7 @@ extension WeatherViewController: UITableViewDataSource {
         }
         
         cell.configure(with: weatherForecastInfo,
-                       tempUnit: tempUnit,
-                       networkManager: NetworkManager(),
-                       dateFormatter: CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm"))
+                       tempUnit: tempUnit)
         
         return cell
     }
@@ -134,10 +132,8 @@ extension WeatherViewController: UITableViewDelegate {
     }
     
     private func showDetailViewController(with weatherDetailInfo: WeatherDetailInfo) {
-        let networkManger: NetworkManager = .init()
         let detailViewController: WeatherDetailViewController = .init(
-            weatherDetailInfo: weatherDetailInfo,
-            networkManager: networkManger)
+            weatherDetailInfo: weatherDetailInfo)
         navigationController?.show(detailViewController, sender: self)
     }
 }

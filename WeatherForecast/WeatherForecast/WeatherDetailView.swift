@@ -25,7 +25,7 @@ final class WeatherDetailView: UIView {
     private let dateformatter: DateFormattable
     
     init(networkManager: NetworkManagerDelegate,
-         dateformatter: DateFormattable
+         dateformatter: DateFormattable = CustomDateFormatter(timeStyle: .short)
     ) {
         self.networkManager = networkManager
         self.dateformatter = dateformatter
@@ -112,6 +112,6 @@ final class WeatherDetailView: UIView {
         
         let iconName: String = listInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        iconImageView.setImage(from: urlString, with: networkManager)
+        iconImageView.setImage(from: urlString)
     }
 }

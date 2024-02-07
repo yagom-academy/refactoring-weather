@@ -8,30 +8,25 @@
 import UIKit
 
 extension UIImageView {
-    func setImage(from urlString: String, 
-                  memory memoryCacheManager: ImageCacheable = MemoryCacheManager.shared,
-                  disk diskCacheManager: ImageCacheable? = DiskCacheManager(),
-                  with networkManager: NetworkManagerDelegate?
+    func setImage(from urlString: String,
+                  imageLoader: ImageLoadable = ImageLoader()
     ) {
-        if let imageFromMemory = memoryCacheManager.getImage(forKey: urlString) {
+        if let imageFromMemory = imageLoader.getImage(from: .memory, forKey: urlString) {
             self.image = imageFromMemory
             return
         }
         
-        if let imageFromDisk = diskCacheManager?.getImage(forKey: urlString) {
+        if let imageFromDisk = imageLoader.getImage(from: .disk, forKey: urlString) {
             self.image = imageFromDisk
             return
         }
         
-        Task {[weak self] in
-            guard let image = await networkManager?.getIconImage(with: urlString) else { return
-            }
-            
-            memoryCacheManager.setImage(image, forKey: urlString)
-            diskCacheManager?.setImage(image, forKey: urlString)
+        Task {
+            guard let image = await imageLoader.getImageFromDownload(with: urlString)
+            else { return }
             
             await MainActor.run {
-                self?.image = image
+                self.image = image
             }
         }
     }

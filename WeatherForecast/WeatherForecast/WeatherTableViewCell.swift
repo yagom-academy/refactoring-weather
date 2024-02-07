@@ -16,7 +16,6 @@ final class WeatherTableViewCell: UITableViewCell {
     private var temperatureLabel: UILabel!
     private var weatherLabel: UILabel!
     private var descriptionLabel: UILabel!
-    private var networkManager: NetworkManagerDelegate?
     private var dateFormatter: DateFormattable?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -113,10 +112,8 @@ final class WeatherTableViewCell: UITableViewCell {
     
     func configure(with weatherForecastInfo: WeatherForecastInfo, 
                    tempUnit: TempUnit,
-                   networkManager: NetworkManagerDelegate,
-                   dateFormatter: DateFormattable
+                   dateFormatter: DateFormattable = CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
     ) {
-        self.networkManager = networkManager
         self.dateFormatter = dateFormatter
 
         weatherLabel.text = weatherForecastInfo.weather.main
@@ -135,7 +132,7 @@ final class WeatherTableViewCell: UITableViewCell {
         let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
-        weatherIcon.setImage(from: urlString, with: networkManager)
+        weatherIcon.setImage(from: urlString)
     }
 }
 

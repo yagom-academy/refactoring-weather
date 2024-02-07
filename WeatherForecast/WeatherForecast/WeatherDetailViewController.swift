@@ -16,12 +16,15 @@ final class WeatherDetailViewController: UIViewController {
 
     private let weatherDetailInfo: WeatherDetailInfo
     private let networkManager: NetworkManager
+    private let dateFormatter: DateFormattable
     
     init(weatherDetailInfo: WeatherDetailInfo,
-         networkManager: NetworkManager
+         networkManager: NetworkManager = NetworkManager(),
+         dateFormatter: DateFormattable = CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
     ) {
         self.weatherDetailInfo = weatherDetailInfo
         self.networkManager = networkManager
+        self.dateFormatter = dateFormatter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,8 +33,7 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     override func loadView() {
-        view = WeatherDetailView(networkManager: self.networkManager,
-                                 dateformatter: CustomDateFormatter(timeStyle: .short))
+        view = WeatherDetailView(networkManager: self.networkManager)
     }
     
     override func viewDidLoad() {
@@ -45,8 +47,7 @@ final class WeatherDetailViewController: UIViewController {
         let listInfo = weatherDetailInfo.weatherForecastInfo
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        let formatter: CustomDateFormatter = .init(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
-        let title: String = formatter.string(from: date)
+        let title: String = dateFormatter.string(from: date)
         
         navigationItem.title = title
        

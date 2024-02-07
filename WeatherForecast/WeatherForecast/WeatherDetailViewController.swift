@@ -20,7 +20,7 @@ final class WeatherDetailViewController: UIViewController {
     
     init(weatherDetailInfo: WeatherDetailInfo,
          networkManager: NetworkManager = NetworkManager(),
-         dateFormatter: DateFormattable = CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm")
+         dateFormatter: DateFormattable = CustomDateFormatter(timeStyle: .long)
     ) {
         self.weatherDetailInfo = weatherDetailInfo
         self.networkManager = networkManager

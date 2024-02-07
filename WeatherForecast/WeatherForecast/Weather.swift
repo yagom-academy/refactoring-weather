@@ -26,6 +26,12 @@ struct MainInfo: Decodable {
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
+extension MainInfo {
+    func tempValue(at tempUnit: TempUnit) -> Double {
+        return tempUnit.tempStrategy.changeValue(from: temp)
+    }
+}
+
 // MARK: - Weather
 struct Weather: Decodable {
     let id: Int
@@ -58,5 +64,35 @@ enum TempUnit: String {
         case .imperial: return "℉"
         }
     }
+    
+    var tempStrategy: TempUnitStrategy {
+        switch self {
+        case .metric:
+            return MetricStrategy()
+        case .imperial:
+            return ImperialStrategy()
+        }
+    }
 }
 
+// MARK: - TempUnitStrategy
+protocol TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double
+}
+
+struct MetricStrategy: TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double {
+        return temp
+    }
+}
+
+struct ImperialStrategy: TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double {
+        let changedTemp: Double = (temp * 9 / 5) + 32
+        let formattedString = String(format: "%.2f", changedTemp)
+        guard let formattedDouble = Double(formattedString) else {
+            return changedTemp
+        }
+        return formattedDouble
+    }
+}

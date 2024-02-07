@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol WeatherDetailDelegate: AnyObject {
-    var navigationItem: UINavigationItem { get }
+    func dateDidChanged(text: String)
 }
 
 class WeatherDeatilView: UIView {
@@ -132,7 +132,7 @@ extension WeatherDeatilView {
         
         if let timeInterval = weatherForecastInfo?.dt {
             let date = Date(timeIntervalSince1970: timeInterval)
-            delegate?.navigationItem.title = dateFormatter.string(from: date)
+            delegate?.dateDidChanged(text: dateFormatter.string(from: date))
         }
     }
     

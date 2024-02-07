@@ -12,7 +12,7 @@ struct WeatherDetailInfo {
     let tempUnit: TempUnit
 }
 
-class WeatherDetailViewController: UIViewController, WeatherDetailDelegate {
+class WeatherDetailViewController: UIViewController {
     
     private let weatherAPI: WeatherAPI
     var weatherDetailInfo: WeatherDetailInfo
@@ -29,5 +29,11 @@ class WeatherDetailViewController: UIViewController, WeatherDetailDelegate {
     
     override func loadView() {
         view = WeatherDeatilView(weatherDetailInfo: weatherDetailInfo, weatherAPI: weatherAPI, delegate: self)
+    }
+}
+
+extension WeatherDetailViewController: WeatherDetailDelegate {
+    func dateDidChanged(text: String) {
+        self.navigationItem.title = text
     }
 }

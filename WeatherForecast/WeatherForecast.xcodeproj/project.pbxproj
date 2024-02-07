@@ -25,6 +25,7 @@
 		EE80877E2B721700004D91C2 /* UITableViewCell+id.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80877D2B721700004D91C2 /* UITableViewCell+id.swift */; };
 		EE8087802B721823004D91C2 /* WeatherListViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80877F2B721823004D91C2 /* WeatherListViewDelegate.swift */; };
 		EE8087822B7256A6004D91C2 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087812B7256A6004D91C2 /* ImageCache.swift */; };
+		EE8087852B726306004D91C2 /* ImageChacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087842B726306004D91C2 /* ImageChacheService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		EE80877D2B721700004D91C2 /* UITableViewCell+id.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+id.swift"; sourceTree = "<group>"; };
 		EE80877F2B721823004D91C2 /* WeatherListViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListViewDelegate.swift; sourceTree = "<group>"; };
 		EE8087812B7256A6004D91C2 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		EE8087842B726306004D91C2 /* ImageChacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChacheService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				EE8087832B7262EB004D91C2 /* Services */,
 				EE8087742B6F5873004D91C2 /* Utils */,
 				EE80876D2B6E570E004D91C2 /* UseCases */,
 				EE8087652B6C02A2004D91C2 /* App */,
@@ -149,6 +152,14 @@
 				EE8087772B6F588C004D91C2 /* DateFormatterCreator.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		EE8087832B7262EB004D91C2 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				EE8087842B726306004D91C2 /* ImageChacheService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,6 +236,7 @@
 				EE8087822B7256A6004D91C2 /* ImageCache.swift in Sources */,
 				EE80876F2B6E5720004D91C2 /* WeatherListUseCase.swift in Sources */,
 				EE80877C2B6F6F3E004D91C2 /* TemperatureStrategy.swift in Sources */,
+				EE8087852B726306004D91C2 /* ImageChacheService.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				EE8087762B6F5882004D91C2 /* JSONDecoderCreator.swift in Sources */,
 				EE8087782B6F588C004D91C2 /* DateFormatterCreator.swift in Sources */,

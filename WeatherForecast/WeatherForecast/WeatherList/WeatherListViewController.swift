@@ -21,6 +21,7 @@ final class WeatherListViewController: UIViewController {
     
     override func loadView() {
         view = WeatherListView(delegate: self)
+        refresh()
     }
     
 }

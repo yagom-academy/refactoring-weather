@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 protocol WeatherAPI {
-    var imageLoader: ImageLoader { get }
     func fetchData(_ completion: @escaping (WeatherJSON) -> Void)
     func fetchImage(iconName: String, _ completion: @escaping (UIImage) -> Void)
     func iconImageUrlString(iconName: String) -> String
@@ -17,7 +16,7 @@ protocol WeatherAPI {
 
 class OpenWeatherAPI: WeatherAPI {
     
-    let imageLoader: ImageLoader = ImageLoader.shared
+    private let imageLoader: ImageLoader = ImageLoader.shared
     
     func fetchData(_ completion: @escaping (WeatherJSON) -> Void) {
         let jsonDecoder: JSONDecoder = .init()

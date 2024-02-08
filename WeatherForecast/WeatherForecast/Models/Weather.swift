@@ -25,6 +25,4 @@ final class Weather: Decodable {
 
 
 // MARK: - Coord
-final class Coord: Decodable {
-    let lat, lon: Double
-}
+

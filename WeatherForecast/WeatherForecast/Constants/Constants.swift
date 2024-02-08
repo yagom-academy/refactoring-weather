@@ -7,4 +7,4 @@
 
 import Foundation
 
-var KoreaLocaleCode: Locale = Locale(identifier: "ko-Kore_KR")
+var KoreaIdentifierCode: String = "ko-Kore_KR"

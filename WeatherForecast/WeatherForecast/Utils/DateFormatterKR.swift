@@ -14,7 +14,7 @@ struct DateFormatterKR {
     
     init(dateFormat: String) {
         self.dateFormat = dateFormat
-        dateFormatter.locale = .init(identifier: "ko_KR")
+        dateFormatter.locale = Locale(identifier: LocalIdentifier().getLocaleIdentifier())
     }
     
     func string(from date: Date) -> String {

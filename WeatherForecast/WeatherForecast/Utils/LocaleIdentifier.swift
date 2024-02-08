@@ -12,19 +12,20 @@ protocol Localable {
     static var regionCode: String? { get set }
     static var languageCode: String? { get set }
     
-    func getLocaleIdentifier() -> Locale
+    func getLocaleIdentifier() -> String
 }
 
-struct LocaleIdentifier: Localable {
+struct LocalIdentifier: Localable {
     static var identifier: String = Locale.current.identifier
     static var regionCode: String? = Locale.current.region?.identifier
     static var languageCode: String? = Locale.current.language.languageCode?.identifier
 }
 
-extension LocaleIdentifier {
-    func getLocaleIdentifier() -> Locale {
-        guard let regionCode =  LocaleIdentifier.regionCode else { return KoreaLocaleCode }
-        guard let languageCode = LocaleIdentifier.languageCode else { return KoreaLocaleCode }
-        return Locale(identifier: "\(LocaleIdentifier.identifier)_\(LocaleIdentifier.regionCode)-\(LocaleIdentifier.languageCode)")
+extension LocalIdentifier {
+    func getLocaleIdentifier() -> String {
+        guard let regionCode =  LocalIdentifier.regionCode else { return KoreaIdentifierCode }
+        guard let languageCode = LocalIdentifier.languageCode else { return KoreaIdentifierCode }
+        
+        return "\(LocalIdentifier.identifier)_\(LocalIdentifier.regionCode)-\(LocalIdentifier.languageCode)"
     }
 }

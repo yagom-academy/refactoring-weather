@@ -21,23 +21,9 @@ final class WeatherDetailView: UIView {
     private let sunsetTimeLabel: UILabel = UILabel()
     private let spacingView: UIView = UIView()
     
-    let dataFetcher: DataFetchable
-
-//    let mainStackView: UIStackView = .init(arrangedSubviews: [
-//        iconImageView,
-//        weatherGroupLabel,
-//        weatherDescriptionLabel,
-//        temperatureLabel,
-//        feelsLikeLabel,
-//        maximumTemperatureLable,
-//        minimumTemperatureLable,
-//        popLabel,
-//        humidityLabel,
-//        sunriseTimeLabel,
-//        sunsetTimeLabel,
-//        spacingView
-//    ])
-    let mainStackView: UIStackView = UIStackView()
+    private let dataFetcher: DataFetchable
+    private let mainStackView: UIStackView = UIStackView()
+    
     init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
         self.weatherForecastInfo = weatherForecastInfo
         self.dataFetcher = dataFetcher

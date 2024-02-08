@@ -40,7 +40,9 @@ final class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = date.toString()
+        if let timezone = TimeZone(identifier: "ko-KR") {
+            navigationItem.title = date.toString(locale: Locale(identifier: "ko-KR"), timezone: TimeZone(identifier: "ko-KR") ?? TimeZone(identifier: "ko-KR")!)
+        }
     }
 }
 

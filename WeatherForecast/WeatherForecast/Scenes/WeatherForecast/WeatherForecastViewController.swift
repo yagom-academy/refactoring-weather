@@ -99,8 +99,9 @@ extension WeatherForecastViewController: UITableViewDataSource {
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         
-        cell.setDateLabel(with: date.toString())
-        
+        if let timezone = TimeZone(identifier: "ko-KR") {
+            cell.setDateLabel(with: date.toString(locale: Locale(identifier: "ko-KR"), timezone: timezone))
+        }
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

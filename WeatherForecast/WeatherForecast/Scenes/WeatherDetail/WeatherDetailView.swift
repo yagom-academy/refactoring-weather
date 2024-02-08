@@ -8,36 +8,36 @@
 import UIKit
 
 final class WeatherDetailView: UIView {
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
+    private let iconImageView: UIImageView = UIImageView()
+    private let weatherGroupLabel: UILabel = UILabel()
+    private let weatherDescriptionLabel: UILabel = UILabel()
+    private let temperatureLabel: UILabel = UILabel()
+    private let feelsLikeLabel: UILabel = UILabel()
+    private let maximumTemperatureLable: UILabel = UILabel()
+    private let minimumTemperatureLable: UILabel = UILabel()
+    private let popLabel: UILabel = UILabel()
+    private let humidityLabel: UILabel = UILabel()
+    private let sunriseTimeLabel: UILabel = UILabel()
+    private let sunsetTimeLabel: UILabel = UILabel()
+    private let spacingView: UIView = UIView()
     
     let dataFetcher: DataFetchable
 
-    lazy var mainStackView: UIStackView = .init(arrangedSubviews: [
-        iconImageView,
-        weatherGroupLabel,
-        weatherDescriptionLabel,
-        temperatureLabel,
-        feelsLikeLabel,
-        maximumTemperatureLable,
-        minimumTemperatureLable,
-        popLabel,
-        humidityLabel,
-        sunriseTimeLabel,
-        sunsetTimeLabel,
-        spacingView
-    ])
-    
+//    let mainStackView: UIStackView = .init(arrangedSubviews: [
+//        iconImageView,
+//        weatherGroupLabel,
+//        weatherDescriptionLabel,
+//        temperatureLabel,
+//        feelsLikeLabel,
+//        maximumTemperatureLable,
+//        minimumTemperatureLable,
+//        popLabel,
+//        humidityLabel,
+//        sunriseTimeLabel,
+//        sunsetTimeLabel,
+//        spacingView
+//    ])
+    let mainStackView: UIStackView = UIStackView()
     init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
         self.weatherForecastInfo = weatherForecastInfo
         self.dataFetcher = dataFetcher
@@ -57,6 +57,20 @@ final class WeatherDetailView: UIView {
 }
 
 extension WeatherDetailView {
+    private func layoutStackView() {
+        mainStackView.addArrangedSubview(iconImageView)
+        mainStackView.addArrangedSubview(weatherGroupLabel)
+        mainStackView.addArrangedSubview(weatherDescriptionLabel)
+        mainStackView.addArrangedSubview(temperatureLabel)
+        mainStackView.addArrangedSubview(feelsLikeLabel)
+        mainStackView.addArrangedSubview(maximumTemperatureLable)
+        mainStackView.addArrangedSubview(minimumTemperatureLable)
+        mainStackView.addArrangedSubview(popLabel)
+        mainStackView.addArrangedSubview(humidityLabel)
+        mainStackView.addArrangedSubview(sunriseTimeLabel)
+        mainStackView.addArrangedSubview(sunsetTimeLabel)
+        mainStackView.addArrangedSubview(spacingView)
+    }
     
     private func initialUIData() {
         spacingView.backgroundColor = .clear
@@ -69,6 +83,7 @@ extension WeatherDetailView {
         mainStackView.spacing = 8
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        layoutStackView()
         layoutViews()
         setValueToLabel()
         setIconImage()
@@ -114,7 +129,7 @@ extension WeatherDetailView {
             let formatter: DateFormatter = DateFormatter()
             formatter.dateFormat = .none
             formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
+            formatter.locale = LocaleIdentifier().getLocaleIdentifier()
             sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
             sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }

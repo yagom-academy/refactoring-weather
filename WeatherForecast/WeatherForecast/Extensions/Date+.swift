@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    func toString(dateFormat: String = DateFormatterKR.defaultFormat) -> String {
+    func toString(dateFormat: String = DateFormatterKR.defaultFormat, locale: Locale, timezone: TimeZone) -> String {
         let dateFormatterKR = DateFormatterKR(dateFormat: dateFormat)
         return dateFormatterKR.string(from: self)
     }

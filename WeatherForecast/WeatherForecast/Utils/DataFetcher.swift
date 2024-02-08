@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 protocol WeatherJSONFetchable {
     func fetchWeatherJSON() -> WeatherJSON?
 }
@@ -19,6 +20,12 @@ protocol ImageFetchable {
 protocol NSDataAssetFetchable {
     func fetchNSAssetData(_ name: String) throws -> Data
 }
+
+enum NSDataConvertorError: Error {
+    case unknownDataAsset
+}
+
+
 
 typealias Fetchable = WeatherJSONFetchable & ImageFetchable & NSDataAssetFetchable
 

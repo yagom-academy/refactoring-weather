@@ -26,6 +26,7 @@
 		EE8087802B721823004D91C2 /* WeatherListViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80877F2B721823004D91C2 /* WeatherListViewDelegate.swift */; };
 		EE8087822B7256A6004D91C2 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087812B7256A6004D91C2 /* ImageCache.swift */; };
 		EE8087852B726306004D91C2 /* ImageChacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087842B726306004D91C2 /* ImageChacheService.swift */; };
+		EE8087892B7469B9004D91C2 /* WeatherDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		EE80877F2B721823004D91C2 /* WeatherListViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListViewDelegate.swift; sourceTree = "<group>"; };
 		EE8087812B7256A6004D91C2 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		EE8087842B726306004D91C2 /* ImageChacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChacheService.swift; sourceTree = "<group>"; };
+		EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				EE8087792B6F6EC5004D91C2 /* TemperatureUnit.swift */,
 				EE80877B2B6F6F3E004D91C2 /* TemperatureStrategy.swift */,
 				EE8087812B7256A6004D91C2 /* ImageCache.swift */,
+				EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				EE80876C2B6E4AFA004D91C2 /* WeatherListView.swift in Sources */,
+				EE8087892B7469B9004D91C2 /* WeatherDetailContext.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				EE8087802B721823004D91C2 /* WeatherListViewDelegate.swift in Sources */,

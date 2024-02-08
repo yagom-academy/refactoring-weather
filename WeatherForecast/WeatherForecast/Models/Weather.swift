@@ -11,10 +11,7 @@ import Foundation
 
 
 // MARK: - MainClass
-final class MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
-    let pressure, seaLevel, grndLevel, humidity, pop: Double
-}
+
 
 // MARK: - Weather
 final class Weather: Decodable {

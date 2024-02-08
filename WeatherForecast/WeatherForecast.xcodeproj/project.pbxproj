@@ -28,6 +28,7 @@
 		EE8087852B726306004D91C2 /* ImageChacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087842B726306004D91C2 /* ImageChacheService.swift */; };
 		EE8087872B738DA2004D91C2 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087862B738DA2004D91C2 /* WeatherDetailView.swift */; };
 		EE8087892B7469B9004D91C2 /* WeatherDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */; };
+		EE80878B2B74E994004D91C2 /* CityWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878A2B74E994004D91C2 /* CityWeather.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		EE8087842B726306004D91C2 /* ImageChacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChacheService.swift; sourceTree = "<group>"; };
 		EE8087862B738DA2004D91C2 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContext.swift; sourceTree = "<group>"; };
+		EE80878A2B74E994004D91C2 /* CityWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeather.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				EE80877B2B6F6F3E004D91C2 /* TemperatureStrategy.swift */,
 				EE8087812B7256A6004D91C2 /* ImageCache.swift */,
 				EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */,
+				EE80878A2B74E994004D91C2 /* CityWeather.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				EE80877C2B6F6F3E004D91C2 /* TemperatureStrategy.swift in Sources */,
 				EE8087852B726306004D91C2 /* ImageChacheService.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
+				EE80878B2B74E994004D91C2 /* CityWeather.swift in Sources */,
 				EE8087762B6F5882004D91C2 /* JSONDecoderCreator.swift in Sources */,
 				EE8087782B6F588C004D91C2 /* DateFormatterCreator.swift in Sources */,
 				EE80877E2B721700004D91C2 /* UITableViewCell+id.swift in Sources */,

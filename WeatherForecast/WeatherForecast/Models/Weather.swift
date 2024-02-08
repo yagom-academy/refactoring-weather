@@ -6,11 +6,6 @@
 
 import Foundation
 
-// MARK: - Weather JSON Format
-final class CityWeather: Decodable {
-    let weatherForecast: [WeatherForecastInfo]
-    let city: City
-}
 
 // MARK: - List
 final class WeatherForecastInfo: Decodable {

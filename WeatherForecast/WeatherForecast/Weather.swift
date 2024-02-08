@@ -7,13 +7,13 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-class WeatherJSON: Decodable {
+struct WeatherJSON: Decodable {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
 
 // MARK: - List
-class WeatherForecastInfo: Decodable {
+struct WeatherForecastInfo: Decodable {
     let dt: TimeInterval
     let main: MainInfo
     let weather: Weather
@@ -21,13 +21,33 @@ class WeatherForecastInfo: Decodable {
 }
 
 // MARK: - MainClass
-class MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
+struct MainInfo: Decodable {
+    let temp, feelsLike, tempMin, tempMax: Temperature
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
+// MARK: - TempConvertable
+protocol TempConvertable {
+    var value: Double { get }
+    func convertedValue(to tempUnit: TempUnit) -> String
+}
+
+struct Temperature: Decodable, TempConvertable {
+    var value: Double
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.value = try container.decode(Double.self)
+    }
+    
+    func convertedValue(to tempUnit: TempUnit) -> String {
+        let convertedValue = tempUnit.tempStrategy.changeValue(from: value)
+        return String(format: "%.2f", convertedValue) + tempUnit.expression
+    }
+}
+
 // MARK: - Weather
-class Weather: Decodable {
+struct Weather: Decodable {
     let id: Int
     let main: String
     let description: String
@@ -35,7 +55,7 @@ class Weather: Decodable {
 }
 
 // MARK: - City
-class City: Decodable {
+struct City: Decodable {
     let id: Int
     let name: String
     let coord: Coord
@@ -45,7 +65,7 @@ class City: Decodable {
 }
 
 // MARK: - Coord
-class Coord: Decodable {
+struct Coord: Decodable {
     let lat, lon: Double
 }
 
@@ -58,5 +78,35 @@ enum TempUnit: String {
         case .imperial: return "℉"
         }
     }
+    
+    var tempStrategy: TempUnitStrategy {
+        switch self {
+        case .metric:
+            return MetricStrategy()
+        case .imperial:
+            return ImperialStrategy()
+        }
+    }
 }
 
+// MARK: - TempUnitStrategy
+protocol TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double
+}
+
+struct MetricStrategy: TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double {
+        return temp
+    }
+}
+
+struct ImperialStrategy: TempUnitStrategy {
+    func changeValue(from temp: Double) -> Double {
+        let changedTemp: Double = (temp * 9 / 5) + 32
+        let formattedString = String(format: "%.2f", changedTemp)
+        guard let formattedDouble = Double(formattedString) else {
+            return changedTemp
+        }
+        return formattedDouble
+    }
+}

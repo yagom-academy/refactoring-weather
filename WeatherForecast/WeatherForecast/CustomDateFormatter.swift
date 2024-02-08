@@ -10,9 +10,9 @@ import Foundation
 struct CustomDateFormatter: DateFormattable {
     private let dateFormatter: DateFormatter
     
-    init(dateFormat: String? = nil,
+    init(dateFormat: String = "yyyy-MM-dd(EEEEE) a HH:mm",
          locale: Locale = Locale(identifier: "ko_KR"),
-         timeStyle: DateFormatter.Style = .none
+         timeStyle: DateFormatter.Style = .short
     ) {
         self.dateFormatter = DateFormatter()
         self.dateFormatter.dateFormat = dateFormat

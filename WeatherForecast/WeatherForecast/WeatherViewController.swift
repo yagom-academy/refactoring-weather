@@ -55,18 +55,14 @@ extension WeatherViewController {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        dataManagerDelegate.fetchWeatherData(jsonDecoder: jsonDecoder,
-                                             dataAsset: "weather"
-        ) { [weak self] (result: Result<WeatherJSON, Error>) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let info):
-                    self?.weatherJSON = info
-                    self?.updateUI()
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+        do {
+            let info: WeatherJSON = try dataManagerDelegate.fetchWeatherData(
+                jsonDecoder: jsonDecoder,
+                dataAsset: "weather")
+            self.weatherJSON = info
+            self.updateUI()
+        } catch {
+            print(error.localizedDescription)
         }
     }
     
@@ -108,9 +104,7 @@ extension WeatherViewController: UITableViewDataSource {
         }
         
         cell.configure(with: weatherForecastInfo,
-                       tempUnit: tempUnit,
-                       networkManager: NetworkManager(),
-                       dateFormatter: CustomDateFormatter(dateFormat: "yyyy-MM-dd(EEEE) a HH:mm"))
+                       tempUnit: tempUnit)
         
         return cell
     }
@@ -134,10 +128,8 @@ extension WeatherViewController: UITableViewDelegate {
     }
     
     private func showDetailViewController(with weatherDetailInfo: WeatherDetailInfo) {
-        let networkManger: NetworkManager = .init()
         let detailViewController: WeatherDetailViewController = .init(
-            weatherDetailInfo: weatherDetailInfo,
-            networkManager: networkManger)
+            weatherDetailInfo: weatherDetailInfo)
         navigationController?.show(detailViewController, sender: self)
     }
 }

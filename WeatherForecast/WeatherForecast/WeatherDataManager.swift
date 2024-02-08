@@ -9,16 +9,20 @@ import UIKit
 
 protocol WeatherDataManagerDelegate: AnyObject {
     func fetchWeatherData<T: Decodable>(jsonDecoder: JSONDecoder,
-                                        dataAsset: String) throws -> T?
+                                        dataAsset: String) throws -> T
+}
+
+enum WeatherManagerError: Error {
+    case failDataAssetInit
 }
 
 final class WeatherDataManager: WeatherDataManagerDelegate {
 
     func fetchWeatherData<T: Decodable>(jsonDecoder: JSONDecoder,
                                         dataAsset: String
-    ) throws -> T? {
+    ) throws -> T {
         guard let data = NSDataAsset(name: dataAsset)?.data else {
-            return nil
+            throw WeatherManagerError.failDataAssetInit
         }
         
         do {

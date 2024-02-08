@@ -56,7 +56,7 @@ extension WeatherViewController {
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
         do {
-            let info: WeatherJSON? = try dataManagerDelegate.fetchWeatherData(
+            let info: WeatherJSON = try dataManagerDelegate.fetchWeatherData(
                 jsonDecoder: jsonDecoder,
                 dataAsset: "weather")
             self.weatherJSON = info

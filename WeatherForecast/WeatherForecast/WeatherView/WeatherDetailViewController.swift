@@ -8,30 +8,24 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     
-    let iconImageView: UIImageView = .init()
-    let weatherGroupLabel: UILabel = .init()
-    let weatherDescriptionLabel: UILabel = .init()
-    let temperatureLabel: UILabel = .init()
-    let feelsLikeLabel: UILabel = .init()
-    let maximumTemperatureLable: UILabel = .init()
-    let minimumTemperatureLable: UILabel = .init()
-    let popLabel: UILabel = .init()
-    let humidityLabel: UILabel = .init()
-    let sunriseTimeLabel: UILabel = .init()
-    let sunsetTimeLabel: UILabel = .init()
-    let spacingView: UIView = .init()
-    var weatherInfo: WeatherDetailInfo
-    var cityInfo: CityDetailInfo
-    var mainInfo: MainDetailInfo
-    var tempUnit: TempUnit
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    private let iconImageView: UIImageView = .init()
+    private let weatherGroupLabel: UILabel = .init()
+    private let weatherDescriptionLabel: UILabel = .init()
+    private let temperatureLabel: UILabel = .init()
+    private let feelsLikeLabel: UILabel = .init()
+    private let maximumTemperatureLable: UILabel = .init()
+    private let minimumTemperatureLable: UILabel = .init()
+    private let popLabel: UILabel = .init()
+    private let humidityLabel: UILabel = .init()
+    private let sunriseTimeLabel: UILabel = .init()
+    private let sunsetTimeLabel: UILabel = .init()
+    private let spacingView: UIView = .init()
+    private let weatherInfo: WeatherForecastInfo
+    private let cityInfo: CityDetailInfo
+    private let mainInfo: MainInfo
+    private let tempUnit: TempUnit
   
-    init(weatherInfo: WeatherDetailInfo, mainInfo: MainDetailInfo, cityInfo: CityDetailInfo, tempUnit: TempUnit) {
+    init(weatherInfo: WeatherForecastInfo, mainInfo: MainInfo, cityInfo: CityDetailInfo, tempUnit: TempUnit) {
         self.weatherInfo = weatherInfo
         self.mainInfo = mainInfo
         self.cityInfo = cityInfo
@@ -49,7 +43,7 @@ final class WeatherDetailViewController: UIViewController {
         updateWeatherInfo(listInfo: weatherInfo, mainInfo: mainInfo, tempUnit: tempUnit)
         updateCityInfo(cityInfo)
         Task {
-            await updateWeatherIcon(iconName: weatherInfo.iconImageUrl)
+            await updateWeatherIcon(iconName: weatherInfo.weather.icon)
         }
     }
     
@@ -109,15 +103,15 @@ final class WeatherDetailViewController: UIViewController {
 
 extension WeatherDetailViewController {
     
-    func updateWeatherInfo(listInfo: WeatherDetailInfo, mainInfo: MainDetailInfo,tempUnit: TempUnit){
+    func updateWeatherInfo(listInfo: WeatherForecastInfo, mainInfo: MainInfo,tempUnit: TempUnit){
         
-        navigationItem.title = listInfo.date
-        weatherGroupLabel.text = listInfo.mainWeather
-        weatherDescriptionLabel.text = listInfo.description
-        temperatureLabel.text = "현재 기온 : \(mainInfo.currentTemp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(mainInfo.feelsLikeTemp)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(mainInfo.maxTemp)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(mainInfo.minTemp)\(tempUnit.expression)"
+        navigationItem.title = listInfo.dtTxt
+        weatherGroupLabel.text = listInfo.weather.main
+        weatherDescriptionLabel.text = listInfo.weather.description
+        temperatureLabel.text = "현재 기온 : \(mainInfo.temp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(mainInfo.feelsLike)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(mainInfo.tempMax)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(mainInfo.tempMin)\(tempUnit.expression)"
         popLabel.text = "강수 확률 : \(mainInfo.pop * 100)%"
         humidityLabel.text = "습도 : \(mainInfo.humidity)%"
     }

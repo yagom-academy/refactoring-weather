@@ -12,13 +12,6 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
-
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -107,21 +100,13 @@ class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
-    func configure(info: WeatherDetailInfo, mainInfo: MainDetailInfo, tempUnit: TempUnit){
-        weatherLabel.text = info.mainWeather
-        descriptionLabel.text = info.description
-        temperatureLabel.text = "\(mainInfo.currentTemp)\(tempUnit.expression)"
-        dateLabel.text = info.date
+    func configure(info: WeatherForecastInfo, mainInfo: MainInfo, tempUnit: TempUnit){
+        weatherLabel.text = info.weather.main
+        descriptionLabel.text = info.weather.description
+        temperatureLabel.text = "\(mainInfo.temp)\(tempUnit.expression)"
+        dateLabel.text = info.dtTxt
         Task {
-            await loadImage(info.iconImageUrl)
-        }
-    }
-}
-extension WeatherTableViewCell {
-    @MainActor
-    func loadImage(_ iconName: String) async{
-        if let iconImage = await TransforJSON.shared.fetchWeatherIconImage(iconName: iconName) {
-            self.weatherIcon.image = iconImage
+            weatherIcon.image = await UIImageView.fetchImage(iconName: info.weather.icon)
         }
     }
 }

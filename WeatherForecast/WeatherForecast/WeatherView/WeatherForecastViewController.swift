@@ -97,9 +97,9 @@ extension WeatherForecastViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
-        let weatherDetailInfo = WeatherDetailInfo(weatherForecast: weatherForecastInfo)
-        let mainDetailInfo = MainDetailInfo(mainInfo: weatherForecastInfo.main)
-        cell.configure(info: weatherDetailInfo, mainInfo: mainDetailInfo, tempUnit: tempUnit)
+       
+        let mainInfo = weatherForecastInfo.main
+        cell.configure(info: weatherForecastInfo, mainInfo: mainInfo, tempUnit: tempUnit)
         return cell
     }
 }
@@ -107,14 +107,12 @@ extension WeatherForecastViewController: UITableViewDataSource {
 extension WeatherForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let weatherForecast = weatherJSON?.weatherForecast[indexPath.row],let cityInfo = weatherJSON?.city else {return}
+        guard let weatherForecast = weatherJSON?.weatherForecast[safe: indexPath.row],let cityInfo = weatherJSON?.city else {return}
         
-        let weatherDetailInfo = WeatherDetailInfo(
-            weatherForecast: weatherForecast)
-        let mainDetailInfo = MainDetailInfo(mainInfo: weatherForecast.main)
+        let mainDetailInfo = weatherForecast.main
         let cityDetailInfo = CityDetailInfo(city: cityInfo)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherInfo: weatherDetailInfo, mainInfo: mainDetailInfo, cityInfo: cityDetailInfo, tempUnit: tempUnit)
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherInfo: weatherForecast, mainInfo: mainDetailInfo, cityInfo: cityDetailInfo, tempUnit: tempUnit)
         navigationController?.show(detailViewController, sender: self)
     }
     

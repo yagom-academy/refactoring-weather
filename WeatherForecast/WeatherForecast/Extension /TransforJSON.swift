@@ -24,30 +24,9 @@ final class TransforJSON {
         }
         return info
     }
-    func fetchWeatherIconImage(iconName: String) async -> UIImage? {
-        let urlString = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        let cacheKey = NSString(string: urlString)
-
-        if let cachedImage = ImageCacheManager.shared.getImage(forKey: urlString) {
-            return cachedImage
-        }
-        guard let url = URL(string: urlString) else { return nil }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            guard let image = UIImage(data: data) else { return nil }
-            
-            ImageCacheManager.shared.cacheImage(image, forKey: urlString)
-            
-            return image
-        } catch {
-            print("Error fetching weather icon: \(error)")
-            return nil
-        }
-    }
 
 }
-class ImageCacheManager {
+final class ImageCacheManager {
     static let shared = ImageCacheManager() // 싱글턴 인스턴스
     private var imageCache: NSCache<NSString, UIImage> = NSCache()
 

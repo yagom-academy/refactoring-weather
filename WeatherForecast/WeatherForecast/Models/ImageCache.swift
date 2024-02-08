@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ImageCache {
+final class ImageCache {
     let data: Data
     
     init(data: Data) {

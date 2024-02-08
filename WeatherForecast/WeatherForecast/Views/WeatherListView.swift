@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherListView: UIView {
+final class WeatherListView: UIView {
     var delegate: WeatherListViewDelegate?
     private var tableView: UITableView = UITableView(frame: .zero, style: .plain)
     let refreshControl: UIRefreshControl = UIRefreshControl()

@@ -29,6 +29,7 @@
 		EE8087872B738DA2004D91C2 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087862B738DA2004D91C2 /* WeatherDetailView.swift */; };
 		EE8087892B7469B9004D91C2 /* WeatherDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */; };
 		EE80878B2B74E994004D91C2 /* CityWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878A2B74E994004D91C2 /* CityWeather.swift */; };
+		EE80878D2B74EABC004D91C2 /* WeatherForecastInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		EE8087862B738DA2004D91C2 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailContext.swift; sourceTree = "<group>"; };
 		EE80878A2B74E994004D91C2 /* CityWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeather.swift; sourceTree = "<group>"; };
+		EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 				EE8087812B7256A6004D91C2 /* ImageCache.swift */,
 				EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */,
 				EE80878A2B74E994004D91C2 /* CityWeather.swift */,
+				EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				EE8087782B6F588C004D91C2 /* DateFormatterCreator.swift in Sources */,
 				EE80877E2B721700004D91C2 /* UITableViewCell+id.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
+				EE80878D2B74EABC004D91C2 /* WeatherForecastInfo.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				EE80876C2B6E4AFA004D91C2 /* WeatherListView.swift in Sources */,

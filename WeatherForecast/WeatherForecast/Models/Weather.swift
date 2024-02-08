@@ -8,12 +8,7 @@ import Foundation
 
 
 // MARK: - List
-final class WeatherForecastInfo: Decodable {
-    let dt: TimeInterval
-    let main: MainInfo
-    let weather: Weather
-    let dtTxt: String
-}
+
 
 // MARK: - MainClass
 final class MainInfo: Decodable {

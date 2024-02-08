@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol WeatherListUseCase {
+protocol WeatherUseCase {
     func fetchWeatherList(url: URL?) -> CityWeather?
     func fetchWeatherImage(url: String) async -> ImageCache?
 }
 
-final class DefaultWeatherListUseCase: WeatherListUseCase {
+final class DefaultWeatherUseCase: WeatherUseCase {
     private var imageCacheService: ImageChacheService
     
     init(imageCacheService: ImageChacheService) {

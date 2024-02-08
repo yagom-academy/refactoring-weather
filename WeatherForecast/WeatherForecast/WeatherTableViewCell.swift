@@ -115,7 +115,7 @@ final class WeatherTableViewCell: UITableViewCell {
     ) {
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
-        temperatureLabel.text = "\(weatherForecastInfo.main.tempValue(at: tempUnit))\(tempUnit.expression)"
+        temperatureLabel.text = weatherForecastInfo.main.temp.convertedValue(to: tempUnit)
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         let dateText: String? = dateFormatter.string(from: date)

@@ -22,13 +22,27 @@ struct WeatherForecastInfo: Decodable {
 
 // MARK: - MainClass
 struct MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
+    let temp, feelsLike, tempMin, tempMax: Temperature
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
-extension MainInfo {
-    func tempValue(at tempUnit: TempUnit) -> Double {
-        return tempUnit.tempStrategy.changeValue(from: temp)
+// MARK: - TempConvertable
+protocol TempConvertable {
+    var value: Double { get }
+    func convertedValue(to tempUnit: TempUnit) -> String
+}
+
+struct Temperature: Decodable, TempConvertable {
+    var value: Double
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.value = try container.decode(Double.self)
+    }
+    
+    func convertedValue(to tempUnit: TempUnit) -> String {
+        let convertedValue = tempUnit.tempStrategy.changeValue(from: value)
+        return String(format: "%.2f", convertedValue) + tempUnit.expression
     }
 }
 

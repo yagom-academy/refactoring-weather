@@ -95,10 +95,10 @@ final class WeatherDetailView: UIView {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp.convertedValue(to: tempUnit))"
+        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike.convertedValue(to: tempUnit))"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax.convertedValue(to: tempUnit))"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin.convertedValue(to: tempUnit))"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

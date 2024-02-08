@@ -12,13 +12,8 @@ protocol WeatherDataManagerDelegate: AnyObject {
                                         dataAsset: String) throws -> T?
 }
 
-enum WeatherDataManagerError: Error {
-    case JSONParsingError
-}
-
 final class WeatherDataManager: WeatherDataManagerDelegate {
 
-    
     func fetchWeatherData<T: Decodable>(jsonDecoder: JSONDecoder,
                                         dataAsset: String
     ) throws -> T? {
@@ -30,7 +25,7 @@ final class WeatherDataManager: WeatherDataManagerDelegate {
             let info: T = try jsonDecoder.decode(T.self, from: data)
             return info
         } catch {
-            throw WeatherDataManagerError.JSONParsingError
+            throw error
         }
     }
 }

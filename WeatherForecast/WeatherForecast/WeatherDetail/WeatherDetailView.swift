@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol WeatherDetailDelegate: AnyObject {
+protocol WeatherDetailDelegate: UIViewController {
     func dateDidChanged(text: String)
 }
 

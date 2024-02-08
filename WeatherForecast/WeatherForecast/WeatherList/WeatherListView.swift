@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource {
+protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource, UIViewController {
     func refresh()
     func changeTempUnit() -> String
     var navigationItem: UINavigationItem { get }

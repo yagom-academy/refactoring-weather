@@ -116,10 +116,12 @@ extension WeatherListViewController: UITableViewDelegate {
     }
     
     private func showDetailVC(with weatherForecastInfo: WeatherForecastInfo?) {
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherForecastInfo
-        detailViewController.cityInfo = cityWeather?.city
-        detailViewController.tempUnit = tempUnit
+        guard let weatherForecastInfo: WeatherForecastInfo = weatherForecastInfo,
+              let cityInfo: City = cityWeather?.city else { return }
+        let weatehrDetailContext: WeatherDetailContext = WeatherDetailContext(weatherForecastInfo: weatherForecastInfo,
+                                                                              cityInfo: cityInfo,
+                                                                              tempUnit: tempUnit)
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(contenxt: weatehrDetailContext)
         navigationController?.show(detailViewController, sender: self)
     }
 }

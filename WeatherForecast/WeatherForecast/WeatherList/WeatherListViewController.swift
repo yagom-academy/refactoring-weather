@@ -9,7 +9,7 @@ import UIKit
 final class WeatherListViewController: UIViewController {
 
     private var weatherJSON: WeatherJSON?
-    private var tempUnit: TempUnit = .metric
+    private var tempUnit: TempUnit = Metric()
     private var weatherAPI: WeatherAPI = OpenWeatherAPI()
     
     private let dateFormatter: DateFormatter = {
@@ -27,8 +27,7 @@ final class WeatherListViewController: UIViewController {
 
 extension WeatherListViewController: WeatherListViewDelegate {
     func changeTempUnit() -> String {
-        let newTempUnit: TempUnit = tempUnit == .imperial ? .metric : .imperial
-        self.tempUnit = newTempUnit
+        self.tempUnit = tempUnit.nextUnit()
         refresh()
         
         return tempUnit.title

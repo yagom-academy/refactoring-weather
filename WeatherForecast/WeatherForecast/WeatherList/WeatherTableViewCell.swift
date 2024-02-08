@@ -115,7 +115,10 @@ extension WeatherTableViewCell {
     public func setData(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit) {
         self.weatherLabel.text = weatherForecastInfo.weather.main
         self.descriptionLabel.text = weatherForecastInfo.weather.description
-        self.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let temp = weatherForecastInfo.main.temp
+        let convertedTemp = tempUnit.convertedValue(temp: temp)
+        self.temperatureLabel.text = "\(String(format: "%.1f", convertedTemp))\(tempUnit.expression)"
         
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.locale = .init(identifier: "ko_KR")

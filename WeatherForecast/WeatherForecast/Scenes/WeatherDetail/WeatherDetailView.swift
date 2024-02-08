@@ -24,13 +24,13 @@ final class WeatherDetailView: UIView {
     private let dataFetcher: DataFetchable
     private let mainStackView: UIStackView = UIStackView()
     
-    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
+    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) async {
         self.weatherForecastInfo = weatherForecastInfo
         self.dataFetcher = dataFetcher
         super.init(frame: .zero)
         
         backgroundColor = .white
-        initialUIData()
+        await initialUIData()
     }
     
     required init?(coder: NSCoder) {
@@ -58,7 +58,7 @@ extension WeatherDetailView {
         mainStackView.addArrangedSubview(spacingView)
     }
     
-    private func initialUIData() {
+    private func initialUIData() async {
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
         weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
@@ -72,7 +72,7 @@ extension WeatherDetailView {
         layoutStackView()
         layoutViews()
         setValueToLabel()
-        setIconImage()
+        await iconImageView.setIconImage(weatherForecastInfo: weatherForecastInfo, dataFetcher: DataFetcher())
     }
     
     private func layoutViews() {
@@ -115,13 +115,15 @@ extension WeatherDetailView {
             let formatter: DateFormatter = DateFormatter()
             formatter.dateFormat = .none
             formatter.timeStyle = .short
-            formatter.locale = LocaleIdentifier().getLocaleIdentifier()
+            formatter.locale = Locale(identifier:  LocalIdentifier().getLocaleIdentifier())
             sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
             sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }
     }
-    
-    private func setIconImage() {
+}
+
+extension UIImageView {
+    func setIconImage(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) async {
         Task {
             let iconName: String = weatherForecastInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
@@ -131,7 +133,7 @@ extension WeatherDetailView {
             }
             guard let image = await dataFetcher.fetchImage(hashableURL: url) else { return }
             
-            iconImageView.image = image
+            self.image = image
         }
     }
 }

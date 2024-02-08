@@ -22,14 +22,7 @@ final class Weather: Decodable {
 }
 
 // MARK: - City
-final class City: Decodable {
-    let id: Int
-    let name: String
-    let coord: Coord
-    let country: String
-    let population, timezone: Int
-    let sunrise, sunset: TimeInterval
-}
+
 
 // MARK: - Coord
 final class Coord: Decodable {

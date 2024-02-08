@@ -31,6 +31,7 @@
 		EE80878B2B74E994004D91C2 /* CityWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878A2B74E994004D91C2 /* CityWeather.swift */; };
 		EE80878D2B74EABC004D91C2 /* WeatherForecastInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */; };
 		EE80878F2B74EC4D004D91C2 /* MainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE80878E2B74EC4D004D91C2 /* MainInfo.swift */; };
+		EE8087912B74EC7E004D91C2 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8087902B74EC7E004D91C2 /* City.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		EE80878A2B74E994004D91C2 /* CityWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeather.swift; sourceTree = "<group>"; };
 		EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastInfo.swift; sourceTree = "<group>"; };
 		EE80878E2B74EC4D004D91C2 /* MainInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInfo.swift; sourceTree = "<group>"; };
+		EE8087902B74EC7E004D91C2 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				EE80878A2B74E994004D91C2 /* CityWeather.swift */,
 				EE80878C2B74EABC004D91C2 /* WeatherForecastInfo.swift */,
 				EE80878E2B74EC4D004D91C2 /* MainInfo.swift */,
+				EE8087902B74EC7E004D91C2 /* City.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 				EE80876C2B6E4AFA004D91C2 /* WeatherListView.swift in Sources */,
 				EE8087892B7469B9004D91C2 /* WeatherDetailContext.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
+				EE8087912B74EC7E004D91C2 /* City.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				EE8087802B721823004D91C2 /* WeatherListViewDelegate.swift in Sources */,
 				EE80877A2B6F6EC5004D91C2 /* TemperatureUnit.swift in Sources */,

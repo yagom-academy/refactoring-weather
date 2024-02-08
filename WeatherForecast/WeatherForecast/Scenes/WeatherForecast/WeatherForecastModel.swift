@@ -8,24 +8,31 @@
 import UIKit
 
 final class WeatherForecastModel {
+    private let decoder: CustomDecoder
     private var weatherJSON: WeatherJSON!
+    private var dataFetcher: DataFetchable
     
-    init() {
-        fetchWeatherJSON()
+    init(decoder: CustomDecoder, dataFetcher: DataFetchable) {
+        self.decoder = decoder
+        self.dataFetcher = dataFetcher
+        self.weatherJSON = dataFetcher.fetchWeatherJSON()
     }
 }
 
 extension WeatherForecastModel {
-    private func fetchWeatherJSON() {
-        
-        let assetConvertor = NSDataAssetConvertor()
-        let decoder = CustomDecoder()
-        guard let data = try? assetConvertor.data("weather"),
-              let response = try? decoder.decode(WeatherJSON.self, data: data)
-        else { return }
-        
-        weatherJSON = response
-    }
+    // DataFetcher 구조체로 기능 이전
+//    private func fetchWeatherJSON() {
+//        
+//        // 이 부분에서 메서드가 너무 많은 일을 함
+////        (SRP 위배) 및 의존성 생김(DIP 위배)
+////        let assetConvertor = NSDataAssetConvertor()
+////        let decoder = CustomDecoder()
+//        guard let data = try? assetConvertor.data("weather"),
+//              let response = try? decoder.decode(WeatherJSON.self, data: data)
+//        else { return }
+//        
+//        weatherJSON = response
+//    }
 }
 
 

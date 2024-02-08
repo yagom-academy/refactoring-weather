@@ -8,16 +8,19 @@
 import UIKit
 
 protocol NSDataAssetConvertable {
-  func data(_ name: String) throws -> Data
+    //  func data(_ name: String) throws -> Data
+    func fetchNSData(_ name: String) throws -> Data
 }
 
-struct NSDataAssetConvertor: NSDataAssetConvertable {
-  enum NSDataConvertorError: Error {
+
+enum NSDataConvertorError: Error {
     case unknownDataAsset
-  }
-
-  func data(_ name: String) throws -> Data {
-    guard let dataAsset = NSDataAsset(name: name) else { throw NSDataConvertorError.unknownDataAsset }
-    return dataAsset.data
-  }
 }
+
+//struct NSDataAssetConvertor: NSDataAssetConvertable {
+// dataFetcher 구조체로 이전
+//  func data(_ name: String) throws -> Data {
+//    guard let dataAsset = NSDataAsset(name: name) else { throw NSDataConvertorError.unknownDataAsset }
+//    return dataAsset.data
+//  }
+//}

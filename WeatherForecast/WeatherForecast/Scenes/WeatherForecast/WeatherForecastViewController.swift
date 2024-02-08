@@ -8,12 +8,15 @@ import UIKit
 
 final class WeatherForecastViewController: UIViewController {
     private var tableView: UITableView!
-    private let imageCache: ImageCache = ImageCache()
+    private let imageCache: ImageCache
     private let model: WeatherForecastModel
     private var tempUnit: TempUnit = .celsius
+    private let dataFetcher: DataFetchable
     
-    init(model: WeatherForecastModel) {
+    init(model: WeatherForecastModel, imageChache: ImageCache, dataFetcher: DataFetchable) {
         self.model = model
+        self.imageCache = imageChache
+        self.dataFetcher = dataFetcher
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,14 +73,15 @@ extension WeatherForecastViewController {
         ])
     }
     
-    private func fetchImage(urlString: String) async -> UIImage? {
-        guard let url: URL = URL(string: urlString),
-              let (data, _) = try? await URLSession.shared.data(from: url),
-              let image: UIImage = UIImage(data: data) else {
-            return nil
-        }
-        return image
-    }
+    // DataFetcher 구조체로 이전
+//    private func fetchImage(urlString: String) async -> UIImage? {
+//        guard let url: URL = URL(string: urlString),
+//              let (data, _) = try? await URLSession.shared.data(from: url),
+//              let image: UIImage = UIImage(data: data) else {
+//            return nil
+//        }
+//        return image
+//    }
 }
 
 extension WeatherForecastViewController {
@@ -118,7 +122,8 @@ extension WeatherForecastViewController: UITableViewDataSource {
         
         Task {
             if indexPath == tableView.indexPath(for: cell) {
-                let image = await fetchImage(urlString: urlString)
+//                let image = await fetchImage(urlString: urlString)
+                let image = await dataFetcher.fetchImage(hashableURL: urlString)
                 cell.setWeatherIcon(image: image)
             }
         }

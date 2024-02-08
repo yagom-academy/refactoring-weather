@@ -7,7 +7,8 @@
 
 import UIKit
 
-protocol Cache {
+// 프로토콜 이름 수정
+protocol Cachable {
     associatedtype Key: Hashable
     associatedtype Value
     
@@ -15,10 +16,14 @@ protocol Cache {
     func removeAll()
 }
 
-final class ImageCache: Cache {
-    private let cache: NSCache<NSString, UIImage> = NSCache()
+final class ImageCache: Cachable {
+    private var cache: NSCache<NSString, UIImage>
     typealias Key = String
     typealias Value = UIImage
+    
+    init(cache: NSCache<NSString, UIImage>) {
+        self.cache = cache
+    }
     
     subscript(key: Key) -> Value? {
         get {

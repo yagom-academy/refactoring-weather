@@ -20,6 +20,8 @@ final class WeatherDetailView: UIView {
     let sunriseTimeLabel: UILabel = UILabel()
     let sunsetTimeLabel: UILabel = UILabel()
     let spacingView: UIView = UIView()
+    
+    let dataFetcher: DataFetchable
 
     lazy var mainStackView: UIStackView = .init(arrangedSubviews: [
         iconImageView,
@@ -36,8 +38,9 @@ final class WeatherDetailView: UIView {
         spacingView
     ])
     
-    init(weatherForecastInfo: WeatherForecastInfo) {
+    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
         self.weatherForecastInfo = weatherForecastInfo
+        self.dataFetcher = dataFetcher
         super.init(frame: .zero)
         
         backgroundColor = .white
@@ -121,12 +124,19 @@ extension WeatherDetailView {
         Task {
             let iconName: String = weatherForecastInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
+            
+            // DataFetcher 구조체로 옮김
+            //        SRP에 위반되는것 같음.
+            //        근데 어떻게 async한 Task를 따로 메서드로 분리할지 잘 모르겠음...
+//            guard let url: URL = URL(string: urlString),
+//                  let (data, _) = try? await URLSession.shared.data(from: url),
+//                  let image: UIImage = UIImage(data: data) else {
+//                return
+//            }
+            guard let url: URL = URL(string: urlString) else {
                 return
             }
+            guard let image = await dataFetcher.fetchImage(hashableURL: url) else { return }
             
             iconImageView.image = image
         }

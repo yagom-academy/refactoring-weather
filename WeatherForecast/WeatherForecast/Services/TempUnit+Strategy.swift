@@ -56,6 +56,7 @@ struct Celsius: TempUnitStrategy {
         self.unit = unit
     }
     
+    // 음... 이 부분에서 String이 동적으로 할당되니까 런타임에 안좋지 않을까...?
     func expressionToString(_ temperature: Double) -> String {
         return "\(temperature)\(unit.expression)"
     }
@@ -68,6 +69,7 @@ struct Fahrenheit: TempUnitStrategy {
         self.unit = unit
     }
     
+    // 이 부분도 동적 할당을 하는 String이라서 약간은 문제가 될듯
     func expressionToString(_ temperature: Double) -> String {
         let fahrenheit = TempConverter.convertToFahrenheit(with: temperature)
         return "\(fahrenheit)\(unit.expression)"

@@ -24,7 +24,8 @@ final class WeatherDetailViewController: UIViewController {
     
     override func loadView() {
         let weatherDetailView: WeatherDetailView = WeatherDetailView(
-            weatherForecastInfo: weatherForecastInfo!
+            weatherForecastInfo: weatherForecastInfo!,
+            dataFetcher: DataFetcher()
         )
         
         weatherDetailView.cityInfo = cityInfo

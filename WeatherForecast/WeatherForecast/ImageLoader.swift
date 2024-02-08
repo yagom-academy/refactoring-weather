@@ -7,53 +7,78 @@
 
 import UIKit
 
-enum ImageDirectory: CaseIterable {
-    case memory
-    case disk
-}
-
-fileprivate extension ImageDirectory {
-    var cache: ImageCacheable? {
-        switch self {
-        case .memory:
-            return MemoryCacheManager.shared
-        case .disk:
-            return DiskCacheManager()
-        }
-    }
+struct ImageDirectories: OptionSet {
+    let rawValue: Int
+    
+    static let none: ImageDirectories = .init(rawValue: 0)
+    static let memory: ImageDirectories = .init(rawValue: 1 << 0)
+    static let disk: ImageDirectories = .init(rawValue: 1 << 1)
+    static let all: ImageDirectories = [.memory, .disk]
 }
 
 protocol ImageLoadable {
-    func getImage(from directory: ImageDirectory, forKey urlString: String) -> UIImage?
-    func getImageFromDownload(with urlString: String) async -> UIImage?
+    func loadImage(with urlString: String, 
+                   from directories: ImageDirectories) async -> UIImage?
 }
 
 struct ImageLoader: ImageLoadable {
 
+    private let memoryCacheManager: ImageCacheable
+    private let diskCacheManager: ImageCacheable?
     private let networkManager: NetworkManagerDelegate
     
-    init(networkManager: NetworkManagerDelegate = NetworkManager()) {
+    init(memoryCacheManager: ImageCacheable = MemoryCacheManager.shared,
+         diskCacheManager: ImageCacheable? = DiskCacheManager(),
+         networkManager: NetworkManagerDelegate = NetworkManager()
+    ) {
+        self.memoryCacheManager = memoryCacheManager
+        self.diskCacheManager = diskCacheManager
         self.networkManager = networkManager
     }
-
-    func getImage(from directory: ImageDirectory, forKey urlString: String) -> UIImage? {
-        return directory.cache?.getImage(forKey: urlString)
-    }
     
-    func getImageFromDownload(with urlString: String) async -> UIImage? {
-        guard let image = await networkManager.getIconImage(with: urlString) 
+    func loadImage(with urlString: String, 
+                   from directories: ImageDirectories
+    ) async -> UIImage? {
+        if directories.contains(.memory) {
+            if let image = memoryCacheManager.getImage(forKey: urlString) {
+                return image
+            }
+        }
+        
+        if directories.contains(.disk) {
+            if let image = diskCacheManager?.getImage(forKey: urlString) {
+                return image
+            }
+        }
+        
+        if !directories.contains([.memory, .disk]) {
+            guard let image = await downloadImage(with: urlString)
+            else { return nil }
+            
+            saveImage(image, forKey: urlString, at: directories)
+            
+            return image
+        }
+        
+        return nil
+    }
+
+    private func downloadImage(with urlString: String) async -> UIImage? {
+        guard let image = await networkManager.getIconImage(with: urlString)
         else {
             return nil
         }
         
-        self.setImage(image, forKey: urlString)
-        
         return image
     }
     
-    private func setImage(_ image: UIImage, forKey key: String) {
-        ImageDirectory.allCases.forEach { directory in
-            directory.cache?.setImage(image, forKey: key)
+    private func saveImage(_ image: UIImage, forKey key: String, at directories: ImageDirectories) {
+        if directories.contains(.memory) {
+            memoryCacheManager.setImage(image, forKey: key)
+        }
+        
+        if directories.contains(.disk) {
+            diskCacheManager?.setImage(image, forKey: key)
         }
     }
 

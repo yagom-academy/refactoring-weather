@@ -12,7 +12,7 @@ final class ImageLoader {
     
     static let shared: ImageLoader = ImageLoader()
     
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    private let imageChache: NSCache<NSString, UIImage> = NSCache()
     
     func fetchImage(urlString: String, _ completion: @escaping (UIImage) -> Void) {
         if let image = imageChache.object(forKey: urlString as NSString) {

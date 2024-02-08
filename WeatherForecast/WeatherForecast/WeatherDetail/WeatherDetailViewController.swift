@@ -12,7 +12,7 @@ struct WeatherDetailInfo {
     let tempUnit: TempUnit
 }
 
-class WeatherDetailViewController: UIViewController {
+final class WeatherDetailViewController: UIViewController {
     
     private let weatherAPI: WeatherAPI
     var weatherDetailInfo: WeatherDetailInfo

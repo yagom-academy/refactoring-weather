@@ -6,13 +6,13 @@
 
 import UIKit
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
 
-    var weatherJSON: WeatherJSON?
-    var tempUnit: TempUnit = .metric
-    var weatherAPI: WeatherAPI = OpenWeatherAPI()
+    private var weatherJSON: WeatherJSON?
+    private var tempUnit: TempUnit = .metric
+    private var weatherAPI: WeatherAPI = OpenWeatherAPI()
     
-    let dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"

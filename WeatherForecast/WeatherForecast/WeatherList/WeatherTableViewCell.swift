@@ -6,14 +6,14 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var dashLabel: UILabel!
-    var descriptionLabel: UILabel!
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var dashLabel: UILabel!
+    private var descriptionLabel: UILabel!
     
     private var imageTask: Task<Void, Never>?
      

@@ -8,7 +8,7 @@ import UIKit
 
 final class WeatherListViewController: UIViewController {
     private let weatherListView: WeatherListView = WeatherListView()
-    private let weatherListUseCase: WeatherListUseCase
+    private let weatherUseCase: WeatherUseCase
     private var cityWeather: CityWeather? {
         didSet {
             navigationItem.title = cityWeather?.city.name
@@ -21,17 +21,17 @@ final class WeatherListViewController: UIViewController {
         }
     }
     
-    init(useCase: WeatherListUseCase) {
-        self.weatherListUseCase = useCase
+    init(useCase: WeatherUseCase) {
+        self.weatherUseCase = useCase
         super.init(nibName: nil, bundle: nil)
     }
     
     convenience init() {
-        self.init(useCase: DefaultWeatherListUseCase())
+        self.init(useCase: DefaultWeatherUseCase())
     }
     
     required init?(coder: NSCoder) {
-        self.weatherListUseCase = DefaultWeatherListUseCase()
+        self.weatherUseCase = DefaultWeatherUseCase()
         super.init(coder: coder)
     }
     
@@ -69,7 +69,7 @@ extension WeatherListViewController {
 extension WeatherListViewController: WeatherListViewDelegate {
     func refresh() {
         let url: URL? = Bundle.main.url(forResource: "weather", withExtension: "json")
-        cityWeather = weatherListUseCase.fetchWeatherList(url: url)
+        cityWeather = weatherUseCase.fetchWeatherList(url: url)
         weatherListView.reloadTableView()
         weatherListView.endRefreshControlRefreshing()
     }
@@ -102,7 +102,7 @@ extension WeatherListViewController: UITableViewDataSource {
     private func configureWeatherIcon(with name: String, to cell: WeatherTableViewCell) async {
         Task {
             let imageURLString: String = "https://openweathermap.org/img/wn/\(name)@2x.png"
-            guard let imageData = await weatherListUseCase.fetchWeatherImage(url: imageURLString),
+            guard let imageData = await weatherUseCase.fetchWeatherImage(url: imageURLString),
             let image = UIImage(data: imageData.data) else { return }
             cell.configure(image: image)
         }

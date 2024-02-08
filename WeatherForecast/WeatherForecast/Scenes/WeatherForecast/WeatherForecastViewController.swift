@@ -72,16 +72,6 @@ extension WeatherForecastViewController {
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
     }
-    
-    // DataFetcher 구조체로 이전
-//    private func fetchImage(urlString: String) async -> UIImage? {
-//        guard let url: URL = URL(string: urlString),
-//              let (data, _) = try? await URLSession.shared.data(from: url),
-//              let image: UIImage = UIImage(data: data) else {
-//            return nil
-//        }
-//        return image
-//    }
 }
 
 extension WeatherForecastViewController {

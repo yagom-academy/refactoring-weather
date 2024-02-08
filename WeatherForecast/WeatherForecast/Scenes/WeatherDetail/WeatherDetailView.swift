@@ -124,15 +124,7 @@ extension WeatherDetailView {
         Task {
             let iconName: String = weatherForecastInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            
-            // DataFetcher 구조체로 옮김
-            //        SRP에 위반되는것 같음.
-            //        근데 어떻게 async한 Task를 따로 메서드로 분리할지 잘 모르겠음...
-//            guard let url: URL = URL(string: urlString),
-//                  let (data, _) = try? await URLSession.shared.data(from: url),
-//                  let image: UIImage = UIImage(data: data) else {
-//                return
-//            }
+        
             guard let url: URL = URL(string: urlString) else {
                 return
             }

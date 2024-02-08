@@ -28,8 +28,6 @@ final class WeatherDetailViewController: UIViewController {
             dataFetcher: DataFetcher()
         )
         
-        weatherDetailView.cityInfo = cityInfo
-        weatherDetailView.tempUnit = tempUnit
         view = weatherDetailView
     }
     

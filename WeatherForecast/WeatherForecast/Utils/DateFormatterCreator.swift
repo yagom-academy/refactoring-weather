@@ -22,4 +22,12 @@ struct DateFormatterCreator {
         dateFormatter.dateFormat = DateFormat.fullDatetime
         return dateFormatter
     }
+    
+    static func createShortKoreanDateFormatter() -> DateFormatter {
+        let dateFormatter: DateFormatter = DateFormatter()
+        dateFormatter.locale = .init(identifier: LocaleIndeitifier.korean)
+        dateFormatter.dateFormat = .none
+        dateFormatter.timeStyle = .short
+        return dateFormatter
+    }
 }

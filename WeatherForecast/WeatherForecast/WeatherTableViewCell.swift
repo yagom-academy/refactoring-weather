@@ -6,15 +6,15 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     static let cellId               : String = "WeatherCell"
-    private var dateLabel           : CustomCellLabel = CustomCellLabel()
-    private var temperatureLabel    : CustomCellLabel = CustomCellLabel()
-    private var weatherLabel        : CustomCellLabel = CustomCellLabel()
-    private var dashLabel           : CustomCellLabel = CustomCellLabel()
-    private var descriptionLabel    : CustomCellLabel = CustomCellLabel()
+    private var dateLabel           : CellWeatherInfoLabel = CellWeatherInfoLabel()
+    private var temperatureLabel    : CellWeatherInfoLabel = CellWeatherInfoLabel()
+    private var weatherLabel        : CellWeatherInfoLabel = CellWeatherInfoLabel()
+    private var dashLabel           : CellWeatherInfoLabel = CellWeatherInfoLabel()
+    private var descriptionLabel    : CellWeatherInfoLabel = CellWeatherInfoLabel()
     private var weatherStackView    : UIStackView!
     private var verticalStackView   : UIStackView!
     private var contentsStackView   : UIStackView!
@@ -107,19 +107,17 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     // MARK: - UI Update Method
-    func updateCellUI(with weatherForecastInfo: WeatherForecastInfo, tempUnit: TemperatureUnit, imageManager: ImageManagerProtocol) {
-        weatherLabel.text = weatherForecastInfo.weather.main
-        descriptionLabel.text = weatherForecastInfo.weather.description
-        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+    func updateCellUI(with weatherForecastItem: WeatherForecast,
+                      fetchImage: (String, @escaping (UIImage?) -> Void) -> Void) {
         
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = date.formattedStringFromDate()
-        
-        let iconName: String = weatherForecastInfo.weather.icon
-        imageManager.fetchImage(of: iconName) { [weak self] image in
-            DispatchQueue.main.async {
-                self?.weatherIcon.image = image
-            }
+        temperatureLabel.text = weatherForecastItem.temperature
+        dateLabel.text = weatherForecastItem.longFormattedDate
+        weatherLabel.text = weatherForecastItem.weatherMainDescription
+        descriptionLabel.text = weatherForecastItem.weatherDetailDescription
+    
+        let iconName: String = weatherForecastItem.weatherIcon
+        fetchImage(iconName) { [weak self] image in
+            self?.weatherIcon.image = image
         }
     }
     

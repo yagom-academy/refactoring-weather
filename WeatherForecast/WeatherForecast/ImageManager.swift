@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ImageManagerProtocol {
-    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> ())
+    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> Void)
     var imageChache: NSCache<NSString, UIImage> { get }
 }
 
@@ -16,7 +16,7 @@ struct ImageManager: ImageManagerProtocol {
     
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     
-    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> ()) {
+    func fetchImage(of iconName: String, completion: @escaping (UIImage?) -> Void) {
         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
@@ -37,7 +37,9 @@ struct ImageManager: ImageManagerProtocol {
                 
                 if let data = data, let image = UIImage(data: data) {
                     imageChache.setObject(image, forKey: urlString as NSString)
-                    completion(image)
+                    DispatchQueue.main.async {
+                        completion(image)
+                    }
                 } else {
                     print("Failed to create image from data!")
                     completion(nil)

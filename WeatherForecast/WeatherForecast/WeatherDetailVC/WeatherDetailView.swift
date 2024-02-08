@@ -12,30 +12,28 @@ final class WeatherDetailView: UIView {
     // MARK: - Properties
     private var mainStackView           : UIStackView!
     private let iconImageView           : UIImageView = UIImageView()
-    private let weatherGroupLabel       : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
-    private let weatherDescriptionLabel : CustomDetailLabel = CustomDetailLabel(with: .preferredFont(forTextStyle: .largeTitle))
-    private let temperatureLabel        : CustomDetailLabel = CustomDetailLabel()
-    private let feelsLikeLabel          : CustomDetailLabel = CustomDetailLabel()
-    private let maximumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
-    private let minimumTemperatureLable : CustomDetailLabel = CustomDetailLabel()
-    private let popLabel                : CustomDetailLabel = CustomDetailLabel()
-    private let humidityLabel           : CustomDetailLabel = CustomDetailLabel()
-    private let sunriseTimeLabel        : CustomDetailLabel = CustomDetailLabel()
-    private let sunsetTimeLabel         : CustomDetailLabel = CustomDetailLabel()
+    private let weatherGroupLabel       : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let weatherDescriptionLabel  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel(with: .preferredFont(forTextStyle: .largeTitle))
+    private let temperatureLabel        : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let feelsLikeLabel          : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let maximumTemperatureLable  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let minimumTemperatureLable  : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let popLabel                : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let humidityLabel            : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let sunriseTimeLabel         : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
+    private let sunsetTimeLabel          : DetailViewWeatherInfoLabel = DetailViewWeatherInfoLabel()
     private let spacingView             : UIView = UIView()
 
     private var imageManager            : ImageManagerProtocol
-    var weatherForecastInfo             : WeatherForecastInfo?
-    var cityInfo                        : City?
-    var tempUnit                        : TemperatureUnit = .metric
+    private var weatherForecastInfo      : WeatherForecast?
+    private var cityInfo                 : CityInfo?
     
     
     // MARK: - Init
-    init(imageManager: ImageManagerProtocol, weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TemperatureUnit) {
+    init(imageManager: ImageManagerProtocol, weatherForecastInfo: WeatherForecast?, cityInfo: CityInfo?) {
         self.imageManager = imageManager
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
         
         super.init(frame: .zero)
         
@@ -80,7 +78,7 @@ final class WeatherDetailView: UIView {
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func layoutMainStackView() {
+    private func layoutMainStackView() {
         let safeArea: UILayoutGuide = safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -97,29 +95,27 @@ final class WeatherDetailView: UIView {
     
     private func updateUI() {
         
-        guard let weatherInfo = weatherForecastInfo, let cityInfo = cityInfo else { return }
+        guard let weatherItem = weatherForecastInfo, let cityInfo = cityInfo else { return }
         
-        weatherGroupLabel.text = weatherInfo.weather.main
-        weatherDescriptionLabel.text = weatherInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(weatherInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(weatherInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(weatherInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(weatherInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(weatherInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(weatherInfo.main.humidity)%"
+        weatherGroupLabel.text = weatherItem.weatherMainDescription
+        weatherDescriptionLabel.text = weatherItem.weatherDetailDescription
+        temperatureLabel.text = weatherItem.currentTemperature
+        feelsLikeLabel.text = weatherItem.feelsLikeTemperature
+        maximumTemperatureLable.text = weatherItem.maxTemperature
+        minimumTemperatureLable.text = weatherItem.minTemperature
+        popLabel.text = weatherItem.precipitation
+        humidityLabel.text = weatherItem.humidity
         
-        sunriseTimeLabel.text = "일출 : \(cityInfo.sunrise.stringFromTimeInterval())"
-        sunsetTimeLabel.text = "일몰 : \(cityInfo.sunset.stringFromTimeInterval())"
+        sunriseTimeLabel.text = cityInfo.sunriseTime
+        sunsetTimeLabel.text = cityInfo.sunsetTime
         
-        let iconName: String = weatherInfo.weather.icon
+        let iconName: String = weatherItem.weatherIcon
         updateImage(with: iconName)
     }
     
     private func updateImage(with iconName: String) {
         imageManager.fetchImage(of: iconName) { [weak self] image in
-            DispatchQueue.main.async {
-                self?.iconImageView.image = image
-            }
+            self?.iconImageView.image = image
         }
     }
 }

@@ -6,14 +6,15 @@
 
 import UIKit
 
-class WeatherInfoListVC: UIViewController {
+final class WeatherInfoListVC: UIViewController {
     
     // MARK: - Properties
-    private var tempUnit: TemperatureUnit = .metric
+    private var tempUnit: TemperatureUnit
     private var weatherInfoListView: WeatherInfoListView!
     
     // MARK: - Init
-    init() {
+    init(tempUnit: TemperatureUnit) {
+        self.tempUnit = tempUnit
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,13 +32,14 @@ class WeatherInfoListVC: UIViewController {
     // MARK: - SetupUI
     private func initialSetUp() {
         view.backgroundColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.description,
+                                                            image: nil,
+                                                            target: self,
+                                                            action: #selector(changeTempUnit))
     }
     
     private func setupWeatherInfoListView() {
-        weatherInfoListView = .init(delegate: self,
-                                    fetchDataManager: FetchDataManager(),
-                                    imageManager: ImageManager())
+        weatherInfoListView = .init(delegate: self, fetchDataManager: FetchDataManager(), tempUnit: self.tempUnit)
         view.addSubview(weatherInfoListView)
         weatherInfoListView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -52,14 +54,8 @@ class WeatherInfoListVC: UIViewController {
     
     // MARK: - Methods
     @objc private func changeTempUnit() {
-        switch tempUnit {
-            case .imperial:
-                tempUnit = .metric
-                navigationItem.rightBarButtonItem?.title = "섭씨"
-            case .metric:
-                tempUnit = .imperial
-                navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        tempUnit.toggle()
+        navigationItem.rightBarButtonItem?.title = tempUnit.description
         weatherInfoListView.changeTempUnit(to: tempUnit)
         weatherInfoListView.refresh()
     }

@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource {
+protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource, UIViewController {
     func refresh()
     func changeTempUnit() -> String
     var navigationItem: UINavigationItem { get }
 }
 
-class WeatherListView: UIView {
+final class WeatherListView: UIView {
     
     private var delegate: WeatherListViewDelegate
     
@@ -24,7 +24,7 @@ class WeatherListView: UIView {
         return tableView
     }()
     
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     init(delegate: WeatherListViewDelegate) {
         self.delegate = delegate

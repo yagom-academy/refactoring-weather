@@ -8,33 +8,33 @@
 import Foundation
 import UIKit
 
-protocol WeatherDetailDelegate: AnyObject {
+protocol WeatherDetailDelegate: UIViewController {
     func dateDidChanged(text: String)
 }
 
-class WeatherDeatilView: UIView {
+final class WeatherDeatilView: UIView {
     private weak var delegate: WeatherDetailDelegate?
     private var weatherAPI: WeatherAPI
     
-    let dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
         formatter.locale = .init(identifier: "ko_KR")
         formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
         return formatter
     }()
     
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
+    private let iconImageView: UIImageView = UIImageView()
+    private let weatherGroupLabel: UILabel = UILabel()
+    private let weatherDescriptionLabel: UILabel = UILabel()
+    private let temperatureLabel: UILabel = UILabel()
+    private let feelsLikeLabel: UILabel = UILabel()
+    private let maximumTemperatureLable: UILabel = UILabel()
+    private let minimumTemperatureLable: UILabel = UILabel()
+    private let popLabel: UILabel = UILabel()
+    private let humidityLabel: UILabel = UILabel()
+    private let sunriseTimeLabel: UILabel = UILabel()
+    private let sunsetTimeLabel: UILabel = UILabel()
+    private let spacingView: UIView = UIView()
     
     init(weatherDetailInfo: WeatherDetailInfo, weatherAPI: WeatherAPI, delegate: WeatherDetailDelegate) {
         self.weatherAPI = weatherAPI

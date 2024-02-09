@@ -6,16 +6,18 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+final class WeatherTableViewCell: UITableViewCell {
+    static let reuseIdentifier: String = String(describing: WeatherTableViewCell.self)
+    
+    private var weatherIcon: UIImageView = UIImageView()
+    private var dateLabel: UILabel = UILabel()
+    private var temperatureLabel: UILabel = UILabel()
+    private var weatherLabel: UILabel = UILabel()
+    private var descriptionLabel: UILabel = UILabel()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        layoutViews()
         reset()
     }
     
@@ -28,13 +30,22 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
+    func setData(_ info: WeatherForecastInfo, unit: TempUnit) {
+        weatherLabel.text = info.weather.text
+        descriptionLabel.text = info.weather.description
+        temperatureLabel.text = unit.strategy.expressionToString(info.mainInfo.temperature)
+    }
+    
+    func setDateLabel(with string: String) {
+        dateLabel.text = string
+    }
+    
+    func setWeatherIcon(image: UIImage?) {
+        weatherIcon.image = image
+    }
+    
+    private func layoutViews() {
         let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         

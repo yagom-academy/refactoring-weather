@@ -7,35 +7,35 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-class WeatherJSON: Decodable {
+struct WeatherJSON: Decodable {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
 
 // MARK: - List
-class WeatherForecastInfo: Decodable {
+struct WeatherForecastInfo: Decodable {
     let dt: TimeInterval
-    let main: MainInfo
+    let mainInfo: MainInfo
     let weather: Weather
     let dtTxt: String
 }
 
 // MARK: - MainClass
-class MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
+struct MainInfo: Decodable {
+    let temperature, feelsLike, minTemperature, maxTemperature: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
-class Weather: Decodable {
+struct Weather: Decodable {
     let id: Int
-    let main: String
+    let text: String
     let description: String
     let icon: String
 }
 
 // MARK: - City
-class City: Decodable {
+struct City: Decodable {
     let id: Int
     let name: String
     let coord: Coord
@@ -45,18 +45,6 @@ class City: Decodable {
 }
 
 // MARK: - Coord
-class Coord: Decodable {
+struct Coord: Decodable {
     let lat, lon: Double
 }
-
-// MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
-}
-

@@ -48,23 +48,3 @@ struct City: Decodable {
 struct Coord: Decodable {
     let lat, lon: Double
 }
-
-// MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
-    
-    var title: String {
-        switch self {
-        case .metric: return "섭씨"
-        case .imperial: return "화씨"
-        }
-    }
-}
-

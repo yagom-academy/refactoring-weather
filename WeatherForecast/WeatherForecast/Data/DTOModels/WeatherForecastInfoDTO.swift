@@ -28,7 +28,7 @@ final class WeatherForecastInfoDTO: Decodable {
         return Weather(
             date: Date(timeIntervalSince1970: self.dt),
             temperature: temperature,
-            weatherCondition: weatherCondition,
+            condition: weatherCondition,
             humidity: self.main.humidity,
             pop: self.main.pop
         )

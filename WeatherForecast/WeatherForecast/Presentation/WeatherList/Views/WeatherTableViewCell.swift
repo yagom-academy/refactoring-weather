@@ -45,8 +45,8 @@ final class WeatherTableViewCell: UITableViewCell {
     }
     
     private func configureLables(with weather: Weather, using tempUnit: TemperatureUnit) {
-        weatherLabel.text = weather.weatherCondition.main
-        descriptionLabel.text = weather.weatherCondition.description
+        weatherLabel.text = weather.condition.main
+        descriptionLabel.text = weather.condition.description
         temperatureLabel.text = "\(tempUnit.strategy.convertTemperature(weather.temperature.current))"
         
         let date: Date = weather.date

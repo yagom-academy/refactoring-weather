@@ -10,7 +10,7 @@ import Foundation
 struct Weather {
     let date: Date
     let temperature: Temperature
-    let weatherCondition: WeatherCondition
+    let condition: WeatherCondition
     let humidity: Double
     let pop: Double
 }

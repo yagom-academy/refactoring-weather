@@ -94,7 +94,7 @@ extension WeatherListViewController: UITableViewDataSource {
         
         cell.configure(with: weather, using: tempUnit)
         Task {
-            await configureWeatherIcon(with: weather.weatherCondition.icon, to: cell)
+            await configureWeatherIcon(with: weather.condition.icon, to: cell)
         }
         
         return cell

@@ -57,8 +57,8 @@ extension WeatherDetailViewController {
     }
     
     private func configureDescriptionLabels(with weather: Weather) {
-        weatherDetailView.weatherGroupLabel.text = weather.weatherCondition.main
-        weatherDetailView.weatherDescriptionLabel.text = weather.weatherCondition.description
+        weatherDetailView.weatherGroupLabel.text = weather.condition.main
+        weatherDetailView.weatherDescriptionLabel.text = weather.condition.description
     }
     
     private func configureTemperatureLabels(with weather: Weather) {
@@ -84,7 +84,7 @@ extension WeatherDetailViewController {
     
     private func configureImage(with weather: Weather) {
         Task {
-            let iconName: String = weather.weatherCondition.icon
+            let iconName: String = weather.condition.icon
             guard let url: URL = URL(string: "https://openweathermap.org/img/wn/\(iconName)@2x.png") else { return }
             guard let imageData = await weatherUseCase.fetchWeatherImage(from: url),
             let image = UIImage(data: imageData.data) else { return }

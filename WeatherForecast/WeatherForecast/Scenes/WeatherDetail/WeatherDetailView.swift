@@ -24,13 +24,15 @@ final class WeatherDetailView: UIView {
     private let dataFetcher: DataFetchable
     private let mainStackView: UIStackView = UIStackView()
     
-    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) async {
+    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
         self.weatherForecastInfo = weatherForecastInfo
         self.dataFetcher = dataFetcher
         super.init(frame: .zero)
         
         backgroundColor = .white
-        await initialUIData()
+        Task {
+            await initialUIData()
+        }
     }
     
     required init?(coder: NSCoder) {

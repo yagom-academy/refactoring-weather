@@ -113,7 +113,6 @@ extension WeatherForecastViewController: UITableViewDataSource {
         
         Task {
             if indexPath == tableView.indexPath(for: cell) {
-//                let image = await fetchImage(urlString: urlString)
                 let image = await dataFetcher.fetchImage(hashableURL: urlString)
                 cell.setWeatherIcon(image: image)
             }

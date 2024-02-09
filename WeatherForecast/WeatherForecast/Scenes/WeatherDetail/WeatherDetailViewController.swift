@@ -11,7 +11,11 @@ final class WeatherDetailViewController: UIViewController {
     private var cityInfo: City?
     private var tempUnit: TempUnit = .celsius
     
-    init(weatherForecastInfo: WeatherForecastInfo? = nil, cityInfo: City? = nil, tempUnit: TempUnit) {
+    init(
+        weatherForecastInfo: WeatherForecastInfo? = nil,
+        cityInfo: City? = nil,
+        tempUnit: TempUnit
+    ) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
@@ -23,8 +27,9 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     override func loadView() {
+        guard let weatherForecastInfo = weatherForecastInfo else { return }
         let weatherDetailView: WeatherDetailView = WeatherDetailView(
-            weatherForecastInfo: weatherForecastInfo!,
+            weatherForecastInfo: weatherForecastInfo,
             dataFetcher: DataFetcher()
         )
         

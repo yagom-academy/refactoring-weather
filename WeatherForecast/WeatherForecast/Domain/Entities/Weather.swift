@@ -1,14 +1,16 @@
 //
-//  WeatherForecast - Weather.swift
-//  Created by yagom.
-//  Copyright © yagom. All rights reserved.
-// 
+//  Weather.swift
+//  WeatherForecast
+//
+//  Created by JunHeeJo on 2/9/24.
+//
 
 import Foundation
 
-final class Weather: Decodable {
-    let id: Int
-    let main: String
-    let description: String
-    let icon: String
+struct Weather {
+    let date: Date
+    let temperature: Temperature
+    let weatherCondition: WeatherCondition
+    let humidity: Double
+    let pop: Double
 }

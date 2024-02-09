@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class MainInfo: Decodable {
+final class MainInfoDTO: Decodable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }

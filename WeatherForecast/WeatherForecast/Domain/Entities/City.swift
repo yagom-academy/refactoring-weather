@@ -2,16 +2,12 @@
 //  City.swift
 //  WeatherForecast
 //
-//  Created by JunHeeJo on 2/8/24.
+//  Created by JunHeeJo on 2/9/24.
 //
 
 import Foundation
 
-final class City: Decodable {
-    let id: Int
+struct City {
     let name: String
-    let coord: Coord
-    let country: String
-    let population, timezone: Int
-    let sunrise, sunset: TimeInterval
+    let sunrise, sunset: Date
 }

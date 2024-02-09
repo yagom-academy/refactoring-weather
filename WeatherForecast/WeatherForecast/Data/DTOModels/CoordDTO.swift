@@ -7,6 +7,6 @@
 
 import Foundation
 
-final class Coord: Decodable {
+final class CoordDTO: Decodable {
     let lat, lon: Double
 }

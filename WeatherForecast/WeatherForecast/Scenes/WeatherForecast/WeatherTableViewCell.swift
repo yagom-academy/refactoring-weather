@@ -9,11 +9,11 @@ import UIKit
 final class WeatherTableViewCell: UITableViewCell {
     static let reuseIdentifier: String = String(describing: WeatherTableViewCell.self)
     
-    private var weatherIcon: UIImageView!
-    private var dateLabel: UILabel!
-    private var temperatureLabel: UILabel!
-    private var weatherLabel: UILabel!
-    private var descriptionLabel: UILabel!
+    private var weatherIcon: UIImageView = UIImageView()
+    private var dateLabel: UILabel = UILabel()
+    private var temperatureLabel: UILabel = UILabel()
+    private var weatherLabel: UILabel = UILabel()
+    private var descriptionLabel: UILabel = UILabel()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,9 +31,9 @@ final class WeatherTableViewCell: UITableViewCell {
     }
     
     func setData(_ info: WeatherForecastInfo, unit: TempUnit) {
-        weatherLabel.text = info.weather.main
+        weatherLabel.text = info.weather.text
         descriptionLabel.text = info.weather.description
-        temperatureLabel.text = unit.strategy.expressionToString(info.main.temp)
+        temperatureLabel.text = unit.strategy.expressionToString(info.mainInfo.temperature)
     }
     
     func setDateLabel(with string: String) {
@@ -45,12 +45,7 @@ final class WeatherTableViewCell: UITableViewCell {
     }
     
     private func layoutViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
         let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         

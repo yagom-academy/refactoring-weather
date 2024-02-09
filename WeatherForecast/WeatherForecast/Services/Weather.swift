@@ -15,21 +15,21 @@ struct WeatherJSON: Decodable {
 // MARK: - List
 struct WeatherForecastInfo: Decodable {
     let dt: TimeInterval
-    let main: MainInfo
+    let mainInfo: MainInfo
     let weather: Weather
     let dtTxt: String
 }
 
 // MARK: - MainClass
 struct MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
+    let temperature, feelsLike, minTemperature, maxTemperature: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
 struct Weather: Decodable {
     let id: Int
-    let main: String
+    let text: String
     let description: String
     let icon: String
 }

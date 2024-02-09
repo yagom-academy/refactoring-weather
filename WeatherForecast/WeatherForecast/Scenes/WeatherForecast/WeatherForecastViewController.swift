@@ -38,7 +38,7 @@ extension WeatherForecastViewController {
     }
     
     @objc private func refresh() {
-        requestWeatherJSON()
+        setTitleName()
         tableView.reloadData()
         tableView.refreshControl?.endRefreshing()
     }
@@ -75,7 +75,7 @@ extension WeatherForecastViewController {
 }
 
 extension WeatherForecastViewController {
-    private func requestWeatherJSON() {
+    private func setTitleName() {
         navigationItem.title = model.cityName
     }
 }

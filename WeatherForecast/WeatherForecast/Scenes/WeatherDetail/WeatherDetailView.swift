@@ -109,14 +109,14 @@ extension WeatherDetailView {
     }
     
     private func setValueToLabel() {
-        weatherGroupLabel.text = weatherForecastInfo.weather.main
+        weatherGroupLabel.text = weatherForecastInfo.weather.text
         weatherDescriptionLabel.text = weatherForecastInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
+        temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.mainInfo.temperature)\(tempUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.mainInfo.feelsLike)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.mainInfo.maxTemperature)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.mainInfo.minTemperature)\(tempUnit.expression)"
+        popLabel.text = "강수 확률 : \(weatherForecastInfo.mainInfo.pop * 100)%"
+        humidityLabel.text = "습도 : \(weatherForecastInfo.mainInfo.humidity)%"
         
         let formatter: DateFormatter = DateFormatter()
         formatter.dateFormat = .none

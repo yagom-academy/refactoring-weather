@@ -9,32 +9,34 @@ import UIKit
 
 // 프로토콜 이름 수정
 protocol Cachable {
-    associatedtype Key: Hashable
-    associatedtype Value
-    
-    subscript(key: Key) -> Value? { get set }
+    subscript(key: any Hashable) -> UIImage? { get set }
     func removeAll()
 }
 
 final class ImageCache: Cachable {
     private var cache: NSCache<NSString, UIImage>
-    typealias Key = String
-    typealias Value = UIImage
     
     init(cache: NSCache<NSString, UIImage>) {
         self.cache = cache
     }
     
-    subscript(key: Key) -> Value? {
+    subscript(key: any Hashable) -> UIImage? {
         get {
-            return cache.object(forKey: key as NSString)
+            if let key = key as? NSString {
+                return cache.object(forKey: key)
+            } else {
+                return nil
+            }
         }
         set {
-            guard let value = newValue else {
-                cache.removeObject(forKey: key as NSString)
-                return
+            if let key = key as? NSString {
+                guard let value = newValue else {
+                    cache.removeObject(forKey: key as NSString)
+                    return
+                }
+                
+                cache.setObject(value, forKey: key as NSString)
             }
-            cache.setObject(value, forKey: key as NSString)
         }
     }
     

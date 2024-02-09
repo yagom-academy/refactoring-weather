@@ -8,12 +8,12 @@ import UIKit
 
 final class WeatherDetailViewController: UIViewController {
     private var weatherForecastInfo: WeatherForecastInfo?
-    private var cityInfo: City?
+    private var cityInfo: City
     private var tempUnit: TempUnit = .celsius
     
     init(
         weatherForecastInfo: WeatherForecastInfo? = nil,
-        cityInfo: City? = nil,
+        cityInfo: City,
         tempUnit: TempUnit
     ) {
         self.weatherForecastInfo = weatherForecastInfo
@@ -30,7 +30,8 @@ final class WeatherDetailViewController: UIViewController {
         guard let weatherForecastInfo = weatherForecastInfo else { return }
         let weatherDetailView: WeatherDetailView = WeatherDetailView(
             weatherForecastInfo: weatherForecastInfo,
-            dataFetcher: DataFetcher()
+            dataFetcher: DataFetcher(),
+            cityInfo: cityInfo
         )
         
         view = weatherDetailView

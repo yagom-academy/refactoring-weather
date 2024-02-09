@@ -8,12 +8,12 @@ import UIKit
 
 final class WeatherForecastViewController: UIViewController {
     private var tableView: UITableView!
-    private let imageCache: ImageCache
+    private let imageCache: Cachable
     private let model: WeatherForecastModel
     private var tempUnit: TempUnit = .celsius
     private let dataFetcher: DataFetchable
     
-    init(model: WeatherForecastModel, imageChache: ImageCache, dataFetcher: DataFetchable) {
+    init(model: WeatherForecastModel, imageChache: Cachable, dataFetcher: DataFetchable) {
         self.model = model
         self.imageCache = imageChache
         self.dataFetcher = dataFetcher

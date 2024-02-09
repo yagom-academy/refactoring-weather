@@ -24,9 +24,14 @@ final class WeatherDetailView: UIView {
     private let dataFetcher: DataFetchable
     private let mainStackView: UIStackView = UIStackView()
     
-    init(weatherForecastInfo: WeatherForecastInfo, dataFetcher: DataFetchable) {
+    init(
+        weatherForecastInfo: WeatherForecastInfo,
+        dataFetcher: DataFetchable,
+        cityInfo: City
+    ) {
         self.weatherForecastInfo = weatherForecastInfo
         self.dataFetcher = dataFetcher
+        self.cityInfo = cityInfo
         super.init(frame: .zero)
         
         backgroundColor = .white
@@ -40,7 +45,7 @@ final class WeatherDetailView: UIView {
     }
     
     let weatherForecastInfo: WeatherForecastInfo
-    var cityInfo: City?
+    var cityInfo: City
     var tempUnit: TempUnit = .celsius
 }
 
@@ -113,14 +118,12 @@ extension WeatherDetailView {
         popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
         
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = Locale(identifier:  LocalIdentifier().getLocaleIdentifier())
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
-        }
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier:  LocalIdentifier().getLocaleIdentifier())
+        sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
+        sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
     }
 }
 

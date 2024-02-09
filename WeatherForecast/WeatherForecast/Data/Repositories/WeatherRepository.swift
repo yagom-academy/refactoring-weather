@@ -9,11 +9,13 @@ import Foundation
 
 protocol WeatherRepository {
     func fetchWeatherList(from url: URL) async throws -> CityWeather
+    func fetchImage(from url: URL) async -> ImageCache?
 }
 
 final class DefaultWeatherRepository: WeatherRepository {
     private let localWeatherDataService: WeatherDataService
     private let remoteWeatherDataService: WeatherDataService
+    private let imageCacheService: ImageChacheService
     private let jsonDecoder: JSONDecoder
     
     func fetchWeatherList(from url: URL) async throws -> CityWeather {
@@ -31,9 +33,15 @@ final class DefaultWeatherRepository: WeatherRepository {
         return dto.toDomain()
     }
     
-    init(localWeatherDataService: WeatherDataService, remoteWeatherDataService: WeatherDataService, jsonDecoder: JSONDecoder) {
+    func fetchImage(from url: URL) async -> ImageCache? {
+        await imageCacheService.fetchImage(from: url)
+    }
+    
+    
+    init(localWeatherDataService: WeatherDataService, remoteWeatherDataService: WeatherDataService, imageCacheService: ImageChacheService, jsonDecoder: JSONDecoder) {
         self.localWeatherDataService = localWeatherDataService
         self.remoteWeatherDataService = remoteWeatherDataService
+        self.imageCacheService = imageCacheService
         self.jsonDecoder = jsonDecoder
     }
     
@@ -41,6 +49,7 @@ final class DefaultWeatherRepository: WeatherRepository {
         self.init(
             localWeatherDataService: LocalWeatherDataService(),
             remoteWeatherDataService: RemoteWeatherDataService(),
+            imageCacheService: DefaultImageChacheService.shared,
             jsonDecoder: JSONDecoderCreator.createSnakeCaseDecoder()
         )
     }

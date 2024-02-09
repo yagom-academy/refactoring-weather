@@ -13,17 +13,14 @@ protocol WeatherUseCase {
 }
 
 final class DefaultWeatherUseCase: WeatherUseCase {
-    private var imageCacheService: ImageChacheService
     private var weatherRepository: WeatherRepository
     
-    init(imageCacheService: ImageChacheService, weatherRepository: WeatherRepository) {
-        self.imageCacheService = imageCacheService
+    init(weatherRepository: WeatherRepository) {
         self.weatherRepository = weatherRepository
     }
     
     convenience init() {
         self.init(
-            imageCacheService: DefaultImageChacheService.shared,
             weatherRepository: DefaultWeatherRepository()
         )
     }
@@ -39,6 +36,6 @@ final class DefaultWeatherUseCase: WeatherUseCase {
     }
     
     func fetchWeatherImage(from url: URL) async -> ImageCache? {
-        await imageCacheService.fetchImage(from: url)
+        await weatherRepository.fetchImage(from: url)
     }
 }

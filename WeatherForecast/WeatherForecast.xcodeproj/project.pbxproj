@@ -110,13 +110,12 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				EE8087652B6C02A2004D91C2 /* App */,
 				EE80879A2B74F01D004D91C2 /* Resources */,
 				EE8087982B74EEF2004D91C2 /* Domain */,
 				EE80879B2B74F0CD004D91C2 /* Presentation */,
 				EE80879E2B74F3AE004D91C2 /* Data */,
-				EE8087832B7262EB004D91C2 /* Services */,
 				EE8087742B6F5873004D91C2 /* Utils */,
-				EE8087652B6C02A2004D91C2 /* App */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
@@ -270,6 +269,7 @@
 				EE8087792B6F6EC5004D91C2 /* TemperatureUnit.swift */,
 				EE80877B2B6F6F3E004D91C2 /* TemperatureStrategy.swift */,
 				EE8087882B7469B9004D91C2 /* WeatherDetailContext.swift */,
+				EE8087812B7256A6004D91C2 /* ImageCache.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -285,9 +285,9 @@
 		EE80879E2B74F3AE004D91C2 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				EE4B31FD2B765826007162A4 /* Repositories */,
 				EE4B31F02B765480007162A4 /* DTOModels */,
-				EE8087812B7256A6004D91C2 /* ImageCache.swift */,
+				EE4B31FD2B765826007162A4 /* Repositories */,
+				EE8087832B7262EB004D91C2 /* Services */,
 			);
 			path = Data;
 			sourceTree = "<group>";

@@ -21,11 +21,12 @@ struct WeatherDetailInfo: WeatherDetailInfoCoordinator {
     var weatherMain: String { weatherForecastInfo.weatherMain }
     var description: String { weatherForecastInfo.description }
     
-    var temp: String { "\(weatherForecastInfo.temp)\(tempUnit.expression)"}
-    var tempMax: String { "\(weatherForecastInfo.tempMax)\(tempUnit.expression)" }
-    var tempMin: String { "\(weatherForecastInfo.tempMin)\(tempUnit.expression)" }
+    var temp: String { tempUnit.formattedTemp(weatherForecastInfo.temp) }
+    var tempMax: String { tempUnit.formattedTempMax(weatherForecastInfo.tempMax) }
+    var tempMin: String { tempUnit.formattedTempMin(weatherForecastInfo.tempMin) }
     
-    var feelsLike: String { "\(weatherForecastInfo.feelsLike)\(tempUnit.expression)" }
+    var feelsLike: String { tempUnit.formattedFeelsLike(weatherForecastInfo.feelsLike) }
+    
     var pop: String { weatherForecastInfo.pop }
     
     var humidity: String { weatherForecastInfo.humidity }

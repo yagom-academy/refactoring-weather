@@ -20,8 +20,8 @@
 		9537AB782B693D3F00A02E0E /* WeatherForecaseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB772B693D3F00A02E0E /* WeatherForecaseInfo.swift */; };
 		9537AB7A2B693D5400A02E0E /* WeatherJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB792B693D5400A02E0E /* WeatherJSON.swift */; };
 		9537AB8F2B69476B00A02E0E /* WeatherDetailInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB8E2B69476B00A02E0E /* WeatherDetailInfoCoordinator.swift */; };
-		9537AB942B6A82B100A02E0E /* Metric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB932B6A82B100A02E0E /* Metric.swift */; };
-		9537AB962B6A82BF00A02E0E /* Imperial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB952B6A82BF00A02E0E /* Imperial.swift */; };
+		9537AB942B6A82B100A02E0E /* Fahrenheit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB932B6A82B100A02E0E /* Fahrenheit.swift */; };
+		9537AB962B6A82BF00A02E0E /* Celsius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB952B6A82BF00A02E0E /* Celsius.swift */; };
 		9537AB992B6AA4BA00A02E0E /* ImageServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB982B6AA4BA00A02E0E /* ImageServiceError.swift */; };
 		9537AB9B2B6AA83D00A02E0E /* JsonServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB9A2B6AA83D00A02E0E /* JsonServiceError.swift */; };
 		9537AB9F2B6AB87200A02E0E /* Extension+UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537AB9E2B6AB87200A02E0E /* Extension+UILabel.swift */; };
@@ -51,8 +51,8 @@
 		9537AB772B693D3F00A02E0E /* WeatherForecaseInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecaseInfo.swift; sourceTree = "<group>"; };
 		9537AB792B693D5400A02E0E /* WeatherJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherJSON.swift; sourceTree = "<group>"; };
 		9537AB8E2B69476B00A02E0E /* WeatherDetailInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailInfoCoordinator.swift; sourceTree = "<group>"; };
-		9537AB932B6A82B100A02E0E /* Metric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metric.swift; sourceTree = "<group>"; };
-		9537AB952B6A82BF00A02E0E /* Imperial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imperial.swift; sourceTree = "<group>"; };
+		9537AB932B6A82B100A02E0E /* Fahrenheit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fahrenheit.swift; sourceTree = "<group>"; };
+		9537AB952B6A82BF00A02E0E /* Celsius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Celsius.swift; sourceTree = "<group>"; };
 		9537AB982B6AA4BA00A02E0E /* ImageServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceError.swift; sourceTree = "<group>"; };
 		9537AB9A2B6AA83D00A02E0E /* JsonServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonServiceError.swift; sourceTree = "<group>"; };
 		9537AB9E2B6AB87200A02E0E /* Extension+UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UILabel.swift"; sourceTree = "<group>"; };
@@ -277,8 +277,8 @@
 		9537AB922B6A82A600A02E0E /* Structs */ = {
 			isa = PBXGroup;
 			children = (
-				9537AB932B6A82B100A02E0E /* Metric.swift */,
-				9537AB952B6A82BF00A02E0E /* Imperial.swift */,
+				9537AB932B6A82B100A02E0E /* Fahrenheit.swift */,
+				9537AB952B6A82BF00A02E0E /* Celsius.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -423,7 +423,7 @@
 				9537AB742B693D1900A02E0E /* City.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				9537AB9B2B6AA83D00A02E0E /* JsonServiceError.swift in Sources */,
-				9537AB962B6A82BF00A02E0E /* Imperial.swift in Sources */,
+				9537AB962B6A82BF00A02E0E /* Celsius.swift in Sources */,
 				9537AB9F2B6AB87200A02E0E /* Extension+UILabel.swift in Sources */,
 				9537AB762B693D2700A02E0E /* Coord.swift in Sources */,
 				95F812582B67F71E0057058E /* WeatherDetailInfo.swift in Sources */,
@@ -432,7 +432,7 @@
 				9537AB7A2B693D5400A02E0E /* WeatherJSON.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
-				9537AB942B6A82B100A02E0E /* Metric.swift in Sources */,
+				9537AB942B6A82B100A02E0E /* Fahrenheit.swift in Sources */,
 				9537AB6C2B69350500A02E0E /* JsonService.swift in Sources */,
 				95F812562B67E4C70057058E /* WeatherDetailView.swift in Sources */,
 				9537AB702B693CE700A02E0E /* MainInfo.swift in Sources */,

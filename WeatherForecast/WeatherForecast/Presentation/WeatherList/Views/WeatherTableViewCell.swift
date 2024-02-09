@@ -40,16 +40,16 @@ final class WeatherTableViewCell: UITableViewCell {
         weatherIcon.image = image
     }
     
-    func configure(with weatherForecastInfo: WeatherForecastInfo, using tempUnit: TemperatureUnit) {
+    func configure(with weatherForecastInfo: Weather, using tempUnit: TemperatureUnit) {
         configureLables(with: weatherForecastInfo, using: tempUnit)
     }
     
-    private func configureLables(with weatherForecastInfo: WeatherForecastInfo, using tempUnit: TemperatureUnit) {
-        weatherLabel.text = weatherForecastInfo.weather.main
-        descriptionLabel.text = weatherForecastInfo.weather.description
-        temperatureLabel.text = "\(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.temp))"
+    private func configureLables(with weather: Weather, using tempUnit: TemperatureUnit) {
+        weatherLabel.text = weather.weatherCondition.main
+        descriptionLabel.text = weather.weatherCondition.description
+        temperatureLabel.text = "\(tempUnit.strategy.convertTemperature(weather.temperature.current))"
         
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        let date: Date = weather.date
         dateLabel.text = dateFormatter.string(from: date)
     }
     

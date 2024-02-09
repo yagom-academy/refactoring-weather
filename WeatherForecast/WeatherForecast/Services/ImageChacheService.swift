@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ImageChacheService {
-    func fetchImage(urlString: String) async -> ImageCache?
+    func fetchImage(from url: URL) async -> ImageCache?
 }
 
 final class DefaultImageChacheService: ImageChacheService {
@@ -18,17 +18,15 @@ final class DefaultImageChacheService: ImageChacheService {
     
     private init() { }
     
-    func fetchImage(urlString: String) async -> ImageCache? {
-        guard let url = URL(string: urlString) else { return nil }
-        
-        if let imageCache: ImageCache = imageDataChache.object(forKey: urlString as NSString) {
+    func fetchImage(from url: URL) async -> ImageCache? {
+        if let imageCache: ImageCache = imageDataChache.object(forKey: url.absoluteString as NSString) {
            return imageCache
         }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let imageCache = ImageCache(data: data)
-            imageDataChache.setObject(imageCache, forKey: urlString as NSString)
+            imageDataChache.setObject(imageCache, forKey: url.absoluteString as NSString)
             return imageCache
         } catch {
             // TODO: 통신 에러처리 필요

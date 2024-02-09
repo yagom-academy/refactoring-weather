@@ -32,8 +32,8 @@ final class WeatherListView: UIView {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
-    @objc func refresh() {
-        delegate?.refresh()
+    @objc func refresh() async {
+        await delegate?.refresh()
     }
     
     private func layoutTableView() {

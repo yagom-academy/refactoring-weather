@@ -17,7 +17,7 @@ final class WeatherListViewController: UIViewController {
     private var tempUnit: TemperatureUnit = .metric {
         didSet {
             navigationItem.rightBarButtonItem?.title = tempUnit.strategy.unitExpression
-            refresh()
+            Task { await refresh() }
         }
     }
     
@@ -42,6 +42,7 @@ final class WeatherListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        Task { await refresh() }
     }
 }
 
@@ -67,9 +68,9 @@ extension WeatherListViewController {
 }
 
 extension WeatherListViewController: WeatherListViewDelegate {
-    func refresh() {
-        let url: URL? = Bundle.main.url(forResource: "weather", withExtension: "json")
-        cityWeather = weatherUseCase.fetchWeatherList(url: url)
+    func refresh() async {
+        guard let url: URL = Bundle.main.url(forResource: "weather", withExtension: "json") else { return }
+        cityWeather = await weatherUseCase.fetchCityWeather(from: url)
         weatherListView.reloadTableView()
         weatherListView.endRefreshControlRefreshing()
     }
@@ -81,19 +82,19 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        cityWeather?.weatherForecast.count ?? 0
+        return cityWeather?.weathers.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.id, for: indexPath)
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = cityWeather?.weatherForecast[indexPath.row] else {
+              let weather = cityWeather?.weathers[indexPath.row] else {
             return cell
         }
         
-        cell.configure(with: weatherForecastInfo, using: tempUnit)
+        cell.configure(with: weather, using: tempUnit)
         Task {
-            await configureWeatherIcon(with: weatherForecastInfo.weather.icon, to: cell)
+            await configureWeatherIcon(with: weather.weatherCondition.icon, to: cell)
         }
         
         return cell
@@ -101,8 +102,8 @@ extension WeatherListViewController: UITableViewDataSource {
     
     private func configureWeatherIcon(with name: String, to cell: WeatherTableViewCell) async {
         Task {
-            let imageURLString: String = "https://openweathermap.org/img/wn/\(name)@2x.png"
-            guard let imageData = await weatherUseCase.fetchWeatherImage(url: imageURLString),
+            guard let imageURL: URL = URL(string: "https://openweathermap.org/img/wn/\(name)@2x.png") else { return }
+            guard let imageData = await weatherUseCase.fetchWeatherImage(from: imageURL),
             let image = UIImage(data: imageData.data) else { return }
             cell.configure(image: image)
         }
@@ -112,16 +113,14 @@ extension WeatherListViewController: UITableViewDataSource {
 extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        showDetailVC(with: cityWeather?.weatherForecast[indexPath.row])
+        showDetailVC(with: cityWeather?.weathers[indexPath.row])
     }
     
-    private func showDetailVC(with weatherForecastInfo: WeatherForecastInfo?) {
-        guard let weatherForecastInfo: WeatherForecastInfo = weatherForecastInfo,
-              let cityInfo: City = cityWeather?.city else { return }
-        let weatehrDetailContext: WeatherDetailContext = WeatherDetailContext(weatherForecastInfo: weatherForecastInfo,
-                                                                              cityInfo: cityInfo,
-                                                                              tempUnit: tempUnit)
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(contenxt: weatehrDetailContext)
+    private func showDetailVC(with weather: Weather?) {
+        guard let weather: Weather = weather,
+              let city: City = cityWeather?.city else { return }
+        let weatherDetailContext: WeatherDetailContext = WeatherDetailContext(weather: weather, city: city, tempUnit: tempUnit)
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(contenxt: weatherDetailContext)
         navigationController?.show(detailViewController, sender: self)
     }
 }

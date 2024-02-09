@@ -8,5 +8,5 @@
 import Foundation
 
 protocol WeatherListViewDelegate {
-    func refresh()
+    func refresh() async
 }

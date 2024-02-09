@@ -39,55 +39,54 @@ final class WeatherDetailViewController: UIViewController {
 // MARK: Configure UI
 extension WeatherDetailViewController {
     private func configureUI() {
-        let weatherForecastInfo: WeatherForecastInfo = weatherDetailContext.weatherForecastInfo
-        configureNaviagtionBar(with: weatherForecastInfo)
-        configureLabels(with: weatherForecastInfo)
-        configureImage(with: weatherForecastInfo)
+        let weather: Weather = weatherDetailContext.weather
+        configureNaviagtionBar(with: weather)
+        configureLabels(with: weather)
+        configureImage(with: weather)
     }
     
-    private func configureNaviagtionBar(with weatherForecastInfo: WeatherForecastInfo) {
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        navigationItem.title = DateFormatterCreator.createKoreanDateFormatter().string(from: date)
+    private func configureNaviagtionBar(with weather: Weather) {
+        navigationItem.title = DateFormatterCreator.createKoreanDateFormatter().string(from: weather.date)
     }
     
-    private func configureLabels(with weatherForecastInfo: WeatherForecastInfo) {
-        configureDescriptionLabels(with: weatherForecastInfo)
-        configureTemperatureLabels(with: weatherForecastInfo)
-        configureTimeLabels(with: weatherForecastInfo)
-        configureDetailLabels(with: weatherForecastInfo)
+    private func configureLabels(with weather: Weather) {
+        configureDescriptionLabels(with: weather)
+        configureTemperatureLabels(with: weather)
+        configureTimeLabels(with: weather)
+        configureDetailLabels(with: weather)
     }
     
-    private func configureDescriptionLabels(with weatherForecastInfo: WeatherForecastInfo) {
-        weatherDetailView.weatherGroupLabel.text = weatherForecastInfo.weather.main
-        weatherDetailView.weatherDescriptionLabel.text = weatherForecastInfo.weather.description
+    private func configureDescriptionLabels(with weather: Weather) {
+        weatherDetailView.weatherGroupLabel.text = weather.weatherCondition.main
+        weatherDetailView.weatherDescriptionLabel.text = weather.weatherCondition.description
     }
     
-    private func configureTemperatureLabels(with weatherForecastInfo: WeatherForecastInfo) {
+    private func configureTemperatureLabels(with weather: Weather) {
         let tempUnit: TemperatureUnit = weatherDetailContext.tempUnit
-        weatherDetailView.temperatureLabel.text = "현재 기온 : \(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.temp))"
-        weatherDetailView.feelsLikeLabel.text = "체감 기온 :\(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.feelsLike))"
-        weatherDetailView.maximumTemperatureLable.text = "최고 기온 : \(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.tempMax))"
-        weatherDetailView.minimumTemperatureLable.text = "최저 기온 : \(tempUnit.strategy.convertTemperature(weatherForecastInfo.main.tempMin))"
+        weatherDetailView.temperatureLabel.text = "현재 기온 : \(tempUnit.strategy.convertTemperature(weather.temperature.current))"
+        weatherDetailView.feelsLikeLabel.text = "체감 기온 :\(tempUnit.strategy.convertTemperature(weather.temperature.feelsLike))"
+        weatherDetailView.maximumTemperatureLable.text = "최고 기온 : \(tempUnit.strategy.convertTemperature(weather.temperature.max))"
+        weatherDetailView.minimumTemperatureLable.text = "최저 기온 : \(tempUnit.strategy.convertTemperature(weather.temperature.min))"
     }
     
-    private func configureTimeLabels(with weatherForecastInfo: WeatherForecastInfo) {
-        let cityInfo = weatherDetailContext.cityInfo
+    private func configureTimeLabels(with weather: Weather) {
+        let cityInfo = weatherDetailContext.city
         let formatter: DateFormatter = DateFormatterCreator.createShortKoreanDateFormatter()
-        weatherDetailView.sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-        weatherDetailView.sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+        weatherDetailView.sunriseTimeLabel.text = "일출 : \(formatter.string(from: cityInfo.sunrise))"
+        weatherDetailView.sunsetTimeLabel.text = "일몰 : \(formatter.string(from: cityInfo.sunset))"
     }
     
-    private func configureDetailLabels(with weatherForecastInfo: WeatherForecastInfo) {
-        weatherDetailView.popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
-        weatherDetailView.humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
+    private func configureDetailLabels(with weather: Weather) {
+        weatherDetailView.popLabel.text = "강수 확률 : \(weather.pop * 100)%"
+        weatherDetailView.humidityLabel.text = "습도 : \(weather.humidity)%"
     }
 
     
-    private func configureImage(with weatherForecastInfo: WeatherForecastInfo) {
+    private func configureImage(with weather: Weather) {
         Task {
-            let iconName: String = weatherForecastInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            guard let imageData = await weatherUseCase.fetchWeatherImage(url: urlString),
+            let iconName: String = weather.weatherCondition.icon
+            guard let url: URL = URL(string: "https://openweathermap.org/img/wn/\(iconName)@2x.png") else { return }
+            guard let imageData = await weatherUseCase.fetchWeatherImage(from: url),
             let image = UIImage(data: imageData.data) else { return }
             weatherDetailView.iconImageView.image = image
         }

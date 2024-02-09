@@ -9,5 +9,6 @@ import Foundation
 
 struct City {
     let name: String
-    let sunrise, sunset: Date
+    let sunrise: Date
+    let sunset: Date
 }

@@ -11,10 +11,3 @@ struct CityWeather {
     let weathers: [Weather]
     let city: City
 }
-
-
-
-
-
-
-

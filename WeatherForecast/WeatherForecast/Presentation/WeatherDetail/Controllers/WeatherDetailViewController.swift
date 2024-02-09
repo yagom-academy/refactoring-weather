@@ -80,7 +80,6 @@ extension WeatherDetailViewController {
         weatherDetailView.popLabel.text = "강수 확률 : \(weather.pop * 100)%"
         weatherDetailView.humidityLabel.text = "습도 : \(weather.humidity)%"
     }
-
     
     private func configureImage(with weather: Weather) {
         Task {

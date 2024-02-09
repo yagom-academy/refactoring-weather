@@ -12,7 +12,7 @@ class WeatherTableViewCell: UITableViewCell {
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
-     
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layViews()
@@ -99,5 +99,14 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+    }
+    func configure(info: WeatherForecastInfo, mainInfo: MainInfo, tempUnit: TempUnit){
+        weatherLabel.text = info.weather.main
+        descriptionLabel.text = info.weather.description
+        temperatureLabel.text = "\(mainInfo.temp)\(tempUnit.expression)"
+        dateLabel.text = info.dtTxt
+        Task {
+            weatherIcon.image = await UIImageView.fetchImage(iconName: info.weather.icon)
+        }
     }
 }

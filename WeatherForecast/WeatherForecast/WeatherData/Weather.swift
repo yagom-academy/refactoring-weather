@@ -60,3 +60,6 @@ enum TempUnit: String {
     }
 }
 
+protocol tempStrategy {
+    //var
+}

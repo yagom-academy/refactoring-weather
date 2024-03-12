@@ -8,12 +8,12 @@ import UIKit
 
 class ViewController: UIViewController {
   var tableView: UITableView!
-  let refreshControl: UIRefreshControl = UIRefreshControl()
+  let refreshControl: UIRefreshControl = .init()
   var weatherJSON: WeatherJSON?
   var icons: [UIImage]?
-  let imageChache: NSCache<NSString, UIImage> = NSCache()
+  let imageChache: NSCache<NSString, UIImage> = .init()
   let dateFormatter: DateFormatter = {
-    let formatter: DateFormatter = DateFormatter()
+    let formatter: DateFormatter = .init()
     formatter.locale = .init(identifier: "ko_KR")
     formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
     return formatter
@@ -47,7 +47,7 @@ extension ViewController {
   }
   
   private func initialSetUp() {
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+    navigationItem.rightBarButtonItem = .init(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
     
     layTable()
     
@@ -122,7 +122,7 @@ extension ViewController: UITableViewDataSource {
     cell.descriptionLabel.text = weatherForecastInfo.weather.description
     cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
     
-    let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+    let date: Date = .init(timeIntervalSince1970: weatherForecastInfo.dt)
     cell.dateLabel.text = dateFormatter.string(from: date)
     
     let iconName: String = weatherForecastInfo.weather.icon
@@ -134,9 +134,9 @@ extension ViewController: UITableViewDataSource {
     }
     
     Task {
-      guard let url: URL = URL(string: urlString),
+      guard let url: URL = .init(string: urlString),
             let (data, _) = try? await URLSession.shared.data(from: url),
-            let image: UIImage = UIImage(data: data) else {
+            let image: UIImage = .init(data: data) else {
         return
       }
       
@@ -155,7 +155,7 @@ extension ViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     
-    let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
+    let detailViewController: WeatherDetailViewController = .init()
     detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
     detailViewController.cityInfo = weatherJSON?.city
     detailViewController.tempUnit = tempUnit

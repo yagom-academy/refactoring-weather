@@ -13,7 +13,7 @@ class WeatherDetailViewController: UIViewController {
   var tempUnit: TempUnit = .metric
   
   let dateFormatter: DateFormatter = {
-    let formatter: DateFormatter = DateFormatter()
+    let formatter: DateFormatter = .init()
     formatter.locale = .init(identifier: "ko_KR")
     formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
     return formatter
@@ -29,21 +29,21 @@ class WeatherDetailViewController: UIViewController {
     
     guard let listInfo = weatherForecastInfo else { return }
     
-    let date: Date = Date(timeIntervalSince1970: listInfo.dt)
+    let date: Date = .init(timeIntervalSince1970: listInfo.dt)
     navigationItem.title = dateFormatter.string(from: date)
     
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
+    let iconImageView: UIImageView = .init()
+    let weatherGroupLabel: UILabel = .init()
+    let weatherDescriptionLabel: UILabel = .init()
+    let temperatureLabel: UILabel = .init()
+    let feelsLikeLabel: UILabel = .init()
+    let maximumTemperatureLable: UILabel = .init()
+    let minimumTemperatureLable: UILabel = .init()
+    let popLabel: UILabel = .init()
+    let humidityLabel: UILabel = .init()
+    let sunriseTimeLabel: UILabel = .init()
+    let sunsetTimeLabel: UILabel = .init()
+    let spacingView: UIView = .init()
     spacingView.backgroundColor = .clear
     spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
     
@@ -103,21 +103,21 @@ class WeatherDetailViewController: UIViewController {
     humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
     
     if let cityInfo {
-      let formatter: DateFormatter = DateFormatter()
+      let formatter: DateFormatter = .init()
       formatter.dateFormat = .none
       formatter.timeStyle = .short
       formatter.locale = .init(identifier: "ko_KR")
-      sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-      sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+      sunriseTimeLabel.text = "일출 : \(formatter.string(from: .init(timeIntervalSince1970: cityInfo.sunrise)))"
+      sunsetTimeLabel.text = "일몰 : \(formatter.string(from: .init(timeIntervalSince1970: cityInfo.sunset)))"
     }
     
     Task {
       let iconName: String = listInfo.weather.icon
       let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
       
-      guard let url: URL = URL(string: urlString),
+      guard let url: URL = .init(string: urlString),
             let (data, _) = try? await URLSession.shared.data(from: url),
-            let image: UIImage = UIImage(data: data) else {
+            let image: UIImage = .init(data: data) else {
         return
       }
       

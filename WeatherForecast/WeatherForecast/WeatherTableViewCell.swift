@@ -29,12 +29,12 @@ class WeatherTableViewCell: UITableViewCell {
   }
   
   private func layViews() {
-    weatherIcon = UIImageView()
-    dateLabel = UILabel()
-    temperatureLabel = UILabel()
-    weatherLabel = UILabel()
-    let dashLabel: UILabel = UILabel()
-    descriptionLabel = UILabel()
+    weatherIcon = .init()
+    dateLabel = .init()
+    temperatureLabel = .init()
+    weatherLabel = .init()
+    let dashLabel: UILabel = .init()
+    descriptionLabel = .init()
     
     let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
     
@@ -44,7 +44,7 @@ class WeatherTableViewCell: UITableViewCell {
       label.numberOfLines = 1
     }
     
-    let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
+    let weatherStackView: UIStackView = .init(arrangedSubviews: [
       weatherLabel,
       dashLabel,
       descriptionLabel
@@ -59,7 +59,7 @@ class WeatherTableViewCell: UITableViewCell {
     weatherStackView.distribution = .fill
     
     
-    let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [
+    let verticalStackView: UIStackView = .init(arrangedSubviews: [
       dateLabel,
       temperatureLabel,
       weatherStackView
@@ -70,7 +70,7 @@ class WeatherTableViewCell: UITableViewCell {
     verticalStackView.distribution = .fill
     verticalStackView.alignment = .leading
     
-    let contentsStackView: UIStackView = UIStackView(arrangedSubviews: [
+    let contentsStackView: UIStackView = .init(arrangedSubviews: [
       weatherIcon,
       verticalStackView
     ])
@@ -94,7 +94,7 @@ class WeatherTableViewCell: UITableViewCell {
   }
   
   private func reset() {
-    weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
+    weatherIcon.image = .init(systemName: "arrow.down.circle.dotted")
     dateLabel.text = "0000-00-00 00:00:00"
     temperatureLabel.text = "00℃"
     weatherLabel.text = "~~~"

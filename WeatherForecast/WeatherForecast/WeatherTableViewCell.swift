@@ -44,41 +44,38 @@ class WeatherTableViewCell: UITableViewCell {
       label.numberOfLines = 1
     }
     
-    let weatherStackView: UIStackView = .init(arrangedSubviews: [
-      weatherLabel,
-      dashLabel,
-      descriptionLabel
-    ])
+    let weatherStackView: UIStackView = .init(
+      arrangedSubviews: [
+        weatherLabel,
+        dashLabel,
+        descriptionLabel
+      ],
+      alignment: .center,
+      axis: .horizontal,
+      spacing: 8
+    )
+    descriptionLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
     
-    descriptionLabel.setContentHuggingPriority(.defaultLow,
-                                               for: .horizontal)
+    let verticalStackView: UIStackView = .init(
+      arrangedSubviews: [
+        dateLabel,
+        temperatureLabel,
+        weatherStackView
+      ],
+      alignment: .leading,
+      axis: .vertical,
+      spacing: 8
+    )
     
-    weatherStackView.axis = .horizontal
-    weatherStackView.spacing = 8
-    weatherStackView.alignment = .center
-    weatherStackView.distribution = .fill
-    
-    
-    let verticalStackView: UIStackView = .init(arrangedSubviews: [
-      dateLabel,
-      temperatureLabel,
-      weatherStackView
-    ])
-    
-    verticalStackView.axis = .vertical
-    verticalStackView.spacing = 8
-    verticalStackView.distribution = .fill
-    verticalStackView.alignment = .leading
-    
-    let contentsStackView: UIStackView = .init(arrangedSubviews: [
-      weatherIcon,
-      verticalStackView
-    ])
-    
-    contentsStackView.axis = .horizontal
-    contentsStackView.spacing = 16
-    contentsStackView.alignment = .center
-    contentsStackView.distribution = .fill
+    let contentsStackView: UIStackView = .init(
+      arrangedSubviews: [
+        weatherIcon,
+        verticalStackView
+      ],
+      alignment: .center,
+      axis: .horizontal,
+      spacing: 16
+    )
     contentsStackView.translatesAutoresizingMaskIntoConstraints = false
     
     contentView.addSubview(contentsStackView)

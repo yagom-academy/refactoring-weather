@@ -47,20 +47,25 @@ class WeatherDetailViewController: UIViewController {
     spacingView.backgroundColor = .clear
     spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
     
-    let mainStackView: UIStackView = .init(arrangedSubviews: [
-      iconImageView,
-      weatherGroupLabel,
-      weatherDescriptionLabel,
-      temperatureLabel,
-      feelsLikeLabel,
-      maximumTemperatureLable,
-      minimumTemperatureLable,
-      popLabel,
-      humidityLabel,
-      sunriseTimeLabel,
-      sunsetTimeLabel,
-      spacingView
-    ])
+    let mainStackView: UIStackView = .init(
+      arrangedSubviews: [
+        iconImageView,
+        weatherGroupLabel,
+        weatherDescriptionLabel,
+        temperatureLabel,
+        feelsLikeLabel,
+        maximumTemperatureLable,
+        minimumTemperatureLable,
+        popLabel,
+        humidityLabel,
+        sunriseTimeLabel,
+        sunsetTimeLabel,
+        spacingView
+      ],
+      alignment: .center,
+      axis: .vertical,
+      spacing: 8
+    )
     
     mainStackView.arrangedSubviews.forEach { subview in
       guard let subview: UILabel = subview as? UILabel else { return }
@@ -74,9 +79,6 @@ class WeatherDetailViewController: UIViewController {
     weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
     weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
     
-    mainStackView.axis = .vertical
-    mainStackView.alignment = .center
-    mainStackView.spacing = 8
     view.addSubview(mainStackView)
     mainStackView.translatesAutoresizingMaskIntoConstraints = false
     

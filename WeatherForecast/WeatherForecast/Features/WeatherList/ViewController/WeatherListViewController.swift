@@ -6,13 +6,22 @@
 
 import UIKit
 
-class WeatherListViewController: UIViewController {
-  var tableView: UITableView!
-  let refreshControl: UIRefreshControl = .init()
-  var weatherJSON: WeatherJSON?
-  var icons: [UIImage]?
-  let imageChache: NSCache<NSString, UIImage> = .init()
-  var tempUnit: TempUnit = .metric
+final class WeatherListViewController: UIViewController {
+  private let weatherFetcherService: WeatherFetcherServiceable
+  private var weatherJSON: WeatherJSON?
+  private var tempUnit: TempUnit = .metric
+  private let imageChache: NSCache<NSString, UIImage> = .init()
+  
+  private let tableView: UITableView = .init(frame: .zero, style: .plain)
+  
+  init(weatherFetcherService: WeatherFetcherServiceable) {
+    self.weatherFetcherService = weatherFetcherService
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -21,47 +30,27 @@ class WeatherListViewController: UIViewController {
 }
 
 extension WeatherListViewController {
-  @objc private func changeTempUnit() {
-    switch tempUnit {
-    case .imperial:
-      tempUnit = .metric
-    case .metric:
-      tempUnit = .imperial
-    }
-    navigationItem.rightBarButtonItem?.title = tempUnit.title
-    refresh()
-  }
-  
-  @objc private func refresh() {
-    fetchWeatherJSON()
-    tableView.reloadData()
-    refreshControl.endRefreshing()
-  }
-  
   private func initialSetUp() {
+    setUpView()
+    setUpNavigationItem()
+    setLayout()
+    setUpTableView()
+  }
+  
+  private func setUpView() {
+    view.backgroundColor = .white
+  }
+  
+  private func setUpNavigationItem() {
     navigationItem.rightBarButtonItem = .init(
       title: TempUnit.imperial.title,
       image: nil,
       target: self,
       action: #selector(changeTempUnit)
     )
-    
-    layTable()
-    
-    refreshControl.addTarget(self,
-                             action: #selector(refresh),
-                             for: .valueChanged)
-    
-    tableView.refreshControl = refreshControl
-    tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-    tableView.dataSource = self
-    tableView.delegate = self
-    
-    view.backgroundColor = .white
   }
   
-  private func layTable() {
-    tableView = .init(frame: .zero, style: .plain)
+  private func setLayout() {
     view.addSubview(tableView)
     tableView.translatesAutoresizingMaskIntoConstraints = false
     
@@ -74,28 +63,59 @@ extension WeatherListViewController {
       tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
     ])
   }
+  
+  private func setUpTableView() {
+    tableView.refreshControl = UIRefreshControl()
+    tableView.refreshControl?.addTarget(
+      self,
+      action: #selector(onRefresh),
+      for: .valueChanged
+    )
+    tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+    tableView.dataSource = self
+    tableView.delegate = self
+  }
+  
+  @objc private func changeTempUnit() {
+    switch tempUnit {
+    case .imperial:
+      tempUnit = .metric
+    case .metric:
+      tempUnit = .imperial
+    }
+    navigationItem.rightBarButtonItem?.title = tempUnit.title
+    onRefresh()
+  }
+  
+  @objc private func onRefresh() {
+    fetchWeatherJSON()
+    refreshTableView()
+  }
+  
+  private func refreshTableView() {
+    tableView.reloadData()
+    tableView.refreshControl?.endRefreshing()
+  }
 }
 
 extension WeatherListViewController {
   private func fetchWeatherJSON() {
-    
-    let jsonDecoder: JSONDecoder = .init()
-    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    
-    guard let data = NSDataAsset(name: "weather")?.data else {
-      return
+    let result = weatherFetcherService.execute()
+    switch result {
+    case .success(let weatherJson):
+      onSuccessFetchWeather(weatherJson)
+    case .failure(let error):
+      onFailFetchWeather(error)
     }
-    
-    let info: WeatherJSON
-    do {
-      info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-    } catch {
-      print(error.localizedDescription)
-      return
-    }
-    
-    weatherJSON = info
+  }
+  
+  private func onSuccessFetchWeather(_ weatherJson: WeatherJSON) {
+    self.weatherJSON = weatherJson
     navigationItem.title = weatherJSON?.city.name
+  }
+  
+  private func onFailFetchWeather(_ error: Error) {
+    print("onFail fetchWeather: \(error)")
   }
 }
 
@@ -159,5 +179,3 @@ extension WeatherListViewController: UITableViewDelegate {
     navigationController?.show(detailViewController, sender: self)
   }
 }
-
-

@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -77,7 +77,7 @@ extension ViewController {
     }
 }
 
-extension ViewController {
+extension WeatherViewController {
     private func fetchWeatherJSON() {
         
         let jsonDecoder: JSONDecoder = .init()
@@ -100,7 +100,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -151,7 +151,7 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

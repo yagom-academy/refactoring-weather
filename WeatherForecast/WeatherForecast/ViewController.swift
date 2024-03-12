@@ -12,13 +12,6 @@ class ViewController: UIViewController {
   var weatherJSON: WeatherJSON?
   var icons: [UIImage]?
   let imageChache: NSCache<NSString, UIImage> = .init()
-  let dateFormatter: DateFormatter = {
-    let formatter: DateFormatter = .init()
-    formatter.locale = .init(identifier: "ko_KR")
-    formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-    return formatter
-  }()
-  
   var tempUnit: TempUnit = .metric
   
   override func viewDidLoad() {
@@ -104,7 +97,7 @@ extension ViewController {
   }
 }
 
-extension ViewController: UITableViewDataSource {
+extension ViewController: UITableViewDataSource, DateFormattable {
   
   func numberOfSections(in tableView: UITableView) -> Int {
     1
@@ -125,9 +118,7 @@ extension ViewController: UITableViewDataSource {
     cell.weatherLabel.text = weatherForecastInfo.weather.main
     cell.descriptionLabel.text = weatherForecastInfo.weather.description
     cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-    
-    let date: Date = .init(timeIntervalSince1970: weatherForecastInfo.dt)
-    cell.dateLabel.text = dateFormatter.string(from: date)
+    cell.dateLabel.text = dateFormat(from: weatherForecastInfo.dt, with: .KoreanLongForm)
     
     let iconName: String = weatherForecastInfo.weather.icon
     let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

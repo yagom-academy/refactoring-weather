@@ -56,6 +56,8 @@ extension ViewController {
     tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
     tableView.dataSource = self
     tableView.delegate = self
+    
+    view.backgroundColor = .white
   }
   
   private func layTable() {

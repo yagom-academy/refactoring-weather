@@ -1,12 +1,12 @@
 //
-//  WeatherForecast - ViewController.swift
+//  WeatherForecast - WeatherListViewController.swift
 //  Created by yagom.
 //  Copyright © yagom. All rights reserved.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherListViewController: UIViewController {
   var tableView: UITableView!
   let refreshControl: UIRefreshControl = .init()
   var weatherJSON: WeatherJSON?
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
   }
 }
 
-extension ViewController {
+extension WeatherListViewController {
   @objc private func changeTempUnit() {
     switch tempUnit {
     case .imperial:
@@ -76,7 +76,7 @@ extension ViewController {
   }
 }
 
-extension ViewController {
+extension WeatherListViewController {
   private func fetchWeatherJSON() {
     
     let jsonDecoder: JSONDecoder = .init()
@@ -99,7 +99,7 @@ extension ViewController {
   }
 }
 
-extension ViewController: UITableViewDataSource, DateFormattable {
+extension WeatherListViewController: UITableViewDataSource, DateFormattable {
   
   func numberOfSections(in tableView: UITableView) -> Int {
     1
@@ -148,7 +148,7 @@ extension ViewController: UITableViewDataSource, DateFormattable {
   }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     

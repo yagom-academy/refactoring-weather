@@ -32,11 +32,10 @@ extension ViewController {
     switch tempUnit {
     case .imperial:
       tempUnit = .metric
-      navigationItem.rightBarButtonItem?.title = "섭씨"
     case .metric:
       tempUnit = .imperial
-      navigationItem.rightBarButtonItem?.title = "화씨"
     }
+    navigationItem.rightBarButtonItem?.title = tempUnit.title
     refresh()
   }
   
@@ -47,7 +46,12 @@ extension ViewController {
   }
   
   private func initialSetUp() {
-    navigationItem.rightBarButtonItem = .init(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+    navigationItem.rightBarButtonItem = .init(
+      title: TempUnit.imperial.title,
+      image: nil,
+      target: self,
+      action: #selector(changeTempUnit)
+    )
     
     layTable()
     

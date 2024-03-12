@@ -43,6 +43,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60EC0E772BA02A2B0042C815 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				60EC0E792BA02A540042C815 /* WeatherDetail */,
+				60EC0E782BA02A3C0042C815 /* Weather */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		60EC0E782BA02A3C0042C815 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				C7743D902B21C38100DF0D09 /* ViewController.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		60EC0E792BA02A540042C815 /* WeatherDetail */ = {
+			isa = PBXGroup;
+			children = (
+				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
+				C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */,
+			);
+			path = WeatherDetail;
+			sourceTree = "<group>";
+		};
+		60EC0E7A2BA02A820042C815 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
+				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		60EC0E7B2BA02A8C0042C815 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				60EC0E7C2BA02AC80042C815 /* Model */,
+				60EC0E772BA02A2B0042C815 /* Scene */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		60EC0E7C2BA02AC80042C815 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		C7743D802B21C38100DF0D09 = {
 			isa = PBXGroup;
 			children = (
@@ -62,12 +114,8 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
-				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
-				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
-				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,
-				C7743D902B21C38100DF0D09 /* ViewController.swift */,
-				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
-				C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */,
+				60EC0E7A2BA02A820042C815 /* Resource */,
+				60EC0E7B2BA02A8C0042C815 /* Source */,
 				C7743D922B21C38100DF0D09 /* Main.storyboard */,
 				C7743D952B21C38200DF0D09 /* Assets.xcassets */,
 				C7743D972B21C38200DF0D09 /* LaunchScreen.storyboard */,

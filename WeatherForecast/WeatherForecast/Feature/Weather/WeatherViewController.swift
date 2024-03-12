@@ -32,11 +32,10 @@ extension WeatherViewController {
         switch tempUnit {
         case .imperial:
             tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
         case .metric:
             tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
         }
+        navigationItem.rightBarButtonItem?.title = tempUnit.strategy.title
         refresh()
     }
     
@@ -120,7 +119,7 @@ extension WeatherViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.strategy.unitSymbol)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = dateFormatter.string(from: date)

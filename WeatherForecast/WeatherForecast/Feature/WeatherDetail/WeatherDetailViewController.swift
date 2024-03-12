@@ -12,13 +12,6 @@ class WeatherDetailViewController: UIViewController {
     var cityInfo: City?
     var tempUnit: TempUnit = .metric
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -30,7 +23,7 @@ class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = date.toFormattedString()
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -44,6 +37,7 @@ class WeatherDetailViewController: UIViewController {
         let sunriseTimeLabel: UILabel = UILabel()
         let sunsetTimeLabel: UILabel = UILabel()
         let spacingView: UIView = UIView()
+        
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
         
@@ -95,10 +89,10 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(tempUnit.strategy.convertTemperture(metric: listInfo.main.temp))\(tempUnit.strategy.unitSymbol)"
+        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.strategy.unitSymbol)"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.strategy.unitSymbol)"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.strategy.unitSymbol)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

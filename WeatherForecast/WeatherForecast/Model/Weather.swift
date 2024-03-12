@@ -49,14 +49,3 @@ class Coord: Decodable {
     let lat, lon: Double
 }
 
-// MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
-}
-

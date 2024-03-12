@@ -82,8 +82,8 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
-				510D0FCD2BA05D7D002CF674 /* Models */,
 				510D0FC82BA04210002CF674 /* Extensions */,
+				510D0FCD2BA05D7D002CF674 /* Models */,
 				C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */,
 				C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */,
 				C7743DA02B21C3B400DF0D09 /* WeatherTableViewCell.swift */,

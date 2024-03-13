@@ -10,7 +10,7 @@ final class WeatherViewController: UIViewController {
     private let tableView: UITableView = .init(frame: .zero, style: .plain)
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    private var weatherJSON: WeatherJSON?
+    private var weatherJSON: WeatherDataProtocol?
     private var tempUnit: TempUnit
     
     private let weatherService: WeatherJSONService

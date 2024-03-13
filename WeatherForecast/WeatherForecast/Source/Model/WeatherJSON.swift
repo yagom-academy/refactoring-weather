@@ -6,7 +6,20 @@
 //
 
 // MARK: - Weather JSON Format
-struct WeatherJSON: Decodable {
-    let weatherForecast: [WeatherForecastInfo]
-    let city: City
+protocol WeatherDataProtocol {
+    var weatherForecast: [WeatherForecastInfo] { get }
+    var city: City { get }
+}
+
+struct WeatherJSON: Decodable, WeatherDataProtocol {
+    private let _weatherForecast: [WeatherForecastInfo]
+    private let _city: City
+    
+    var weatherForecast: [WeatherForecastInfo] {
+        return _weatherForecast
+    }
+    
+    var city: City {
+        return _city
+    }
 }

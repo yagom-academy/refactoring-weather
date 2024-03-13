@@ -93,4 +93,21 @@ final class WeatherTableViewCell: UITableViewCell {
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
     }
+    
+    func configure(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageService: WeatherImageService) {
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        let iconName: String = weatherForecastInfo.weather.icon
+        
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.symbol)"
+        dateLabel.text = DateFormatter.convertToKorean(by: date)
+        
+        imageService.fetchImage(iconName: iconName) { image in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                weatherIcon.image = image
+            }
+        }
+    }
 }

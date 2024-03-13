@@ -115,19 +115,9 @@ extension WeatherViewController: UITableViewDataSource {
             return cell
         }
     
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        let iconName: String = weatherForecastInfo.weather.icon
-        
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.symbol)"
-        cell.dateLabel.text = DateFormatter.convertToKorean(by: date)
-
-        imageService.fetchImage(iconName: iconName) { image in
-            DispatchQueue.main.async {
-                cell.weatherIcon.image = image
-            }
-        }
+        cell.configure(weatherForecastInfo: weatherForecastInfo,
+                       tempUnit: tempUnit,
+                       imageService: imageService)
         
         return cell
     }

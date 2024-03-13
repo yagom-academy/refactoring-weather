@@ -7,7 +7,7 @@
 import UIKit
 import Combine
 
-class ViewController: UIViewController {
+class WeatherListViewController: UIViewController {
     var tempUnit: TempUnit = .metric
     private var weatherRepository: WeatherRepository = WeatherRepositoryImpl()
     private var cancellables: Set<AnyCancellable> = .init()
@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherListViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -39,7 +39,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: WeatherListViewDelegate {
+extension WeatherListViewController: WeatherListViewDelegate {
     func weatherListView(_ weatherListView: WeatherListView, didSelectRowAt indexPath: IndexPath) {
 //        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
 //        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]

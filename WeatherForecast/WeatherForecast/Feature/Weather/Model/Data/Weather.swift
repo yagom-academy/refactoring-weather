@@ -208,8 +208,7 @@ struct ImperialStrategy: TemperatureStrategy {
         // TOOD: 변환
         let convertedTemperature: Double = temperature
         
-        return "\(temperature)℉"
+        return "\(convertedTemperature)℉"
     }
 }
-
 

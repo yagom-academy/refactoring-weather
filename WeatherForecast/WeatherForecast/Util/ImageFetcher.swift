@@ -32,6 +32,7 @@ struct ImageFetcherImpl: ImageFetcher {
                         throw ImageFetchError.createUIImageFailed
                     }
                     
+                    ImageCache.shared.set(uiImage, forKey: url.absoluteString as NSString)
                     promise(.success(uiImage))
                 } catch {
                     promise(.failure(error))

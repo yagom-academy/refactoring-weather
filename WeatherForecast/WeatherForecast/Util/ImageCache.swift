@@ -12,7 +12,7 @@ protocol ImageCacheProtocol {
     func get(forKey key: NSString) -> UIImage?
 }
 
-struct ImageCacheNSCache: ImageCacheProtocol {
+struct MemoryCache: ImageCacheProtocol {
     private let cache: NSCache<NSString, UIImage> = NSCache()
     
     func set(_ image: UIImage, forKey: NSString) throws {
@@ -24,8 +24,19 @@ struct ImageCacheNSCache: ImageCacheProtocol {
     }
 }
 
+struct DiskCache: ImageCacheProtocol {
+    func set(_ image: UIImage, forKey: NSString) throws {
+        // TODO: 디스크 캐시 구현 (FileManager)
+    }
+    
+    func get(forKey: NSString) -> UIImage? {
+        // TODO: 디스크 캐시 구현 (FileManager)
+        return nil
+    }
+}
+
 struct ImageCache {
-    private let caches: [ImageCacheProtocol] = [ImageCacheNSCache()]
+    private let caches: [ImageCacheProtocol] = [MemoryCache()]
     
     func set(_ image: UIImage, forKey key: NSString) {
         for cache in caches {
@@ -33,6 +44,7 @@ struct ImageCache {
                 try cache.set(image, forKey: key)
                 return
             } catch {
+                // handle error
                 
             }
         }

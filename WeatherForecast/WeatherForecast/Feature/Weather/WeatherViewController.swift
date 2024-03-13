@@ -9,11 +9,23 @@ import UIKit
 class WeatherViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
+    var weatherJsonLoader: WeatherJsonLoader
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
 
     var tempUnit: TempUnit = .metric
+    
+    init(weatherJsonLoader: WeatherJsonLoader) {
+        self.weatherJsonLoader = weatherJsonLoader
+        super.init(nibName:nil, bundle:nil)
+        
+        view.backgroundColor = .white
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +46,13 @@ extension WeatherViewController {
     }
     
     @objc private func refresh() {
-        fetchWeatherJSON()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
     private func initialSetUp() {
+        fetchWeatherJSON()
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.strategy.title,
                                                             image: nil,
                                                             target: self,
@@ -79,9 +92,7 @@ extension WeatherViewController {
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
+        guard let data = weatherJsonLoader.loadJson() else { return }
         
         let info: WeatherJSON
         do {

@@ -25,7 +25,6 @@ final class WeatherViewModelImp: WeatherViewModel {
     private(set) var tempUnit: TempUnit
     private let weatherService: WeatherJSONService
     private let imageService: WeatherImageService
-    private let imageCache: NSCache<NSString, UIImage>
     
     var navigationBarItemTitle: String {
         return tempUnit.description
@@ -37,7 +36,6 @@ final class WeatherViewModelImp: WeatherViewModel {
         self.weatherService = weatherService
         self.imageService = imageService
         self.tempUnit = tempUnit
-        imageCache = NSCache()
     }
     
     func fetch() {

@@ -100,7 +100,7 @@ extension WeatherViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.symbol)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = DateFormatter.convertToKorean(by: date)

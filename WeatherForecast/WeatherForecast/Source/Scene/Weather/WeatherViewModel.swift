@@ -24,15 +24,15 @@ protocol WeatherViewModel {
 final class WeatherViewModelImp: WeatherViewModel {
     private(set) var weatherForecast: [WeatherForecastInfo] = []
     private(set) var city: City = City.mock
-    private(set) var tempUnit: TempUnit = .metric
+    private(set) var tempUnit: TempUnit = .celsius
     
     private let weatherService: WeatherJSONService
     private let imageCache: NSCache<NSString, UIImage>
     
     lazy var navigationBarItemTitle: String = {
         switch tempUnit {
-        case.imperial: return "화씨"
-        case .metric: return "섭씨"
+        case.fahrenheit: return "화씨"
+        case .celsius: return "섭씨"
         }
     }()
     
@@ -50,18 +50,18 @@ final class WeatherViewModelImp: WeatherViewModel {
             self.city = data.city
         }
         
-        navigationBarItemTitle = tempUnit.expression
+        navigationBarItemTitle = tempUnit.symbol
     }
     
     func changeTempUnit() {
         switch tempUnit {
-        case .metric:
-            tempUnit = .imperial
-        case .imperial:
-            tempUnit = .metric
+        case .celsius:
+            tempUnit = .fahrenheit
+        case .fahrenheit:
+            tempUnit = .celsius
         }
         
-        navigationBarItemTitle = tempUnit.expression
+        navigationBarItemTitle = tempUnit.symbol
     }
     
     func getCachedImage(urlString key: String) -> UIImage? {

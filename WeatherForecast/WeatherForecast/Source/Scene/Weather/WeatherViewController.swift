@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     private let tableView: UITableView = .init(frame: .zero, style: .plain)
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     
@@ -110,8 +110,7 @@ extension WeatherViewController: UITableViewDataSource {
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.symbol)"
         cell.dateLabel.text = DateFormatter.convertToKorean(by: date)
 
-        viewModel.fetchImage(iconName: iconName) { [weak self] image in
-            guard let self = self else { return }
+        viewModel.fetchImage(iconName: iconName) { image in
             DispatchQueue.main.async {
                 cell.weatherIcon.image = image
             }

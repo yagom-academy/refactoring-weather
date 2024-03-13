@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     static let identifier = String(describing: WeatherTableViewCell.self)
     
     let weatherIcon: UIImageView = UIImageView()

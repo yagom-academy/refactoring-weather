@@ -9,11 +9,12 @@ import UIKit
 class WeatherTableViewCell: UITableViewCell {
     static let identifier = String(describing: WeatherTableViewCell.self)
     
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    let weatherIcon: UIImageView = UIImageView()
+    let dateLabel: UILabel = UILabel()
+    let temperatureLabel: UILabel = UILabel()
+    let weatherLabel: UILabel = UILabel()
+    let descriptionLabel: UILabel = UILabel()
+    let dashLabel: UILabel = UILabel()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -31,13 +32,6 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
-        
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
         labels.forEach { label in

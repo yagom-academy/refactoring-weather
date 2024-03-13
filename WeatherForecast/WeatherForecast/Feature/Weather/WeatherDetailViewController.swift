@@ -29,7 +29,8 @@ class WeatherDetailViewController: UIViewController {
         
         guard let listInfo = weatherForecastInfo else { return }
         
-        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
+//        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
+        let date: Date = listInfo.dt
         navigationItem.title = dateFormatter.string(from: date)
         
         let iconImageView: UIImageView = UIImageView()
@@ -93,35 +94,35 @@ class WeatherDetailViewController: UIViewController {
                                                  multiplier: 0.3)
         ])
         
-        weatherGroupLabel.text = listInfo.weather.main
-        weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+        weatherGroupLabel.text = listInfo.mainString
+        weatherDescriptionLabel.text = listInfo.description
+//        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
+//        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
+//        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
+//        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+//        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
+//        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
-        }
+//        if let cityInfo {
+//            let formatter: DateFormatter = DateFormatter()
+//            formatter.dateFormat = .none
+//            formatter.timeStyle = .short
+//            formatter.locale = .init(identifier: "ko_KR")
+//            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
+//            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+//        }
         
-        Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            iconImageView.image = image
-        }
+//        Task {
+//            let iconName: String = listInfo.weather.icon
+//            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+//
+//            guard let url: URL = URL(string: urlString),
+//                  let (data, _) = try? await URLSession.shared.data(from: url),
+//                  let image: UIImage = UIImage(data: data) else {
+//                return
+//            }
+//            
+//            iconImageView.image = image
+//        }
     }
 }

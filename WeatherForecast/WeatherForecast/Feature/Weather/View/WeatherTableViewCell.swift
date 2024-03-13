@@ -5,13 +5,19 @@
 // 
 
 import UIKit
+import Combine
 
 class WeatherTableViewCell: UITableViewCell {
+    static let ReuseIdentifier: String = "WeatherTableViewCell"
+    
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
     var descriptionLabel: UILabel!
+    
+    private var imageFetcher: ImageFetcher?
+    private var cancellable: Set<AnyCancellable> = .init()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,5 +105,45 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
+        cancellable.forEach {
+            $0.cancel()
+        }
+        cancellable.removeAll()
+    }
+    
+    func setImageFetcher(_ imageFetcher: ImageFetcher) {
+        self.imageFetcher = imageFetcher
+    }
+    
+    func updateUI(
+        weatherMain: String,
+        weatherDescription: String,
+        temperature: String,
+        date: String,
+        icon: String
+    ) {
+        weatherLabel.text = weatherMain
+        descriptionLabel.text = weatherDescription
+        temperatureLabel.text = temperature
+        dateLabel.text = date
+        
+        guard let url = URL(string: icon) else { return }
+        imageFetcher?.loadImage(url: url)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let self else { return }
+                
+                switch result {
+                case .finished:
+                    break
+                case .failure(let error):
+                    // handle error (placeholder 이미지 노출 등)
+                    print(error)
+                }
+            } receiveValue: { [weak self] fetchedImage in
+                guard let self else { return }
+                
+                weatherIcon.image = fetchedImage
+            }.store(in: &cancellable)
     }
 }

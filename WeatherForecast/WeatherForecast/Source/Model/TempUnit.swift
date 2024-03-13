@@ -27,4 +27,13 @@ enum TempUnit: String {
             return "화씨"
         }
     }
+    
+    mutating func toggle() {
+        switch self {
+        case .celsius:
+            self = .fahrenheit
+        case .fahrenheit:
+            self = .celsius
+        }
+    }
 }

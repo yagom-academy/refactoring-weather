@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
         let weatherService: WeatherJSONService = WeatherJSONService()
-        let viewModel = WeatherViewModelImp(weatherService: weatherService)
+        let viewModel = WeatherViewModelImp(weatherService: weatherService, tempUnit: TempUnit.fahrenheit)
         let viewController = WeatherViewController(viewModel: viewModel)
         let navigationController = UINavigationController(rootViewController: viewController)
         window?.rootViewController = navigationController

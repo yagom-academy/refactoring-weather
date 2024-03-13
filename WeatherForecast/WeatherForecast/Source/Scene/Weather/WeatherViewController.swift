@@ -45,11 +45,16 @@ extension WeatherViewController {
         viewModel.fetch()
         tableView.reloadData()
         refreshControl.endRefreshing()
+        navigationItem.rightBarButtonItem?.title = viewModel.navigationBarItemTitle
+        navigationItem.title = viewModel.city.name
     }
     
     private func initialSetUp() {
         view.backgroundColor = .systemBackground
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        
+        let tempUnit = viewModel.tempUnit
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.description, image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.title = viewModel.city.name
         
         layTable()
         

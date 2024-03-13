@@ -128,10 +128,11 @@ extension WeatherViewController: UITableViewDelegate {
         let weatherForecastInfo = viewModel.weatherForecast[indexPath.row]
         let city = viewModel.city
         let tempUnit = viewModel.tempUnit
-        
+        let imageService = WeatherImageService()
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecastInfo,
                                                                                             cityInfo: city,
-                                                                                            tempUnit: tempUnit)
+                                                                                            tempUnit: tempUnit,
+                                                                                            imageService: imageService)
         
         navigationController?.show(detailViewController, sender: self)
     }

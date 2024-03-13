@@ -11,10 +11,17 @@ class WeatherDetailViewController: UIViewController {
     private let cityInfo: City
     private let tempUnit: TempUnit
     
-    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit) {
+    private let imageService: WeatherImageService
+    
+    init(weatherForecastInfo: WeatherForecastInfo, 
+         cityInfo: City,
+         tempUnit: TempUnit,
+         imageService: WeatherImageService) {
+        
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
+        self.imageService = imageService
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -111,18 +118,12 @@ class WeatherDetailViewController: UIViewController {
         sunriseTimeLabel.text = "일출 : \(DateFormatter.convertToCityTime(by: sunriseDate))"
         sunsetTimeLabel.text = "일몰 : \(DateFormatter.convertToCityTime(by: sunsetDate))"
         
+        let iconName: String = listInfo.weather.icon
         
-        Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
+        imageService.fetchImage(iconName: iconName) { image in
+            DispatchQueue.main.async {
+                iconImageView.image = image
             }
-            
-            iconImageView.image = image
         }
     }
 }

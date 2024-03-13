@@ -12,13 +12,11 @@ protocol WeatherViewModel {
     var weatherForecast: [WeatherForecastInfo] { get }
     var city: City { get }
     var tempUnit: TempUnit { get }
-    
     var navigationBarItemTitle: String { get }
     
     func fetch()
     func changeTempUnit()
-    func getCachedImage(urlString key: String) -> UIImage?
-    func setCachedImage(_ image: UIImage, urlString key: String)
+    func fetchImage(iconName: String, completion: @escaping (UIImage) -> ())
 }
 
 final class WeatherViewModelImp: WeatherViewModel {
@@ -26,14 +24,18 @@ final class WeatherViewModelImp: WeatherViewModel {
     private(set) var city: City = City.mock
     private(set) var tempUnit: TempUnit
     private let weatherService: WeatherJSONService
+    private let imageService: WeatherImageService
     private let imageCache: NSCache<NSString, UIImage>
     
     var navigationBarItemTitle: String {
         return tempUnit.description
     }
     
-    init(weatherService: WeatherJSONService, tempUnit: TempUnit) {
+    init(weatherService: WeatherJSONService,
+         imageService: WeatherImageService,
+         tempUnit: TempUnit) {
         self.weatherService = weatherService
+        self.imageService = imageService
         self.tempUnit = tempUnit
         imageCache = NSCache()
     }
@@ -51,13 +53,9 @@ final class WeatherViewModelImp: WeatherViewModel {
         tempUnit.toggle()
     }
     
-    func getCachedImage(urlString key: String) -> UIImage? {
-        return imageCache.object(forKey: key as NSString)
-    }
-    
-    func setCachedImage(_ image: UIImage, 
-                        urlString key: String) {
-        imageCache.setObject(image,
-                              forKey: key as NSString)
+    func fetchImage(iconName: String, completion: @escaping (UIImage) -> ()) {
+        imageService.fetchImage(iconName: iconName) { image in
+            completion(image)
+        }
     }
 }

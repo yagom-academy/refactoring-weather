@@ -102,32 +102,17 @@ extension WeatherViewController: UITableViewDataSource {
         
         let weatherForecastInfo = viewModel.weatherForecast[indexPath.row]
         let tempUnit = viewModel.tempUnit
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        let iconName: String = weatherForecastInfo.weather.icon
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.symbol)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = DateFormatter.convertToKorean(by: date)
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = viewModel.getCachedImage(urlString: urlString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            viewModel.setCachedImage(image, urlString: urlString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
+
+        viewModel.fetchImage(iconName: iconName) { [weak self] image in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
                 cell.weatherIcon.image = image
             }
         }

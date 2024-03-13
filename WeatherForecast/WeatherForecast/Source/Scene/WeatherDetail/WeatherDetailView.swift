@@ -68,16 +68,14 @@ final class WeatherDetailView: UIView {
     
     func setupLayout() {
         let safeArea: UILayoutGuide = self.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
-                                                   constant: 16),
-            mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                   constant: -16),
-            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
-            iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
-                                                 multiplier: 0.3)
-        ])
+        NSLayoutConstraint.activate([mainStackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                                     mainStackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+                                     mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
+                                                                            constant: 16),
+                                     mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
+                                                                             constant: -16),
+                                     iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
+                                     iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
+                                                                          multiplier: 0.3)])
     }
 }

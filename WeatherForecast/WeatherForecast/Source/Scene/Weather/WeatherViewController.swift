@@ -12,6 +12,7 @@ final class WeatherViewController: UIViewController {
     
     private var weatherJSON: WeatherJSON?
     private var tempUnit: TempUnit
+    
     private let weatherService: WeatherJSONService
     private let imageService: WeatherImageService
 
@@ -49,7 +50,6 @@ final class WeatherViewController: UIViewController {
 
 extension WeatherViewController {
     @objc private func changeTempUnit() {
-        
         tempUnit.toggle()
         refresh()
     }
@@ -63,7 +63,10 @@ extension WeatherViewController {
     private func initialSetUp() {
         view.backgroundColor = .systemBackground
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.description, image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.description, 
+                                                            image: nil,
+                                                            target: self,
+                                                            action: #selector(changeTempUnit))
         navigationItem.title = weatherJSON?.city.name
         
         layTable()
@@ -73,7 +76,8 @@ extension WeatherViewController {
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.identifier)
+        tableView.register(WeatherTableViewCell.self, 
+                           forCellReuseIdentifier: WeatherTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -111,7 +115,6 @@ extension WeatherViewController: UITableViewDataSource {
             return cell
         }
     
-
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         let iconName: String = weatherForecastInfo.weather.icon
         
@@ -136,10 +139,12 @@ extension WeatherViewController: UITableViewDelegate {
         
         let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         let city = weatherJSON?.city
-        let tempUnit = tempUnit
         let imageService = WeatherImageService()
-        let weatherDetailInfo = WeatherDetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: city, tempUnit: tempUnit)
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherDetailInfo: weatherDetailInfo, imageService: imageService)
+        let weatherDetailInfo = WeatherDetailInfo(weatherForecastInfo: weatherForecastInfo, 
+                                                  cityInfo: city,
+                                                  tempUnit: tempUnit)
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherDetailInfo: weatherDetailInfo, 
+                                                                                            imageService: imageService)
         
         navigationController?.show(detailViewController, sender: self)
     }

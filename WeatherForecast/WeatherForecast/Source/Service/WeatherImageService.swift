@@ -9,7 +9,7 @@
 import UIKit
 
 final class WeatherImageService {
-    let imageCache: NSCache<NSString, UIImage> = NSCache()
+    private let imageCache: NSCache<NSString, UIImage> = NSCache()
     
     func fetchImage(iconName: String, completion: @escaping (UIImage) -> ()) {
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"

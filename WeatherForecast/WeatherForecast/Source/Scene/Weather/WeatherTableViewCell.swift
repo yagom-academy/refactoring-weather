@@ -16,8 +16,10 @@ final class WeatherTableViewCell: UITableViewCell {
     let descriptionLabel: UILabel = UILabel()
     let dashLabel: UILabel = UILabel()
      
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCell.CellStyle, 
+                  reuseIdentifier: String?) {
+        super.init(style: style, 
+                   reuseIdentifier: reuseIdentifier)
         layViews()
         reset()
     }
@@ -32,7 +34,11 @@ final class WeatherTableViewCell: UITableViewCell {
     }
     
     private func layViews() {
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
+        let labels: [UILabel] = [dateLabel, 
+                                 temperatureLabel,
+                                 weatherLabel,
+                                 dashLabel,
+                                 descriptionLabel]
         
         labels.forEach { label in
             label.textColor = .black
@@ -40,11 +46,9 @@ final class WeatherTableViewCell: UITableViewCell {
             label.numberOfLines = 1
         }
         
-        let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
-            weatherLabel,
-            dashLabel,
-            descriptionLabel
-        ])
+        let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [weatherLabel,
+                                                                           dashLabel,
+                                                                           descriptionLabel])
         
         descriptionLabel.setContentHuggingPriority(.defaultLow,
                                                    for: .horizontal)
@@ -54,22 +58,17 @@ final class WeatherTableViewCell: UITableViewCell {
         weatherStackView.alignment = .center
         weatherStackView.distribution = .fill
         
-        
-        let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [
-            dateLabel,
-            temperatureLabel,
-            weatherStackView
-        ])
+        let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [dateLabel,
+                                                                            temperatureLabel,
+                                                                            weatherStackView])
         
         verticalStackView.axis = .vertical
         verticalStackView.spacing = 8
         verticalStackView.distribution = .fill
         verticalStackView.alignment = .leading
         
-        let contentsStackView: UIStackView = UIStackView(arrangedSubviews: [
-            weatherIcon,
-            verticalStackView
-        ])
+        let contentsStackView: UIStackView = UIStackView(arrangedSubviews: [weatherIcon,
+                                                                            verticalStackView])
                
         contentsStackView.axis = .horizontal
         contentsStackView.spacing = 16
@@ -79,14 +78,12 @@ final class WeatherTableViewCell: UITableViewCell {
         
         contentView.addSubview(contentsStackView)
                 
-        NSLayoutConstraint.activate([
-            contentsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            contentsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            contentsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            contentsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            weatherIcon.widthAnchor.constraint(equalTo: weatherIcon.heightAnchor),
-            weatherIcon.widthAnchor.constraint(equalToConstant: 100)
-        ])
+        NSLayoutConstraint.activate([contentsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+                                     contentsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                                     contentsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                                     contentsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+                                     weatherIcon.widthAnchor.constraint(equalTo: weatherIcon.heightAnchor),
+                                     weatherIcon.widthAnchor.constraint(equalToConstant: 100)])
     }
     
     private func reset() {

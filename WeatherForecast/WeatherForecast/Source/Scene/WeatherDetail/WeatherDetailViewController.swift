@@ -6,22 +6,22 @@
 
 import UIKit
 
+struct WeatherDetailInfo {
+    let weatherForecastInfo: WeatherForecastInfo?
+    let cityInfo: City?
+    let tempUnit: TempUnit
+}
+
 final class WeatherDetailViewController: UIViewController {
-    private let weatherForecastInfo: WeatherForecastInfo
-    private let cityInfo: City
-    private let tempUnit: TempUnit
+    private let weatherDetailInfo: WeatherDetailInfo
     private let contentView = WeatherDetailView()
     
     private let imageService: WeatherImageService
     
-    init(weatherForecastInfo: WeatherForecastInfo, 
-         cityInfo: City,
-         tempUnit: TempUnit,
+    init(weatherDetailInfo: WeatherDetailInfo,
          imageService: WeatherImageService) {
         
-        self.weatherForecastInfo = weatherForecastInfo
-        self.cityInfo = cityInfo
-        self.tempUnit = tempUnit
+        self.weatherDetailInfo = weatherDetailInfo
         self.imageService = imageService
         
         super.init(nibName: nil, bundle: nil)
@@ -47,16 +47,20 @@ final class WeatherDetailViewController: UIViewController {
         contentView.weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
         contentView.weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
         
-        let listInfo = weatherForecastInfo
+        guard let listInfo = weatherDetailInfo.weatherForecastInfo,
+              let cityInfo = weatherDetailInfo.cityInfo else {
+            return
+        }
+        
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
         navigationItem.title = DateFormatter.convertToKorean(by: date)
 
         contentView.weatherGroupLabel.text = listInfo.weather.main
         contentView.weatherDescriptionLabel.text = listInfo.weather.description
-        contentView.temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.symbol)"
-        contentView.feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.symbol)"
-        contentView.maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.symbol)"
-        contentView.minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.symbol)"
+        contentView.temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(weatherDetailInfo.tempUnit.symbol)"
+        contentView.feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(weatherDetailInfo.tempUnit.symbol)"
+        contentView.maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(weatherDetailInfo.tempUnit.symbol)"
+        contentView.minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(weatherDetailInfo.tempUnit.symbol)"
         contentView.popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         contentView.humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

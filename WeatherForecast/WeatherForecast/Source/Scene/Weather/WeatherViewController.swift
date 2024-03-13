@@ -127,11 +127,12 @@ extension WeatherViewController: UITableViewDelegate {
         
         let weatherForecastInfo = viewModel.weatherForecast[indexPath.row]
         let city = viewModel.city
+        let tempUnit = viewModel.tempUnit
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherForecastInfo
-        detailViewController.cityInfo = city
-        detailViewController.tempUnit = viewModel.tempUnit
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherForecastInfo,
+                                                                                            cityInfo: city,
+                                                                                            tempUnit: tempUnit)
+        
         navigationController?.show(detailViewController, sender: self)
     }
 }

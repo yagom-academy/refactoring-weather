@@ -7,11 +7,21 @@
 import UIKit
 
 class WeatherDetailViewController: UIViewController {
-
-    var weatherForecastInfo: WeatherForecastInfo?
-    var cityInfo: City?
-    var tempUnit: TempUnit = .celsius
-
+    private let weatherForecastInfo: WeatherForecastInfo
+    private let cityInfo: City
+    private let tempUnit: TempUnit
+    
+    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit) {
+        self.weatherForecastInfo = weatherForecastInfo
+        self.cityInfo = cityInfo
+        self.tempUnit = tempUnit
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -20,8 +30,7 @@ class WeatherDetailViewController: UIViewController {
     private func initialSetUp() {
         view.backgroundColor = .white
         
-        guard let listInfo = weatherForecastInfo else { return }
-        
+        let listInfo = weatherForecastInfo
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
         navigationItem.title = DateFormatter.convertToKorean(by: date)
         
@@ -95,13 +104,13 @@ class WeatherDetailViewController: UIViewController {
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
-            let sunriseDate = Date(timeIntervalSince1970: cityInfo.sunrise)
-            let sunsetDate = Date(timeIntervalSince1970: cityInfo.sunset)
-            
-            sunriseTimeLabel.text = "일출 : \(DateFormatter.convertToCityTime(by: sunriseDate))"
-            sunsetTimeLabel.text = "일몰 : \(DateFormatter.convertToCityTime(by: sunsetDate))"
-        }
+        
+        let sunriseDate = Date(timeIntervalSince1970: cityInfo.sunrise)
+        let sunsetDate = Date(timeIntervalSince1970: cityInfo.sunset)
+        
+        sunriseTimeLabel.text = "일출 : \(DateFormatter.convertToCityTime(by: sunriseDate))"
+        sunsetTimeLabel.text = "일몰 : \(DateFormatter.convertToCityTime(by: sunsetDate))"
+        
         
         Task {
             let iconName: String = listInfo.weather.icon

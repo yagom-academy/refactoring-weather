@@ -109,9 +109,7 @@ class WeatherDetailViewController: UIViewController {
             let iconName: String = listInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
 
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
+            guard let image = await ImageLoader.loadUIImage(from: urlString) else {
                 return
             }
             

@@ -12,13 +12,7 @@ class WeatherViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
+
     var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
@@ -46,7 +40,10 @@ extension WeatherViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.strategy.title,
+                                                            image: nil,
+                                                            target: self,
+                                                            action: #selector(changeTempUnit))
         
         layTable()
         
@@ -119,25 +116,21 @@ extension WeatherViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.strategy.unitSymbol)"
+        cell.temperatureLabel.text = "\(tempUnit.strategy.convertTemperture(metric: weatherForecastInfo.main.temp))\(tempUnit.strategy.unitSymbol)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
+        cell.dateLabel.text = date.toFormattedString()
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
+        
         if let image = imageChache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
             return cell
         }
         
         Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
+            guard let image = await ImageLoader.loadUIImage(from: urlString) else { return }
             
             imageChache.setObject(image, forKey: urlString as NSString)
             

@@ -52,7 +52,7 @@ extension WeatherViewController {
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -107,7 +107,7 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
@@ -121,18 +121,18 @@ extension WeatherViewController: UITableViewDataSource {
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = date.toFormattedString()
                 
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+            
+        let imageUrlString: String = weatherForecastInfo.weather.iconPath
         
-        if let image = imageChache.object(forKey: urlString as NSString) {
+        if let image = imageChache.object(forKey: imageUrlString as NSString) {
             cell.weatherIcon.image = image
             return cell
         }
         
         Task {
-            guard let image = await ImageLoader.loadUIImage(from: urlString) else { return }
+            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else { return }
             
-            imageChache.setObject(image, forKey: urlString as NSString)
+            imageChache.setObject(image, forKey: imageUrlString as NSString)
             
             if indexPath == tableView.indexPath(for: cell) {
                 cell.weatherIcon.image = image

@@ -32,6 +32,7 @@ class Weather: Decodable {
     let main: String
     let description: String
     let icon: String
+    var iconPath : String { get { return "https://openweathermap.org/img/wn/\(icon)@2x.png" }}
 }
 
 // MARK: - City

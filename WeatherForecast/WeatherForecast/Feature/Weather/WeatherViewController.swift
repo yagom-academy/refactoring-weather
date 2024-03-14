@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     let jsonFileName: String = "weather"
     
     var jsonLoader: JsonLoader

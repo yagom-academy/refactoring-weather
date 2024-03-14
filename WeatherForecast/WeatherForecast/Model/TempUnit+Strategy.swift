@@ -28,7 +28,7 @@ protocol TempUnitStrategy {
     func convertTemperture(metric: Double) -> Double
 }
 
-class MetricUnitStrategy: TempUnitStrategy {
+final class MetricUnitStrategy: TempUnitStrategy {
     var title: String = "섭씨"
     var unitSymbol: String = "℃"
     
@@ -37,7 +37,7 @@ class MetricUnitStrategy: TempUnitStrategy {
     }
 }
 
-class ImperialUnitStrategy: TempUnitStrategy {
+final class ImperialUnitStrategy: TempUnitStrategy {
     var title: String = "화씨"
     var unitSymbol: String = "℉"
     

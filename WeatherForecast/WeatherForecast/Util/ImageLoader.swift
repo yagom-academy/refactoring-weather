@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageLoader {
+final class ImageLoader {
     static func loadUIImage(from urlString: String) async -> UIImage? {
         guard let url: URL = URL(string: urlString),
               let (data, _) = try? await URLSession.shared.data(from: url),

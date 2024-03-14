@@ -7,26 +7,26 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-class WeatherJSON: Decodable {
+final class WeatherJSON: Decodable {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
 
 // MARK: - List
-class WeatherForecastInfo: Decodable {
+final class WeatherForecastInfo: Decodable {
     let dt: TimeInterval
     let main: MainInfo
     let weather: Weather
 }
 
 // MARK: - MainClass
-class MainInfo: Decodable {
+final class MainInfo: Decodable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
-class Weather: Decodable {
+final class Weather: Decodable {
     let id: Int
     let main: String
     let description: String
@@ -35,7 +35,7 @@ class Weather: Decodable {
 }
 
 // MARK: - City
-class City: Decodable {
+final class City: Decodable {
     let id: Int
     let name: String
     let coord: Coord
@@ -45,7 +45,7 @@ class City: Decodable {
 }
 
 // MARK: - Coord
-class Coord: Decodable {
+final class Coord: Decodable {
     let lat, lon: Double
 }
 

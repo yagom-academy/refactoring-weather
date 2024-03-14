@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class JsonLoader {
+final class JsonLoader {
     private let jsonDecoder: JSONDecoder
     
     init() {

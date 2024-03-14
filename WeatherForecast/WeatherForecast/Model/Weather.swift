@@ -17,7 +17,6 @@ class WeatherForecastInfo: Decodable {
     let dt: TimeInterval
     let main: MainInfo
     let weather: Weather
-    let dtTxt: String
 }
 
 // MARK: - MainClass

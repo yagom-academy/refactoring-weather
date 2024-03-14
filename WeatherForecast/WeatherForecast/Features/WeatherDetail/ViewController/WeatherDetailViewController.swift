@@ -6,9 +6,6 @@
 
 import UIKit
 
-<<<<<<< Updated upstream
-class WeatherDetailViewController: UIViewController, DateFormattable {
-=======
 struct WeatherDetailInfo {
   let weatherForecastInfo: WeatherForecastInfo?
   let cityInfo: City?
@@ -16,7 +13,6 @@ struct WeatherDetailInfo {
 }
 
 final class WeatherDetailViewController: UIViewController, DateFormattable {
->>>>>>> Stashed changes
   private let weatherImageCacheService: WeatherImageCacheServiceable
   private var info: WeatherDetailInfo
   

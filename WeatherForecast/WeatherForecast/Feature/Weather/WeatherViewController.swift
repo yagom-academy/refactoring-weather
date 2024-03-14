@@ -13,9 +13,18 @@ final class WeatherViewController: UIViewController {
     
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    let imageChache: NSCache<NSString, UIImage>
     
     var tempUnit: TempUnit = .metric
+    
+    init(imageChache: NSCache<NSString, UIImage>) {
+        self.imageChache = imageChache
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,31 +114,7 @@ extension WeatherViewController: UITableViewDataSource {
             return cell
         }
         
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(tempUnit.strategy.convertTemperture(metric: weatherForecastInfo.main.temp))\(tempUnit.strategy.unitSymbol)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = date.toFormattedString()
-                
-            
-        let imageUrlString: String = weatherForecastInfo.weather.iconPath
-        
-        if let image = imageChache.object(forKey: imageUrlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        Task {
-            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else { return }
-            
-            imageChache.setObject(image, forKey: imageUrlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
-        
+        cell.setContents(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit, imageChache: imageChache)
         return cell
     }
 }

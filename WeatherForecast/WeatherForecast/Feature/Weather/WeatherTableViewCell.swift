@@ -29,6 +29,30 @@ final class WeatherTableViewCell: UITableViewCell {
         resetContents()
     }
     
+    func setContents(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageChache: NSCache<NSString, UIImage>) {
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(tempUnit.strategy.convertTemperture(metric: weatherForecastInfo.main.temp))\(tempUnit.strategy.unitSymbol)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = date.toFormattedString()
+        
+        let imageUrlString: String = weatherForecastInfo.weather.iconPath
+        
+        if let image = imageChache.object(forKey: imageUrlString as NSString) {
+            weatherIcon.image = image
+            return
+        }
+        
+        Task {
+            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else { return }
+            
+            imageChache.setObject(image, forKey: imageUrlString as NSString)
+            weatherIcon.image = image
+        }
+    }
+    
+    
     private func setLayout() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()

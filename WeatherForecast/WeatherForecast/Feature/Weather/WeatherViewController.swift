@@ -9,18 +9,17 @@ import UIKit
 class WeatherViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
-    var weatherJsonLoader: WeatherJsonLoader
+    var jsonLoader: JsonLoader
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
 
     var tempUnit: TempUnit = .metric
     
-    init(weatherJsonLoader: WeatherJsonLoader) {
-        self.weatherJsonLoader = weatherJsonLoader
+    init(jsonLoader: JsonLoader) {
+        self.jsonLoader = jsonLoader
         super.init(nibName:nil, bundle:nil)
         
-        view.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +52,7 @@ extension WeatherViewController {
     private func initialSetUp() {
         fetchWeatherJSON()
         
+        view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.strategy.title,
                                                             image: nil,
                                                             target: self,
@@ -89,20 +89,9 @@ extension WeatherViewController {
 extension WeatherViewController {
     private func fetchWeatherJSON() {
         
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let weatherInfo: WeatherJSON = jsonLoader.fetchJson(filename: "weather") else { return }
 
-        guard let data = weatherJsonLoader.loadJson() else { return }
-        
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
-        weatherJSON = info
+        weatherJSON = weatherInfo
         navigationItem.title = weatherJSON?.city.name
     }
 }

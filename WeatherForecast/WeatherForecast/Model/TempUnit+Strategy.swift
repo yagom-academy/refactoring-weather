@@ -43,7 +43,6 @@ class ImperialUnitStrategy: TempUnitStrategy {
     
     func convertTemperture(metric: Double) -> Double {
         // TODO: 좀 더 개선을 하고싶음
-        // round의 성능이 크게 좋지 않다고 강의노트에서 확인했던 것 같은데!
         return round((metric * 5.0 / 9.0 + 32.0) * 100) / 100
     }
 }

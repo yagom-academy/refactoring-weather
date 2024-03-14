@@ -10,7 +10,7 @@
 		34CEDAF22BA06418005F9E66 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CEDAF12BA06418005F9E66 /* Date+.swift */; };
 		34CEDAF42BA06981005F9E66 /* TempUnit+Strategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CEDAF32BA06981005F9E66 /* TempUnit+Strategy.swift */; };
 		34CEDAF62BA138F9005F9E66 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CEDAF52BA138F9005F9E66 /* ImageLoader.swift */; };
-		34CEDAF82BA15E58005F9E66 /* Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CEDAF72BA15E58005F9E66 /* Json.swift */; };
+		34CEDAF82BA15E58005F9E66 /* JsonLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CEDAF72BA15E58005F9E66 /* JsonLoader.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
 		C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */; };
@@ -25,7 +25,7 @@
 		34CEDAF12BA06418005F9E66 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		34CEDAF32BA06981005F9E66 /* TempUnit+Strategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TempUnit+Strategy.swift"; sourceTree = "<group>"; };
 		34CEDAF52BA138F9005F9E66 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
-		34CEDAF72BA15E58005F9E66 /* Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
+		34CEDAF72BA15E58005F9E66 /* JsonLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonLoader.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C7743D892B21C38100DF0D09 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 			children = (
 				34CEDAF12BA06418005F9E66 /* Date+.swift */,
 				34CEDAF52BA138F9005F9E66 /* ImageLoader.swift */,
-				34CEDAF72BA15E58005F9E66 /* Json.swift */,
+				34CEDAF72BA15E58005F9E66 /* JsonLoader.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -199,7 +199,7 @@
 				C7743D912B21C38100DF0D09 /* WeatherViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				34CEDAF62BA138F9005F9E66 /* ImageLoader.swift in Sources */,
-				34CEDAF82BA15E58005F9E66 /* Json.swift in Sources */,
+				34CEDAF82BA15E58005F9E66 /* JsonLoader.swift in Sources */,
 				34CEDAF22BA06418005F9E66 /* Date+.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,

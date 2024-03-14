@@ -9,14 +9,8 @@ import Foundation
 import UIKit
 
 final class JsonLoader {
-    private let jsonDecoder: JSONDecoder
     
-    init() {
-        jsonDecoder = JSONDecoder()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    }
-
-    func fetchJson<T: Decodable>(filename: String) -> T? {
+    static func fetchJson<T: Decodable>(filename: String) -> T? {
         guard let data: Data = loadJson(filename: filename),
               let info: T = decodeJson(data: data)
         else {
@@ -26,7 +20,7 @@ final class JsonLoader {
         return info
     }
     
-    private func loadJson(filename: String) -> Data?{
+    private static func loadJson(filename: String) -> Data?{
         guard let data = NSDataAsset(name: filename)?.data else {
             debugPrint("json file {\(filename)} wasn't able to load")
             return nil
@@ -34,8 +28,10 @@ final class JsonLoader {
         return data
     }
     
-    private func decodeJson<T: Decodable>(data: Data) -> T? {
+    private static func decodeJson<T: Decodable>(data: Data) -> T? {
         let info: T
+        let jsonDecoder: JSONDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
         do {
             info = try jsonDecoder.decode(T.self, from: data)

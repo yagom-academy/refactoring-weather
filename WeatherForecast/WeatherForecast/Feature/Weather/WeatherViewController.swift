@@ -9,7 +9,6 @@ import UIKit
 final class WeatherViewController: UIViewController {
     let jsonFileName: String = "weather"
     
-    var jsonLoader: JsonLoader
     var weatherJSON: WeatherJSON?
     
     var tableView: UITableView!
@@ -17,16 +16,6 @@ final class WeatherViewController: UIViewController {
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     
     var tempUnit: TempUnit = .metric
-    
-    init(jsonLoader: JsonLoader) {
-        self.jsonLoader = jsonLoader
-        super.init(nibName:nil, bundle:nil)
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +80,7 @@ extension WeatherViewController {
 extension WeatherViewController {
     private func fetchWeatherJSON() {
         
-        guard let weatherInfo: WeatherJSON = jsonLoader.fetchJson(filename: jsonFileName) else { return }
+        guard let weatherInfo: WeatherJSON = JsonLoader.fetchJson(filename: jsonFileName) else { return }
 
         weatherJSON = weatherInfo
         navigationItem.title = weatherJSON?.city.name

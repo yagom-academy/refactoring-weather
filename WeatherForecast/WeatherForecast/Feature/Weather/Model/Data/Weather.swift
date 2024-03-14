@@ -59,6 +59,26 @@ class WeatherForecastInfo {
         main.temp
     }
     
+    var feelsLike: Double {
+        main.feelsLike
+    }
+    
+    var minimumTemperature: Double {
+        main.tempMin
+    }
+    
+    var maximumTemperature: Double {
+        main.tempMax
+    }
+    
+    var rainProbabilityString: String {
+        "\(main.pop * 100)%"
+    }
+    
+    var humidityString: String {
+        "\(main.humidity)%"
+    }
+    
     var iconUrlString: String {
         "https://openweathermap.org/img/wn/\(weather.icon)@2x.png"
     }
@@ -158,6 +178,14 @@ class City {
         self.sunrise = .init(timeIntervalSince1970: dto.sunrise)
         self.sunset = .init(timeIntervalSince1970: dto.sunset)
     }
+    
+    var sunriseString: String {
+        sunrise.citySunriseString
+    }
+    
+    var sunsetString: String {
+        sunset.citySunsetString
+    }
 }
 
 // MARK: - Coord
@@ -194,16 +222,25 @@ enum TempUnit: String {
 }
 
 protocol TemperatureStrategy {
+    var krString: String { get }
     func convert(_ temperature: Double) -> String
 }
 
 struct MetricStrategy: TemperatureStrategy {
+    var krString: String {
+        "섭씨"
+    }
+    
     func convert(_ temperature: Double) -> String {
         "\(temperature)℃"
     }
 }
 
 struct ImperialStrategy: TemperatureStrategy {
+    var krString: String {
+        "화씨"
+    }
+    
     func convert(_ temperature: Double) -> String {
         // TOOD: 변환
         let convertedTemperature: Double = temperature

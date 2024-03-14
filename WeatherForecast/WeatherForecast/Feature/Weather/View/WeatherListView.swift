@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol WeatherListViewDelegate {
-    func weatherListView(_ weatherListView: WeatherListView, didSelectRowAt indexPath: IndexPath)
+protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource {
+    func weatherSelected(_ weather: WeatherForecastInfo)
     func refresh()
 }
 
@@ -27,11 +27,6 @@ class WeatherListView: UIView {
         return control
     }()
     
-    // MARK: UI Model
-    private var weatherForecast: [WeatherForecastInfo]?
-    private var city: City?
-    private var tempUnit: TempUnit?
-    
     private var delegate: WeatherListViewDelegate
     
     init(delegate: WeatherListViewDelegate) {
@@ -46,6 +41,8 @@ class WeatherListView: UIView {
     }
     
     private func initialSetUp() {
+        backgroundColor = .white
+        
         setUpTableView()
         setUpRefreshControl()
     }
@@ -64,8 +61,8 @@ class WeatherListView: UIView {
         ])
         
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.ReuseIdentifier)
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableView.dataSource = delegate
+        tableView.delegate = delegate
     }
     
     private func setUpRefreshControl() {
@@ -78,62 +75,13 @@ class WeatherListView: UIView {
     
     @objc private func refresh() {
         delegate.refresh()
-//        fetchWeatherJSON()
-//        tableView.reloadData()
-//        refreshControl.endRefreshing()
     }
     
-    func updateUI(_ fetchResult: FetchWeatherResult, _ tempUnit: TempUnit) {
-        self.weatherForecast = fetchResult.weatherForecast
-        self.city = fetchResult.city
-        self.tempUnit = tempUnit
-        
+    func updateUI() {
         tableView.reloadData()
+        
         if refreshControl.isRefreshing {
             refreshControl.endRefreshing()
         }
-    }
-}
-
-extension WeatherListView: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-//        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-//        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-//        detailViewController.cityInfo = weatherJSON?.city
-//        detailViewController.tempUnit = tempUnit
-//        navigationController?.show(detailViewController, sender: self)
-    }
-}
-
-extension WeatherListView: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherForecast?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.ReuseIdentifier, for: indexPath)
-        
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherForecast?[indexPath.row] else {
-            return cell
-        }
-        
-        cell.setImageFetcher(ImageFetcherImpl())
-        cell.updateUI(
-            weatherMain: weatherForecastInfo.mainString,
-            weatherDescription: weatherForecastInfo.description,
-            temperature: tempUnit?.convert(weatherForecastInfo.temperature) ?? "-",
-            date: weatherForecastInfo.dateString,
-            icon: weatherForecastInfo.iconUrlString
-        )
-        
-        return cell
     }
 }

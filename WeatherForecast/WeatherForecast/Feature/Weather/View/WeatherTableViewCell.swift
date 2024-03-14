@@ -130,9 +130,7 @@ class WeatherTableViewCell: UITableViewCell {
         guard let url = URL(string: icon) else { return }
         imageFetcher?.loadImage(url: url)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                guard let self else { return }
-                
+            .sink { result in
                 switch result {
                 case .finished:
                     break

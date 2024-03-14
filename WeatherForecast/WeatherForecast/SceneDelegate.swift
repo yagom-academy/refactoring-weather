@@ -17,8 +17,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         
-        let viewController: WeatherListViewController = .init()
-        let navigationController: UINavigationController = UINavigationController(rootViewController: viewController)
+        let weatherListViewController: WeatherListViewController = .init(
+            weatherRepository: WeatherRepositoryImpl(),
+            imageFetcher: ImageFetcherImpl()
+        )
+        let navigationController: UINavigationController = UINavigationController(rootViewController: weatherListViewController)
         navigationController.navigationBar.prefersLargeTitles = true
         navigationController.navigationBar.tintColor = .black
         

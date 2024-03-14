@@ -6,34 +6,64 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell, ReusableCell {
+    typealias SuperView = UITableView
+    
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
     var weatherLabel: UILabel!
+    var dashLabel: UILabel!
     var descriptionLabel: UILabel!
+    private var imageTask: Task<Void, Error>?
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        setSubviews()
+        setLayoutSubviews()
         reset()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
+        super.init(coder: coder)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         reset()
+        imageTask?.cancel()
     }
     
-    private func layViews() {
+    func configureCell(with weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit) {
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        
+        let dateFormatter: DateFormatter = {
+            let df = DateFormatter()
+            df.locale = .init(identifier: "ko_KR")
+            df.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+            return df
+        }()
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = dateFormatter.string(from: date)
+    }
+    
+    func setImage(with imageUrl: String) {
+        self.imageTask = Task {
+            let icon = try await ImageLoader.shared.fetchImageFromNetwork(with: imageUrl)
+            weatherIcon.image = icon
+        }
+    }
+    
+    private func setSubviews() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
         temperatureLabel = UILabel()
         weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
+        dashLabel = UILabel()
         descriptionLabel = UILabel()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
@@ -43,15 +73,16 @@ class WeatherTableViewCell: UITableViewCell {
             label.font = .preferredFont(forTextStyle: .body)
             label.numberOfLines = 1
         }
-        
+    }
+    
+    private func setLayoutSubviews() {
         let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
             weatherLabel,
             dashLabel,
             descriptionLabel
         ])
         
-        descriptionLabel.setContentHuggingPriority(.defaultLow,
-                                                   for: .horizontal)
+        descriptionLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         weatherStackView.axis = .horizontal
         weatherStackView.spacing = 8

@@ -8,6 +8,7 @@ import Foundation
 
 // MARK: - Weather JSON Format
 class WeatherJSON: Decodable {
+    static let changeWeaterJsonKey: String = "changeWeatherJson"
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
@@ -52,10 +53,18 @@ class Coord: Decodable {
 // MARK: - Temperature Unit
 enum TempUnit: String {
     case metric, imperial
+    
     var expression: String {
         switch self {
         case .metric: return "℃"
         case .imperial: return "℉"
+        }
+    }
+    
+    var buttonTitle: String {
+        switch self {
+        case .metric: return "섭씨"
+        case .imperial: return "화씨"
         }
     }
 }

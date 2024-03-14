@@ -25,7 +25,7 @@ final class WeatherFetcherService: WeatherFetcherServiceable {
       return .success(info)
     } catch {
       print(error.localizedDescription)
-      return .failure(.decodingFailed)
+      return .failure(.failedToDecode)
     }
   }
 }

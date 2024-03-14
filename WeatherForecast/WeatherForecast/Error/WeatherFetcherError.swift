@@ -9,5 +9,5 @@ import Foundation
 
 enum WeatherFetcherError: Error {
   case notFoundData
-  case decodingFailed
+  case failedToDecode
 }

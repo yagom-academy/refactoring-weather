@@ -6,16 +6,25 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-  var weatherIcon: UIImageView!
-  var dateLabel: UILabel!
-  var temperatureLabel: UILabel!
-  var weatherLabel: UILabel!
-  var descriptionLabel: UILabel!
+struct WeatherCellInfo {
+  let dt: TimeInterval
+  let main: MainInfo
+  let weather: Weather
+  let tempExpression: String
+}
+
+class WeatherTableViewCell: UITableViewCell, DateFormattable {
+  static let identifier: String = "WeatherTableViewCell"
+  
+  private let weatherIcon: UIImageView = .init()
+  private let dateLabel: UILabel = .init()
+  private let temperatureLabel: UILabel = .init()
+  private let weatherLabel: UILabel = .init()
+  private let descriptionLabel: UILabel = .init()
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    layViews()
+    setLayout()
     reset()
   }
   
@@ -28,53 +37,53 @@ class WeatherTableViewCell: UITableViewCell {
     reset()
   }
   
-  private func layViews() {
-    weatherIcon = .init()
-    dateLabel = .init()
-    temperatureLabel = .init()
-    weatherLabel = .init()
+  private func setLayout() {
     let dashLabel: UILabel = .init()
-    descriptionLabel = .init()
     
-    let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
-    
-    labels.forEach { label in
+    [
+      dateLabel, 
+      temperatureLabel,
+      weatherLabel,
+      dashLabel,
+      descriptionLabel
+    ]
+    .forEach { label in
       label.textColor = .black
       label.font = .preferredFont(forTextStyle: .body)
       label.numberOfLines = 1
     }
     
     let weatherStackView: UIStackView = .init(
-      arrangedSubviews: [
-        weatherLabel,
-        dashLabel,
-        descriptionLabel
-      ],
-      alignment: .center,
-      axis: .horizontal,
-      spacing: 8
+        arrangedSubviews: [
+          weatherLabel,
+          dashLabel,
+          descriptionLabel
+        ],
+        alignment: .center,
+        axis: .horizontal,
+        spacing: 8
     )
     descriptionLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
     
     let verticalStackView: UIStackView = .init(
-      arrangedSubviews: [
-        dateLabel,
-        temperatureLabel,
-        weatherStackView
-      ],
-      alignment: .leading,
-      axis: .vertical,
-      spacing: 8
+        arrangedSubviews: [
+          dateLabel,
+          temperatureLabel,
+          weatherStackView
+        ],
+        alignment: .leading,
+        axis: .vertical,
+        spacing: 8
     )
     
     let contentsStackView: UIStackView = .init(
-      arrangedSubviews: [
-        weatherIcon,
-        verticalStackView
-      ],
-      alignment: .center,
-      axis: .horizontal,
-      spacing: 16
+        arrangedSubviews: [
+          weatherIcon,
+          verticalStackView
+        ],
+        alignment: .center,
+        axis: .horizontal,
+        spacing: 16
     )
     contentsStackView.translatesAutoresizingMaskIntoConstraints = false
     
@@ -96,5 +105,16 @@ class WeatherTableViewCell: UITableViewCell {
     temperatureLabel.text = "00℃"
     weatherLabel.text = "~~~"
     descriptionLabel.text = "~~~~~"
+  }
+  
+  func configure(weatherCellInfo info: WeatherCellInfo) {
+    weatherLabel.text = info.weather.main
+    descriptionLabel.text = info.weather.description
+    temperatureLabel.text = "\(info.main.temp)\(info.tempExpression)"
+    dateLabel.text = dateFormat(from: info.dt, with: .KoreanLongForm)
+  }
+  
+  func set(image: UIImage) {
+    weatherIcon.image = image
   }
 }

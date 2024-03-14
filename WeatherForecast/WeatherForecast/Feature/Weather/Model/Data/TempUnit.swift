@@ -48,6 +48,10 @@ enum TempUnit: String {
         }
     }
     
+    var krString: String {
+        strategy.krString
+    }
+    
     func convert(_ temperature: Double) -> String {
         strategy.convert(temperature)
     }

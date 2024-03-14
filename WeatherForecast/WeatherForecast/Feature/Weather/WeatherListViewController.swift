@@ -42,16 +42,15 @@ extension WeatherListViewController {
         switch tempUnit {
         case .imperial:
             tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
         case .metric:
             tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
         }
+        navigationItem.rightBarButtonItem?.title = tempUnit.krString
         refresh()
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: TempUnit.imperial.krString, image: nil, target: self, action: #selector(changeTempUnit))
         view = WeatherListView(delegate: self)
         
         refresh()

@@ -105,9 +105,6 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "00℃"
         weatherLabel.text = "~~~"
         descriptionLabel.text = "~~~~~"
-        cancellable.forEach {
-            $0.cancel()
-        }
         cancellable.removeAll()
     }
     

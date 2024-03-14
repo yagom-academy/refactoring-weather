@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Weather JSON Format
+// MARK: - Weather DTO
 struct FetchWeatherResultDTO: Decodable {
     let weatherForecast: [WeatherForecastInfoDTO]
     let city: CityDTO

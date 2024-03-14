@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A781F3262BA2960B00BC4327 /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A781F3252BA2960B00BC4327 /* TempUnit.swift */; };
 		A79726EE2BA1768C00D9CE5C /* WeatherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */; };
 		A79726F02BA1769200D9CE5C /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */; };
 		A79726F32BA1773300D9CE5C /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726F22BA1773300D9CE5C /* Date+Extension.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A781F3252BA2960B00BC4327 /* TempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListView.swift; sourceTree = "<group>"; };
 		A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		A79726F22BA1773300D9CE5C /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			children = (
 				A79726FD2BA1861D00D9CE5C /* DTO */,
 				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+				A781F3252BA2960B00BC4327 /* TempUnit.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				A79726FF2BA1862200D9CE5C /* WeatherDTO.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				A781F3262BA2960B00BC4327 /* TempUnit.swift in Sources */,
 				A79726F32BA1773300D9CE5C /* Date+Extension.swift in Sources */,
 				A79726F62BA17E7400D9CE5C /* ImageFetcher.swift in Sources */,
 			);

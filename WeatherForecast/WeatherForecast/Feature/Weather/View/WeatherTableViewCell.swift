@@ -10,18 +10,18 @@ import Combine
 class WeatherTableViewCell: UITableViewCell {
     static let ReuseIdentifier: String = "WeatherTableViewCell"
     
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    var weatherIcon: UIImageView = .init()
+    var dateLabel: UILabel = .init()
+    var temperatureLabel: UILabel = .init()
+    var weatherLabel: UILabel = .init()
+    var descriptionLabel: UILabel = .init()
     
     private var imageFetcher: ImageFetcher?
-    private var cancellable: Set<AnyCancellable> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        layoutViews()
         reset()
     }
     
@@ -34,13 +34,20 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
+    private func reset() {
+        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
+        dateLabel.text = "0000-00-00 00:00:00"
+        temperatureLabel.text = "00℃"
+        weatherLabel.text = "~~~"
+        descriptionLabel.text = "~~~~~"
+        cancellables.removeAll()
+    }
+}
+
+// MARK: Layout Views
+extension WeatherTableViewCell {
+    private func layoutViews() {
+        let dashLabel: UILabel = .init()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
@@ -98,16 +105,10 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
-    
-    private func reset() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
-        dateLabel.text = "0000-00-00 00:00:00"
-        temperatureLabel.text = "00℃"
-        weatherLabel.text = "~~~"
-        descriptionLabel.text = "~~~~~"
-        cancellable.removeAll()
-    }
-    
+}
+
+// MARK: Update UI
+extension WeatherTableViewCell {
     func setImageFetcher(_ imageFetcher: ImageFetcher) {
         self.imageFetcher = imageFetcher
     }
@@ -124,21 +125,25 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = temperature
         dateLabel.text = date
         
-        guard let url = URL(string: icon) else { return }
+        fetchIconImage(icon)
+    }
+    
+    private func fetchIconImage(_ iconImageUrlString: String) {
+        guard let url = URL(string: iconImageUrlString) else { return }
         imageFetcher?.loadImage(url: url)
             .receive(on: DispatchQueue.main)
-            .sink { result in
+            .sink(receiveCompletion: { result in
                 switch result {
                 case .finished:
                     break
                 case .failure(let error):
-                    // handle error (placeholder 이미지 노출 등)
+                    // handle error
                     print(error)
                 }
-            } receiveValue: { [weak self] fetchedImage in
+            }, receiveValue: { [weak self] fetchedImage in
                 guard let self else { return }
                 
                 weatherIcon.image = fetchedImage
-            }.store(in: &cancellable)
+            }).store(in: &cancellables)
     }
 }

@@ -14,20 +14,10 @@ protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource {
 
 class WeatherListView: UIView {
     
-    // MARK: UI
-    private let tableView: UITableView = {
-        let tableView: UITableView = .init()
-        
-        return tableView
-    }()
+    private let tableView: UITableView = .init()
+    private let refreshControl: UIRefreshControl = .init()
     
-    private let refreshControl: UIRefreshControl = {
-        let control: UIRefreshControl = UIRefreshControl()
-        
-        return control
-    }()
-    
-    private var delegate: WeatherListViewDelegate
+    private let delegate: WeatherListViewDelegate
     
     init(delegate: WeatherListViewDelegate) {
         self.delegate = delegate

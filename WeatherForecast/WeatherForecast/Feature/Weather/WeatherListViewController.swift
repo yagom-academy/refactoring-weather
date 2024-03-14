@@ -9,16 +9,18 @@ import Combine
 
 class WeatherListViewController: UIViewController {
     
-    // MARK: UI Model
     private var weatherForecast: [WeatherForecastInfo]?
     private var city: City?
     private var tempUnit: TempUnit = .metric
     
-    private var weatherRepository: WeatherRepository
-    private var imageFetcher: ImageFetcher
+    private let weatherRepository: WeatherRepository
+    private let imageFetcher: ImageFetcher
     private var cancellables: Set<AnyCancellable> = .init()
     
-    init(weatherRepository: WeatherRepository, imageFetcher: ImageFetcher) {
+    init(
+        weatherRepository: WeatherRepository,
+        imageFetcher: ImageFetcher
+    ) {
         self.weatherRepository = weatherRepository
         self.imageFetcher = imageFetcher
         

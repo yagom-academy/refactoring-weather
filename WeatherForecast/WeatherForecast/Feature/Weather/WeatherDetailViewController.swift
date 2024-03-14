@@ -8,11 +8,11 @@ import UIKit
 
 class WeatherDetailViewController: UIViewController {
 
-    private var weatherForecastInfo: WeatherForecastInfo
-    private var cityInfo: City
-    private var tempUnit: TempUnit = .metric
+    private let weatherForecastInfo: WeatherForecastInfo
+    private let cityInfo: City
+    private let tempUnit: TempUnit
     
-    private var imageFetcher: ImageFetcher
+    private let imageFetcher: ImageFetcher
     
     init(
         weatherForecastInfo: WeatherForecastInfo,
@@ -38,7 +38,7 @@ class WeatherDetailViewController: UIViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.title = weatherForecastInfo.dt.weatherDateString
+        navigationItem.title = weatherForecastInfo.dateString
         
         view = WeatherDetailView(
             weather: weatherForecastInfo,

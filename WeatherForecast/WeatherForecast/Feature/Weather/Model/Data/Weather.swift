@@ -6,7 +6,7 @@
 
 import Foundation
 
-// MARK: - Weather JSON Format
+// MARK: - Weather UI Model
 class FetchWeatherResult {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
@@ -24,23 +24,20 @@ class FetchWeatherResult {
 
 // MARK: - List
 class WeatherForecastInfo {
-    let dt: Date
-    let main: MainInfo
-    let weather: Weather
-    let dtTxt: String
+    private let date: Date
+    private let main: MainInfo
+    private let weather: Weather
     
-    init(dt: Date, main: MainInfo, weather: Weather, dtTxt: String) {
-        self.dt = dt
+    init(date: Date, main: MainInfo, weather: Weather) {
+        self.date = date
         self.main = main
         self.weather = weather
-        self.dtTxt = dtTxt
     }
     
     init(dto: WeatherForecastInfoDTO) {
-        self.dt = .init(timeIntervalSince1970: dto.dt)
+        self.date = .init(timeIntervalSince1970: dto.dt)
         self.main = .init(dto: dto.main)
         self.weather = .init(dto: dto.weather)
-        self.dtTxt = dto.dtTxt
     }
     
     var mainString: String {
@@ -52,7 +49,7 @@ class WeatherForecastInfo {
     }
     
     var dateString: String {
-        dt.weatherDateString
+        date.weatherDateString
     }
     
     var temperature: Double {
@@ -87,16 +84,13 @@ class WeatherForecastInfo {
 // MARK: - MainClass
 class MainInfo {
     let temp, feelsLike, tempMin, tempMax: Double
-    let pressure, seaLevel, grndLevel, humidity, pop: Double
+    let humidity, pop: Double
     
-    init(temp: Double, feelsLike: Double, tempMin: Double, tempMax: Double, pressure: Double, seaLevel: Double, grndLevel: Double, humidity: Double, pop: Double) {
+    init(temp: Double, feelsLike: Double, tempMin: Double, tempMax: Double, humidity: Double, pop: Double) {
         self.temp = temp
         self.feelsLike = feelsLike
         self.tempMin = tempMin
         self.tempMax = tempMax
-        self.pressure = pressure
-        self.seaLevel = seaLevel
-        self.grndLevel = grndLevel
         self.humidity = humidity
         self.pop = pop
     }
@@ -106,9 +100,6 @@ class MainInfo {
         self.feelsLike = dto.feelsLike
         self.tempMin = dto.tempMin
         self.tempMax = dto.tempMax
-        self.pressure = dto.pressure
-        self.seaLevel = dto.seaLevel
-        self.grndLevel = dto.grndLevel
         self.humidity = dto.humidity
         self.pop = dto.pop
     }
@@ -143,27 +134,22 @@ class Weather {
     }
 }
 
+// MARK: - City
 enum CityCountry: String {
     case korea = "KR"
     case us = "US"
 }
 
-// MARK: - City
 class City {
-    let id: Int
-    let name: String
-    let coord: Coord
-    let country: CityCountry
-    let population, timezone: Int
-    let sunrise, sunset: Date
+    private let id: Int
+    private let name: String
+    private let country: CityCountry
+    private let sunrise, sunset: Date
     
-    init(id: Int, name: String, coord: Coord, country: CityCountry, population: Int, timezone: Int, sunrise: Date, sunset: Date) {
+    init(id: Int, name: String, country: CityCountry, sunrise: Date, sunset: Date) {
         self.id = id
         self.name = name
-        self.coord = coord
         self.country = country
-        self.population = population
-        self.timezone = timezone
         self.sunrise = sunrise
         self.sunset = sunset
     }
@@ -171,10 +157,7 @@ class City {
     init(dto: CityDTO) {
         self.id = dto.id
         self.name = dto.name
-        self.coord = .init(dto: dto.coord)
         self.country = CityCountry(rawValue: dto.country) ?? .us
-        self.population = dto.population
-        self.timezone = dto.timezone
         self.sunrise = .init(timeIntervalSince1970: dto.sunrise)
         self.sunset = .init(timeIntervalSince1970: dto.sunset)
     }
@@ -187,65 +170,3 @@ class City {
         sunset.citySunsetString
     }
 }
-
-// MARK: - Coord
-class Coord {
-    let lat, lon: Double
-    
-    init(lat: Double, lon: Double) {
-        self.lat = lat
-        self.lon = lon
-    }
-    
-    init(dto: CoordDTO) {
-        self.lat = dto.lat
-        self.lon = dto.lon
-    }
-}
-
-// MARK: - Temperature Unit
-enum TempUnit: String {
-    case metric, imperial
-    
-    private var strategy: TemperatureStrategy {
-        switch self {
-        case .metric:
-            MetricStrategy()
-        case .imperial:
-            ImperialStrategy()
-        }
-    }
-    
-    func convert(_ temperature: Double) -> String {
-        strategy.convert(temperature)
-    }
-}
-
-protocol TemperatureStrategy {
-    var krString: String { get }
-    func convert(_ temperature: Double) -> String
-}
-
-struct MetricStrategy: TemperatureStrategy {
-    var krString: String {
-        "섭씨"
-    }
-    
-    func convert(_ temperature: Double) -> String {
-        "\(temperature)℃"
-    }
-}
-
-struct ImperialStrategy: TemperatureStrategy {
-    var krString: String {
-        "화씨"
-    }
-    
-    func convert(_ temperature: Double) -> String {
-        // TOOD: 변환
-        let convertedTemperature: Double = temperature
-        
-        return "\(convertedTemperature)℉"
-    }
-}
-

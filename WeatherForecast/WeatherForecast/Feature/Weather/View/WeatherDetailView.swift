@@ -21,11 +21,11 @@ class WeatherDetailView: UIView {
     private let sunriseTimeLabel: UILabel = UILabel()
     private let sunsetTimeLabel: UILabel = UILabel()
     
-    private var weather: WeatherForecastInfo
-    private var cityInfo: City
-    private var tempUnit: TempUnit
+    private let weather: WeatherForecastInfo
+    private let cityInfo: City
+    private let tempUnit: TempUnit
     
-    private var imageFetcher: ImageFetcher
+    private let imageFetcher: ImageFetcher
     private var cancellables: Set<AnyCancellable> = .init()
     
     init(
@@ -51,9 +51,19 @@ class WeatherDetailView: UIView {
         layoutViews()
         updateUI()
     }
-    
+}
+
+extension WeatherDetailView {
     private func layoutViews() {
         backgroundColor = .white
+        let mainStackView = createMainStackView()
+        
+        setUpConstrains(mainStackView: mainStackView)
+    }
+    
+    private func createMainStackView() -> UIStackView {
+        weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
+        weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
         
         let spacingView: UIView = UIView()
         spacingView.backgroundColor = .clear
@@ -83,13 +93,15 @@ class WeatherDetailView: UIView {
             subview.font = .preferredFont(forTextStyle: .body)
         }
         
-        weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
-        
         mainStackView.axis = .vertical
         mainStackView.alignment = .center
         mainStackView.spacing = 8
         addSubview(mainStackView)
+        
+        return mainStackView
+    }
+    
+    private func setUpConstrains(mainStackView: UIStackView) {
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         
         let safeArea: UILayoutGuide = safeAreaLayoutGuide
@@ -105,6 +117,9 @@ class WeatherDetailView: UIView {
                                                  multiplier: 0.3)
         ])
     }
+}
+
+extension WeatherDetailView {
     
     private func updateUI() {
         weatherGroupLabel.text = weather.mainString
@@ -119,8 +134,11 @@ class WeatherDetailView: UIView {
         sunriseTimeLabel.text = "일출 : \(cityInfo.sunriseString)"
         sunsetTimeLabel.text = "일몰 : \(cityInfo.sunsetString)"
         
-        let iconUrlString = weather.iconUrlString
-        guard let url = URL(string: iconUrlString) else { return }
+        fetchIconImage(weather.iconUrlString)
+    }
+    
+    private func fetchIconImage(_ iconImageUrlString: String) {
+        guard let url = URL(string: iconImageUrlString) else { return }
         imageFetcher.loadImage(url: url)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { result in

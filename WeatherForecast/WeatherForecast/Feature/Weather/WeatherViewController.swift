@@ -19,6 +19,7 @@ final class WeatherViewController: UIViewController {
     
     init(imageChache: NSCache<NSString, UIImage>) {
         self.imageChache = imageChache
+        
         super.init(nibName: nil, bundle: nil)
     }
     

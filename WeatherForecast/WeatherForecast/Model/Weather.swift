@@ -7,7 +7,7 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-final class WeatherJSON: Decodable {
+struct WeatherJSON: Decodable {
     let weatherForecast: ContiguousArray<WeatherForecastInfo>
     let city: City
 }
@@ -20,13 +20,13 @@ final class WeatherForecastInfo: Decodable {
 }
 
 // MARK: - MainClass
-final class MainInfo: Decodable {
+struct MainInfo: Decodable {
     let temp, feelsLike, tempMin, tempMax: Double
     let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
-final class Weather: Decodable {
+struct Weather: Decodable {
     let id: Int
     let main: String
     let description: String
@@ -45,7 +45,7 @@ final class City: Decodable {
 }
 
 // MARK: - Coord
-final class Coord: Decodable {
+struct Coord: Decodable {
     let lat, lon: Double
 }
 

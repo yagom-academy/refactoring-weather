@@ -49,7 +49,6 @@ final class ImperialUnitStrategy: TempUnitStrategy {
     var unitSymbol: String = "℉"
     
     func convertTemperture(metric: Double) -> Double {
-        // TODO: 좀 더 개선을 하고싶음
         return round((metric * 5.0 / 9.0 + 32.0) * 100) / 100
     }
 }

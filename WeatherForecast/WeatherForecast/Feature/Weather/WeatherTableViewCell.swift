@@ -32,7 +32,7 @@ final class WeatherTableViewCell: UITableViewCell {
     func setContents(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageChache: NSCache<NSString, UIImage>) {
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
-        temperatureLabel.text = "\(tempUnit.strategy.convertTemperture(metric: weatherForecastInfo.main.temp))\(tempUnit.strategy.unitSymbol)"
+        temperatureLabel.text = "\(tempUnit.convertUnit(fromMetric: weatherForecastInfo.main.temp))\(tempUnit.unitSymbol)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         dateLabel.text = date.toFormattedString()

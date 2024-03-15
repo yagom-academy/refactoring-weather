@@ -11,7 +11,7 @@ import Foundation
 enum TempUnit: String {
     case metric, imperial
     
-    var strategy: TempUnitStrategy {
+    private var strategy: TempUnitStrategy {
         switch(self) {
         case .metric:
             return MetricUnitStrategy()
@@ -19,6 +19,13 @@ enum TempUnit: String {
             return ImperialUnitStrategy()
         }
     }
+    
+    func convertUnit(fromMetric metric: Double) -> Double {
+        self.strategy.convertTemperture(metric: metric)
+    }
+    
+    var unitTitle: String { get { return strategy.title }}
+    var unitSymbol: String { get { return strategy.unitSymbol }}
 }
 
 protocol TempUnitStrategy {

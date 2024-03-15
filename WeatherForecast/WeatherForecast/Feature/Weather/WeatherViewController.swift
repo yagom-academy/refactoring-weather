@@ -40,7 +40,7 @@ extension WeatherViewController {
         case .metric:
             tempUnit = .imperial
         }
-        navigationItem.rightBarButtonItem?.title = tempUnit.strategy.title
+        navigationItem.rightBarButtonItem?.title = tempUnit.unitTitle
         refresh()
     }
     
@@ -53,7 +53,7 @@ extension WeatherViewController {
         fetchWeatherJSON()
         
         view.backgroundColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.strategy.title,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.unitTitle,
                                                             image: nil,
                                                             target: self,
                                                             action: #selector(changeTempUnit))

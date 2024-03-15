@@ -130,5 +130,3 @@ extension WeatherViewController: UITableViewDelegate {
         navigationController?.show(detailViewController, sender: self)
     }
 }
-
-

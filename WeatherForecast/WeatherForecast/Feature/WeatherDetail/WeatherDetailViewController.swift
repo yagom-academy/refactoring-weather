@@ -109,13 +109,11 @@ final class WeatherDetailViewController: UIViewController {
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+        if let cityInfo,
+           let sunrizeTimeString = Date(timeIntervalSince1970: cityInfo.sunrise).toFormattedString("a h:mm"),
+           let sunsetTimeString = Date(timeIntervalSince1970: cityInfo.sunset).toFormattedString("a h:mm") {
+            sunriseTimeLabel.text = "일출 : \(sunrizeTimeString)"
+            sunsetTimeLabel.text = "일몰 : \(sunsetTimeString)"
         }
         
         Task {

@@ -29,14 +29,7 @@ class ViewController: UIViewController {
 
 extension ViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
-        case .imperial:
-            tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        navigationItem.rightBarButtonItem?.title = tempUnit.buttonTitle
         refresh()
     }
     
@@ -47,21 +40,21 @@ extension ViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: TempUnit.imperial.buttonTitle, image: nil, target: self, action: #selector(changeTempUnit))
         
-        layTable()
+        setLayoutTableView()
         
         refreshControl.addTarget(self,
                                  action: #selector(refresh),
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
-        tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        WeatherTableViewCell.registerClass(superView: self.tableView)
         tableView.dataSource = self
         tableView.delegate = self
     }
     
-    private func layTable() {
+    private func setLayoutTableView() {
         tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,10 +104,9 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell: WeatherTableViewCell = .dequeueReusableCell(superView: tableView, indexPath: indexPath)
         
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
+        guard let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
         
@@ -155,11 +147,7 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
-        detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
-        detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
-        navigationController?.show(detailViewController, sender: self)
+        
     }
 }
 

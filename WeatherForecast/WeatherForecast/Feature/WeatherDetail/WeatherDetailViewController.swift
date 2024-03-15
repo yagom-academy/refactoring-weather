@@ -6,18 +6,23 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+final class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    init(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TempUnit) {
+        self.weatherForecastInfo = weatherForecastInfo
+        self.cityInfo = cityInfo
+        self.tempUnit = tempUnit
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +35,7 @@ class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = date.toFormattedString()
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -44,6 +49,7 @@ class WeatherDetailViewController: UIViewController {
         let sunriseTimeLabel: UILabel = UILabel()
         let sunsetTimeLabel: UILabel = UILabel()
         let spacingView: UIView = UIView()
+        
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
         
@@ -95,29 +101,25 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        
+        temperatureLabel.text = "현재 기온 : \(tempUnit.convertUnit(fromMetric: listInfo.main.temp))\(tempUnit.unitSymbol)"
+        feelsLikeLabel.text = "체감 기온 : \(tempUnit.convertUnit(fromMetric: listInfo.main.feelsLike))\(tempUnit.unitSymbol)"
+        maximumTemperatureLable.text = "최고 기온 : \(tempUnit.convertUnit(fromMetric: listInfo.main.tempMax))\(tempUnit.unitSymbol)"
+        minimumTemperatureLable.text = "최저 기온 : \(tempUnit.convertUnit(fromMetric: listInfo.main.tempMin))\(tempUnit.unitSymbol)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+        if let cityInfo,
+           let sunrizeTimeString = Date(timeIntervalSince1970: cityInfo.sunrise).toFormattedString("a h:mm"),
+           let sunsetTimeString = Date(timeIntervalSince1970: cityInfo.sunset).toFormattedString("a h:mm") {
+            sunriseTimeLabel.text = "일출 : \(sunrizeTimeString)"
+            sunsetTimeLabel.text = "일몰 : \(sunsetTimeString)"
         }
         
         Task {
-            let iconName: String = listInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+            let imageUrlString: String = listInfo.weather.iconPath
 
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
+            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else {
                 return
             }
             

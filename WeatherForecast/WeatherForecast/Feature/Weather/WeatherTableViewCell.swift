@@ -6,7 +6,9 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
+    static let identifier: String = "WeatherCell"
+    
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
@@ -15,8 +17,7 @@ class WeatherTableViewCell: UITableViewCell {
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
-        reset()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -25,10 +26,34 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        reset()
+        resetContents()
     }
     
-    private func layViews() {
+    func setContents(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageChache: NSCache<NSString, UIImage>) {
+        weatherLabel.text = weatherForecastInfo.weather.main
+        descriptionLabel.text = weatherForecastInfo.weather.description
+        temperatureLabel.text = "\(tempUnit.convertUnit(fromMetric: weatherForecastInfo.main.temp))\(tempUnit.unitSymbol)"
+        
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        dateLabel.text = date.toFormattedString()
+        
+        let imageUrlString: String = weatherForecastInfo.weather.iconPath
+        
+        if let image = imageChache.object(forKey: imageUrlString as NSString) {
+            weatherIcon.image = image
+            return
+        }
+        
+        Task {
+            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else { return }
+            
+            imageChache.setObject(image, forKey: imageUrlString as NSString)
+            weatherIcon.image = image
+        }
+    }
+    
+    
+    private func setLayout() {
         weatherIcon = UIImageView()
         dateLabel = UILabel()
         temperatureLabel = UILabel()
@@ -36,7 +61,7 @@ class WeatherTableViewCell: UITableViewCell {
         let dashLabel: UILabel = UILabel()
         descriptionLabel = UILabel()
         
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
+        let labels: ContiguousArray<UILabel> = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
         labels.forEach { label in
             label.textColor = .black
@@ -93,7 +118,7 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func reset() {
+    private func resetContents() {
         weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
         dateLabel.text = "0000-00-00 00:00:00"
         temperatureLabel.text = "00℃"

@@ -61,7 +61,7 @@ final class WeatherTableViewCell: UITableViewCell {
         let dashLabel: UILabel = UILabel()
         descriptionLabel = UILabel()
         
-        let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
+        let labels: ContiguousArray<UILabel> = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
         labels.forEach { label in
             label.textColor = .black

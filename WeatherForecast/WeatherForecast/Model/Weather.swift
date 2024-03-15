@@ -8,7 +8,7 @@ import Foundation
 
 // MARK: - Weather JSON Format
 final class WeatherJSON: Decodable {
-    let weatherForecast: [WeatherForecastInfo]
+    let weatherForecast: ContiguousArray<WeatherForecastInfo>
     let city: City
 }
 

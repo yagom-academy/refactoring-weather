@@ -12,12 +12,6 @@ class ViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-//    let dateFormatter: DateFormatter = {
-//        let formatter: DateFormatter = DateFormatter()
-//        formatter.locale = .init(identifier: "ko_KR")
-//        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-//        return formatter
-//    }()
     
     var temperatureUnit: TempUnit = .metric
     

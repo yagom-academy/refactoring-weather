@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         return formatter
     }()
     
-    var tempUnit: TempUnit = .metric
+    var temperatureUnit: TemperatureUnit = .metric
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,31 +28,31 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-    @objc private func changeTempUnit() {
-        switch tempUnit {
+    @objc private func changeTemperatureUnit() {
+        switch temperatureUnit {
         case .imperial:
-            tempUnit = .metric
+            temperatureUnit = .metric
             navigationItem.rightBarButtonItem?.title = "섭씨"
         case .metric:
-            tempUnit = .imperial
+            temperatureUnit = .imperial
             navigationItem.rightBarButtonItem?.title = "화씨"
         }
-        refresh()
+        refreshTableView()
     }
     
-    @objc private func refresh() {
+    @objc private func refreshTableView() {
         fetchWeatherJSON()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTemperatureUnit))
         
-        layTable()
+        layoutTableView()
         
         refreshControl.addTarget(self,
-                                 action: #selector(refresh),
+                                 action: #selector(refreshTableView),
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
@@ -61,7 +61,7 @@ extension ViewController {
         tableView.delegate = self
     }
     
-    private func layTable() {
+    private func layoutTableView() {
         tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -120,9 +120,9 @@ extension ViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temperature)\(temperatureUnit.expression)"
         
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.date)
         cell.dateLabel.text = dateFormatter.string(from: date)
                 
         let iconName: String = weatherForecastInfo.weather.icon         
@@ -158,7 +158,7 @@ extension ViewController: UITableViewDelegate {
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        detailViewController.temperatureUnit = temperatureUnit
         navigationController?.show(detailViewController, sender: self)
     }
 }

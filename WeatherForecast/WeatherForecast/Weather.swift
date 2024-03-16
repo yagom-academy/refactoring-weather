@@ -14,16 +14,16 @@ class WeatherJSON: Decodable {
 
 // MARK: - List
 class WeatherForecastInfo: Decodable {
-    let dt: TimeInterval
+    let date: TimeInterval
     let main: MainInfo
     let weather: Weather
-    let dtTxt: String
+    let dateText: String
 }
 
 // MARK: - MainClass
 class MainInfo: Decodable {
-    let temp, feelsLike, tempMin, tempMax: Double
-    let pressure, seaLevel, grndLevel, humidity, pop: Double
+    let temperature, feelsLike, minTemperature, maxTemperature: Double
+    let pressure, seaLevel, groundLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
@@ -38,19 +38,19 @@ class Weather: Decodable {
 class City: Decodable {
     let id: Int
     let name: String
-    let coord: Coord
+    let coord: Coordinate
     let country: String
     let population, timezone: Int
     let sunrise, sunset: TimeInterval
 }
 
-// MARK: - Coord
-class Coord: Decodable {
-    let lat, lon: Double
+// MARK: - Coordinate
+class Coordinate: Decodable {
+    let latitude, longtitude: Double
 }
 
 // MARK: - Temperature Unit
-enum TempUnit: String {
+enum TemperatureUnit: String {
     case metric, imperial
     var expression: String {
         switch self {

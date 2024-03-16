@@ -110,7 +110,7 @@ final class WeatherTableViewCell: UITableViewCell, DateFormattable {
   func configure(weatherCellInfo info: WeatherCellInfo) {
     weatherLabel.text = info.weather.main
     descriptionLabel.text = info.weather.description
-    temperatureLabel.text = "\(info.main.temp)\(info.tempExpression)"
+    temperatureLabel.text = "\(info.main.temperature)\(info.tempExpression)"
     dateLabel.text = dateFormat(from: info.dt, with: .KoreanLongForm)
   }
   

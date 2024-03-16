@@ -10,7 +10,7 @@ final class WeatherListViewController: UIViewController {
   private let weatherFetcherService: WeatherFetcherServiceable
   private let weatherImageCacheService: WeatherImageCacheServiceable
   private var weatherJSON: WeatherJSON?
-  private var tempUnit: TempUnit = .metric
+  private var temperatureUnit: TemperatureUnit = .celsius
   
   private let tableView: UITableView = .init(frame: .zero, style: .plain)
   
@@ -47,7 +47,7 @@ extension WeatherListViewController {
   
   private func setUpNavigationItem() {
     navigationItem.rightBarButtonItem = .init(
-        title: TempUnit.imperial.title,
+        title: TemperatureUnit.fahrenheit.title,
         image: nil,
         target: self,
         action: #selector(changeTempUnit)
@@ -84,13 +84,13 @@ extension WeatherListViewController {
   }
   
   @objc private func changeTempUnit() {
-    switch tempUnit {
-    case .imperial:
-      tempUnit = .metric
-    case .metric:
-      tempUnit = .imperial
+    switch temperatureUnit {
+    case .fahrenheit:
+      temperatureUnit = .celsius
+    case .celsius:
+      temperatureUnit = .fahrenheit
     }
-    navigationItem.rightBarButtonItem?.title = tempUnit.title
+    navigationItem.rightBarButtonItem?.title = temperatureUnit.title
     onRefresh()
   }
   
@@ -150,10 +150,10 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     let weatherCellInfo = WeatherCellInfo(
-        dt: weatherForecastInfo.dt,
+        dt: weatherForecastInfo.dateTime,
         main: weatherForecastInfo.main,
         weather: weatherForecastInfo.weather,
-        tempExpression: tempUnit.expression
+        tempExpression: temperatureUnit.symbol
     )
     
     Task {
@@ -185,7 +185,7 @@ extension WeatherListViewController: UITableViewDelegate {
     let detailInfo: WeatherDetailInfo = .init(
       weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
       cityInfo: weatherJSON?.city,
-      tempUnit: tempUnit
+      temperatureUnit: temperatureUnit
     )
     
     let detailViewController: WeatherDetailViewController = .init(

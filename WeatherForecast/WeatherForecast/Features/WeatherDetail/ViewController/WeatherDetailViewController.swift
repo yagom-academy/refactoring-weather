@@ -9,7 +9,7 @@ import UIKit
 struct WeatherDetailInfo {
   let weatherForecastInfo: WeatherForecastInfo?
   let cityInfo: City?
-  let tempUnit: TempUnit
+  let temperatureUnit: TemperatureUnit
 }
 
 final class WeatherDetailViewController: UIViewController, DateFormattable {
@@ -45,7 +45,7 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
   
   private func setLayout() {
     guard let listInfo = info.weatherForecastInfo else { return }
-    navigationItem.title = dateFormat(from: listInfo.dt, with: .KoreanLongForm)
+    navigationItem.title = dateFormat(from: listInfo.dateTime, with: .KoreanLongForm)
     
     let iconImageView: UIImageView = .init()
     let weatherGroupLabel: UILabel = .init()
@@ -109,16 +109,16 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
     
     weatherGroupLabel.text = listInfo.weather.main
     weatherDescriptionLabel.text = listInfo.weather.description
-    temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(info.tempUnit.expression)"
-    feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(info.tempUnit.expression)"
-    maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(info.tempUnit.expression)"
-    minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(info.tempUnit.expression)"
+    temperatureLabel.text = "현재 기온 : \(listInfo.main.temperature)\(info.temperatureUnit.symbol)"
+    feelsLikeLabel.text = "체감 기온 : \(listInfo.main.windChillTemperature)\(info.temperatureUnit.symbol)"
+    maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.highestTemperature)\(info.temperatureUnit.symbol)"
+    minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.lowestTemperature)\(info.temperatureUnit.symbol)"
     popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
     humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
     
     if let cityInfo = info.cityInfo {
-      sunriseTimeLabel.text = "일출 : \(dateFormat(from: cityInfo.sunrise, with: .KoreanShortForm))"
-      sunsetTimeLabel.text = "일몰 : \(dateFormat(from: cityInfo.sunset, with: .KoreanShortForm))"
+      sunriseTimeLabel.text = "일출 : \(dateFormat(from: cityInfo.sunriseTime, with: .KoreanShortForm))"
+      sunsetTimeLabel.text = "일몰 : \(dateFormat(from: cityInfo.sunsetTime, with: .KoreanShortForm))"
     }
     
     Task {

@@ -120,7 +120,7 @@ final class WeatherDetailViewController: UIViewController {
         
         Task {
             let imageUrlString: String = listInfo.weather.iconPath
-            guard let image = await imageLoader.loadUIImage(from: imageUrlString) else { return }
+            guard let image = await imageLoader.loadUIImage(fromUrl: imageUrlString) else { return }
             iconImageView.image = image
         }
     }

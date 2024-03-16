@@ -40,7 +40,7 @@ final class WeatherTableViewCell: UITableViewCell {
         let imageUrlString: String = weatherForecastInfo.weather.iconPath
         
         Task {
-            guard let image = await imageLoader.loadUIImage(from: imageUrlString) else { return }
+            guard let image = await imageLoader.loadUIImage(fromUrl: imageUrlString) else { return }
             weatherIcon.image = image
         }
     }

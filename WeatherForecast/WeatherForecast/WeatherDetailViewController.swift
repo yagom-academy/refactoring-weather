@@ -10,7 +10,7 @@ class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var temperatureUnit: TemperatureUnit = .metric
+    var temperatureUnit: TempUnit = .metric
     
     let dateFormatter: DateFormatter = {
         let formatter: DateFormatter = DateFormatter()
@@ -29,7 +29,7 @@ class WeatherDetailViewController: UIViewController {
         
         guard let listInfo = weatherForecastInfo else { return }
         
-        let date: Date = Date(timeIntervalSince1970: listInfo.date)
+        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
         navigationItem.title = dateFormatter.string(from: date)
         
         let iconImageView: UIImageView = UIImageView()
@@ -95,10 +95,10 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temperature)\(temperatureUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(temperatureUnit.expression)"
         feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(temperatureUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.maxTemperature)\(temperatureUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.minTemperature)\(temperatureUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(temperatureUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(temperatureUnit.expression)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

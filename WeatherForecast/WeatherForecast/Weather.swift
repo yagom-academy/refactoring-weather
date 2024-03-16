@@ -2,7 +2,7 @@
 //  WeatherForecast - Weather.swift
 //  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import Foundation
 
@@ -14,16 +14,16 @@ class WeatherJSON: Decodable {
 
 // MARK: - List
 class WeatherForecastInfo: Decodable {
-    let date: TimeInterval
+    let dt: TimeInterval
     let main: MainInfo
     let weather: Weather
-    let dateText: String
+    let dtTxt: String
 }
 
 // MARK: - MainClass
 class MainInfo: Decodable {
-    let temperature, feelsLike, minTemperature, maxTemperature: Double
-    let pressure, seaLevel, groundLevel, humidity, pop: Double
+    let temp, feelsLike, tempMin, tempMax: Double
+    let pressure, seaLevel, grndLevel, humidity, pop: Double
 }
 
 // MARK: - Weather
@@ -38,19 +38,19 @@ class Weather: Decodable {
 class City: Decodable {
     let id: Int
     let name: String
-    let coord: Coordinate
+    let coord: Coord
     let country: String
     let population, timezone: Int
     let sunrise, sunset: TimeInterval
 }
 
-// MARK: - Coordinate
-class Coordinate: Decodable {
-    let latitude, longtitude: Double
+// MARK: - Coord
+class Coord: Decodable {
+    let lat, lon: Double
 }
 
 // MARK: - Temperature Unit
-enum TemperatureUnit: String {
+enum TempUnit: String {
     case metric, imperial
     var expression: String {
         switch self {

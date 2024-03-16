@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         return formatter
     }()
     
-    var temperatureUnit: TemperatureUnit = .metric
+    var temperatureUnit: TempUnit = .metric
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,9 +120,9 @@ extension ViewController: UITableViewDataSource {
         
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temperature)\(temperatureUnit.expression)"
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(temperatureUnit.expression)"
         
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.date)
+        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = dateFormatter.string(from: date)
                 
         let iconName: String = weatherForecastInfo.weather.icon         

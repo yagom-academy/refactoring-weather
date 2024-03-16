@@ -16,7 +16,6 @@ class WeatherTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutViews()
-        resetInformation()
     }
     
     required init?(coder: NSCoder) {
@@ -25,7 +24,6 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        resetInformation()
     }
     
     private func layoutViews() {
@@ -93,11 +91,4 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func resetInformation() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
-        dateLabel.text = "0000-00-00 00:00:00"
-        temperatureLabel.text = "00℃"
-        weatherLabel.text = "~~~"
-        descriptionLabel.text = "~~~~~"
-    }
 }

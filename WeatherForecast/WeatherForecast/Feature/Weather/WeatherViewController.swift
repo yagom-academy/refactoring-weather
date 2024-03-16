@@ -13,13 +13,12 @@ final class WeatherViewController: UIViewController {
     
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
-    let imageChache: NSCache<NSString, UIImage>
+    let imageLoader: ImageLoader
     
     var tempUnit: TempUnit = .metric
     
-    init(imageChache: NSCache<NSString, UIImage>) {
-        self.imageChache = imageChache
-        
+    init(imageLoader: ImageLoader) {
+        self.imageLoader = imageLoader
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -115,7 +114,7 @@ extension WeatherViewController: UITableViewDataSource {
             return cell
         }
         
-        cell.setContents(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit, imageChache: imageChache)
+        cell.setContents(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit, imageLoader: imageLoader)
         return cell
     }
 }
@@ -126,7 +125,8 @@ extension WeatherViewController: UITableViewDelegate {
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
                                                                                             cityInfo: weatherJSON?.city,
-                                                                                            tempUnit: tempUnit)
+                                                                                            tempUnit: tempUnit,
+                                                                                            imageLoader: imageLoader)
     
         navigationController?.show(detailViewController, sender: self)
     }

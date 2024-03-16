@@ -8,13 +8,26 @@
 import UIKit
 
 final class ImageLoader {
-    static func loadUIImage(from urlString: String) async -> UIImage? {
+    init(imageCache: NSCache<NSString, UIImage>) {
+        self.imageCache = imageCache
+    }
+    
+    let imageCache: NSCache<NSString, UIImage>
+    
+    func loadUIImage(from urlString: String) async -> UIImage? {
+        
+        if let image = imageCache.object(forKey: urlString as NSString) {
+            return image
+        }
+        
         guard let url: URL = URL(string: urlString),
               let (data, _) = try? await URLSession.shared.data(from: url),
-              let image: UIImage = UIImage(data: data) 
+              let image: UIImage = UIImage(data: data)
         else {
             return nil
         }
+        
+        imageCache.setObject(image, forKey: urlString as NSString)
         return image
     }
 }

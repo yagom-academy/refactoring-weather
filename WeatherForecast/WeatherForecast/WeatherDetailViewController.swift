@@ -12,13 +12,6 @@ class WeatherDetailViewController: UIViewController {
     var cityInfo: City?
     var temperatureUnit: TempUnit = .metric
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     private let iconImageView: UIImageView = UIImageView()
     private let weatherGroupLabel: UILabel = UILabel()
     private let weatherDescriptionLabel: UILabel = UILabel()
@@ -99,7 +92,9 @@ class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        let dateFormatter = DateFormatter.localizedDateFormatter()
+        let formattedDate = dateFormatter.string(from: date)
+        navigationItem.title = formattedDate
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description

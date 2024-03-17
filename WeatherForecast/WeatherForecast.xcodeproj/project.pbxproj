@@ -11,9 +11,9 @@
 		51304F752BA70BF300BBCD8B /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51304F742BA70BF300BBCD8B /* Date+.swift */; };
 		51304F792BA71CA100BBCD8B /* UITableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51304F782BA71CA100BBCD8B /* UITableView+.swift */; };
 		51304F7C2BA71DA700BBCD8B /* CellIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51304F7B2BA71DA700BBCD8B /* CellIdentifiable.swift */; };
+		51304F7E2BA72C9600BBCD8B /* HTTPSessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51304F7D2BA72C9600BBCD8B /* HTTPSessionService.swift */; };
 		5166E1492BA332C90049011C /* WeatherImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E1482BA332C90049011C /* WeatherImageCacheService.swift */; };
-		5166E14C2BA343BE0049011C /* ImageFetcherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E14B2BA343BE0049011C /* ImageFetcherService.swift */; };
-		5166E14F2BA343E20049011C /* ImageFetcherError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E14E2BA343E20049011C /* ImageFetcherError.swift */; };
+		5166E14F2BA343E20049011C /* HTTPSessionServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E14E2BA343E20049011C /* HTTPSessionServiceError.swift */; };
 		5166E1512BA344340049011C /* ImageCacheError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E1502BA344340049011C /* ImageCacheError.swift */; };
 		5174FC412BA0E56000E8E9BA /* WeatherFetcherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5174FC402BA0E56000E8E9BA /* WeatherFetcherService.swift */; };
 		5174FC442BA0F4E600E8E9BA /* WeatherFetcherError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5174FC432BA0F4E600E8E9BA /* WeatherFetcherError.swift */; };
@@ -32,9 +32,9 @@
 		51304F742BA70BF300BBCD8B /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		51304F782BA71CA100BBCD8B /* UITableView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+.swift"; sourceTree = "<group>"; };
 		51304F7B2BA71DA700BBCD8B /* CellIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellIdentifiable.swift; sourceTree = "<group>"; };
+		51304F7D2BA72C9600BBCD8B /* HTTPSessionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPSessionService.swift; sourceTree = "<group>"; };
 		5166E1482BA332C90049011C /* WeatherImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherImageCacheService.swift; sourceTree = "<group>"; };
-		5166E14B2BA343BE0049011C /* ImageFetcherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcherService.swift; sourceTree = "<group>"; };
-		5166E14E2BA343E20049011C /* ImageFetcherError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcherError.swift; sourceTree = "<group>"; };
+		5166E14E2BA343E20049011C /* HTTPSessionServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPSessionServiceError.swift; sourceTree = "<group>"; };
 		5166E1502BA344340049011C /* ImageCacheError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheError.swift; sourceTree = "<group>"; };
 		5174FC402BA0E56000E8E9BA /* WeatherFetcherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherFetcherService.swift; sourceTree = "<group>"; };
 		5174FC432BA0F4E600E8E9BA /* WeatherFetcherError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherFetcherError.swift; sourceTree = "<group>"; };
@@ -174,9 +174,9 @@
 		5174FC3F2BA0E53E00E8E9BA /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				51304F7D2BA72C9600BBCD8B /* HTTPSessionService.swift */,
 				5174FC402BA0E56000E8E9BA /* WeatherFetcherService.swift */,
 				5166E1482BA332C90049011C /* WeatherImageCacheService.swift */,
-				5166E14B2BA343BE0049011C /* ImageFetcherService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				5174FC432BA0F4E600E8E9BA /* WeatherFetcherError.swift */,
-				5166E14E2BA343E20049011C /* ImageFetcherError.swift */,
+				5166E14E2BA343E20049011C /* HTTPSessionServiceError.swift */,
 				5166E1502BA344340049011C /* ImageCacheError.swift */,
 			);
 			path = Error;
@@ -301,11 +301,11 @@
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
 				5166E1512BA344340049011C /* ImageCacheError.swift in Sources */,
 				5174FC442BA0F4E600E8E9BA /* WeatherFetcherError.swift in Sources */,
-				5166E14F2BA343E20049011C /* ImageFetcherError.swift in Sources */,
+				51304F7E2BA72C9600BBCD8B /* HTTPSessionService.swift in Sources */,
+				5166E14F2BA343E20049011C /* HTTPSessionServiceError.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
-				5166E14C2BA343BE0049011C /* ImageFetcherService.swift in Sources */,
 				51304F752BA70BF300BBCD8B /* Date+.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				5166E1492BA332C90049011C /* WeatherImageCacheService.swift in Sources */,

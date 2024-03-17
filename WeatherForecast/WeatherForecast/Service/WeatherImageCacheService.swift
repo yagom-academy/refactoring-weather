@@ -12,10 +12,10 @@ protocol WeatherImageCacheServiceable {
 }
 
 struct WeatherImageCacheService: WeatherImageCacheServiceable {
-  private let service: ImageFetcherServiceable
+  private let service: HTTPSessionServiceable
   private let cache: NSCache<NSString, UIImage> = .init()
   
-  init(service: ImageFetcherServiceable) {
+  init(service: HTTPSessionServiceable) {
     self.service = service
   }
   
@@ -30,7 +30,7 @@ struct WeatherImageCacheService: WeatherImageCacheServiceable {
       return image
     }
     
-    let imageData = try await service.execute(from: url)
+    let imageData = try await service.downloadData(from: url)
     
     guard let image: UIImage = .init(data: imageData) else {
       throw ImageCacheError.failedToConvertImage

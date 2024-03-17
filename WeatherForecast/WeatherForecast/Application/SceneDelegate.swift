@@ -19,7 +19,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     let weatherFetcherService: WeatherFetcherServiceable = WeatherFetcherService()
     
-    let imagefetcherService: ImageFetcherServiceable = ImageFetcherService()
+    let imagefetcherService: HTTPSessionServiceable = HTTPSessionService()
     let weatherImageCacheService: WeatherImageCacheServiceable = WeatherImageCacheService(
         service: imagefetcherService
     )

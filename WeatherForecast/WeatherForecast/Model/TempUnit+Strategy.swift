@@ -28,7 +28,7 @@ enum TempUnit: String {
     var unitSymbol: String { get { return strategy.unitSymbol }}
 }
 
-protocol TempUnitStrategy {
+protocol TempUnitStrategy: AnyObject {
     var title: String { get }
     var unitSymbol: String { get }
     

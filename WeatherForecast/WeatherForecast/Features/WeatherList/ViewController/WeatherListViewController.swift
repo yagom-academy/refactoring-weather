@@ -76,10 +76,9 @@ extension WeatherListViewController {
         action: #selector(onRefresh),
         for: .valueChanged
     )
-    tableView.register(
-        WeatherTableViewCell.self,
-        forCellReuseIdentifier: WeatherTableViewCell.identifier
-    )
+    
+    tableView.register(WeatherTableViewCell.self)
+    
     tableView.dataSource = self
     tableView.delegate = self
   }
@@ -139,12 +138,7 @@ extension WeatherListViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    guard let cell = tableView.dequeueReusableCell(
-        withIdentifier: WeatherTableViewCell.identifier,
-        for: indexPath
-    ) as? WeatherTableViewCell else {
-      return .init()
-    }
+    let cell: WeatherTableViewCell = tableView.dequeueReusableCell(for: indexPath)
     
     guard let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
       return cell

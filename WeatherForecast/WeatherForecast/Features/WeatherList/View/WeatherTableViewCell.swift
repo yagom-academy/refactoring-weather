@@ -13,9 +13,7 @@ struct WeatherCellInfo {
   let tempExpression: String
 }
 
-final class WeatherTableViewCell: UITableViewCell {
-  static let identifier: String = "WeatherTableViewCell"
-  
+final class WeatherTableViewCell: UITableViewCell, CellIdentifiable {
   private let weatherIcon: UIImageView = .init()
   private let dateLabel: UILabel = .init()
   private let temperatureLabel: UILabel = .init()

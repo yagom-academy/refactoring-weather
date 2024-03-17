@@ -26,7 +26,6 @@ final class ImageLoader {
             return nil
         }
         
-        // 이미지 캐시에 저장하는 작업은 비동기로 처리
         Task {
             imageCache.setObject(image, forKey: urlString as NSString)
         }

@@ -30,6 +30,7 @@ final class WeatherListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     initialSetUp()
+    onRefresh()
   }
 }
 

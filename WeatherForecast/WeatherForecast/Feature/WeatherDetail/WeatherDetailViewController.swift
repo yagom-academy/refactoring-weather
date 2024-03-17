@@ -32,7 +32,7 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     private func initialSetUp() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         guard let listInfo = weatherForecastInfo else { return }
         

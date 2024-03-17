@@ -6,6 +6,7 @@
 
 import UIKit
 
+
 final class WeatherViewController: UIViewController {
     let jsonFileName: String = "weather"
     
@@ -17,8 +18,9 @@ final class WeatherViewController: UIViewController {
     
     var tempUnit: TempUnit = .metric
     
-    init(imageLoader: ImageLoader) {
-        self.imageLoader = imageLoader
+    init(dependency: WeatherViewControllerDependency) {
+        self.imageLoader = dependency.imageLodaer
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,7 +54,7 @@ extension WeatherViewController {
     private func initialSetUp() {
         fetchWeatherJSON()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.unitTitle,
                                                             image: nil,
                                                             target: self,

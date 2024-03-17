@@ -18,8 +18,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         let imageCache: NSCache<NSString, UIImage> = NSCache()
+        let imageLoader: ImageLoader = ImageLoader(imageCache: imageCache)
         
-        let viewController: WeatherViewController = WeatherViewController(imageChache: imageCache)
+        let weatherVCDependency = WeatherViewControllerDependency(imageLoader: imageLoader)
+        
+        let viewController: WeatherViewController = WeatherViewController(dependency: weatherVCDependency)
         let navigationController: UINavigationController = UINavigationController(rootViewController: viewController)
 
         window?.rootViewController = navigationController

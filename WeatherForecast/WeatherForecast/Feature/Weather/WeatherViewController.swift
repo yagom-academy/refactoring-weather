@@ -6,6 +6,7 @@
 
 import UIKit
 
+
 final class WeatherViewController: UIViewController {
     let jsonFileName: String = "weather"
     
@@ -13,12 +14,12 @@ final class WeatherViewController: UIViewController {
     
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
-    let imageChache: NSCache<NSString, UIImage>
+    let imageLoader: ImageLoader
     
     var tempUnit: TempUnit = .metric
     
-    init(imageChache: NSCache<NSString, UIImage>) {
-        self.imageChache = imageChache
+    init(dependency: WeatherViewControllerDependency) {
+        self.imageLoader = dependency.imageLodaer
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -53,7 +54,7 @@ extension WeatherViewController {
     private func initialSetUp() {
         fetchWeatherJSON()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: tempUnit.unitTitle,
                                                             image: nil,
                                                             target: self,
@@ -104,7 +105,10 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        if let _ = weatherJSON {
+            return weatherJSON!.weatherForecast.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,7 +119,7 @@ extension WeatherViewController: UITableViewDataSource {
             return cell
         }
         
-        cell.setContents(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit, imageChache: imageChache)
+        cell.setContents(weatherForecastInfo: weatherForecastInfo, tempUnit: tempUnit, imageLoader: imageLoader)
         return cell
     }
 }
@@ -126,7 +130,8 @@ extension WeatherViewController: UITableViewDelegate {
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController(weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
                                                                                             cityInfo: weatherJSON?.city,
-                                                                                            tempUnit: tempUnit)
+                                                                                            tempUnit: tempUnit,
+                                                                                            imageLoader: imageLoader)
     
         navigationController?.show(detailViewController, sender: self)
     }

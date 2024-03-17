@@ -7,15 +7,11 @@
 
 import Foundation
 
+
 extension Date {
-    func toFormattedString(_ dateFormat: String = "yyyy-MM-dd(EEEEE) a HH:mm") -> String? {
-        let dateFormatter: DateFormatter = {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.locale = .init(identifier: "ko_KR")
-            formatter.dateFormat = dateFormat
-            return formatter
-        }()
-        
-        return dateFormatter.string(from: self) 
+    func toFormattedString(_ dateFormat: String = "yyyy-MM-dd(EEEEE) a HH:mm", locale: DateFormatterLocale = .ko_KR) -> String? {
+        let dateFormatter = DateFormatter.getDateFormatter(locale: locale)
+        dateFormatter.dateFormat = dateFormat
+        return dateFormatter.string(from: self)
     }
 }

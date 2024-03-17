@@ -29,7 +29,7 @@ final class WeatherTableViewCell: UITableViewCell {
         resetContents()
     }
     
-    func setContents(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageChache: NSCache<NSString, UIImage>) {
+    func setContents(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, imageLoader: ImageLoader) {
         weatherLabel.text = weatherForecastInfo.weather.main
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(tempUnit.convertUnit(fromMetric: weatherForecastInfo.main.temp))\(tempUnit.unitSymbol)"
@@ -39,15 +39,8 @@ final class WeatherTableViewCell: UITableViewCell {
         
         let imageUrlString: String = weatherForecastInfo.weather.iconPath
         
-        if let image = imageChache.object(forKey: imageUrlString as NSString) {
-            weatherIcon.image = image
-            return
-        }
-        
         Task {
-            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else { return }
-            
-            imageChache.setObject(image, forKey: imageUrlString as NSString)
+            guard let image = await imageLoader.loadUIImage(fromUrl: imageUrlString) else { return }
             weatherIcon.image = image
         }
     }

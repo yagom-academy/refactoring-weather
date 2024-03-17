@@ -11,11 +11,13 @@ final class WeatherDetailViewController: UIViewController {
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
     var tempUnit: TempUnit
+    let imageLoader: ImageLoader
     
-    init(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TempUnit) {
+    init(weatherForecastInfo: WeatherForecastInfo?, cityInfo: City?, tempUnit: TempUnit, imageLoader: ImageLoader) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
+        self.imageLoader = imageLoader
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -30,7 +32,7 @@ final class WeatherDetailViewController: UIViewController {
     }
     
     private func initialSetUp() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         guard let listInfo = weatherForecastInfo else { return }
         
@@ -118,11 +120,7 @@ final class WeatherDetailViewController: UIViewController {
         
         Task {
             let imageUrlString: String = listInfo.weather.iconPath
-
-            guard let image = await ImageLoader.loadUIImage(from: imageUrlString) else {
-                return
-            }
-            
+            guard let image = await imageLoader.loadUIImage(fromUrl: imageUrlString) else { return }
             iconImageView.image = image
         }
     }

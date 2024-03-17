@@ -21,7 +21,7 @@ enum TempUnit: String {
     }
     
     func convertUnit(fromMetric metric: Double) -> Double {
-        self.strategy.convertTemperture(metric: metric)
+        convertTemperature(strategy: self.strategy, metric: metric)
     }
     
     var unitTitle: String { get { return strategy.title }}
@@ -32,14 +32,14 @@ protocol TempUnitStrategy: AnyObject {
     var title: String { get }
     var unitSymbol: String { get }
     
-    func convertTemperture(metric: Double) -> Double
+    func convert(metric: Double) -> Double
 }
 
 final class MetricUnitStrategy: TempUnitStrategy {
     var title: String = "섭씨"
     var unitSymbol: String = "℃"
     
-    func convertTemperture(metric: Double) -> Double {
+    func convert(metric: Double) -> Double {
         return metric
     }
 }
@@ -48,7 +48,11 @@ final class ImperialUnitStrategy: TempUnitStrategy {
     var title: String = "화씨"
     var unitSymbol: String = "℉"
     
-    func convertTemperture(metric: Double) -> Double {
+    func convert(metric: Double) -> Double {
         return round((metric * 5.0 / 9.0 + 32.0) * 100) / 100
     }
+}
+
+fileprivate func convertTemperature<T: TempUnitStrategy>(strategy: T, metric: Double) -> Double {
+    return strategy.convert(metric: metric)
 }

@@ -16,6 +16,8 @@ final class WeatherDetailViewController: UIViewController {
   private let weatherImageCacheService: WeatherImageCacheServiceable
   private var info: WeatherDetailInfo
   
+  private let iconImageView: UIImageView = .init()
+  
   init(
       weatherImageCacheService: WeatherImageCacheServiceable,
       weatherDetailInfo info: WeatherDetailInfo
@@ -36,18 +38,24 @@ final class WeatherDetailViewController: UIViewController {
   
   private func initialSetUp() {
     setUpView()
+    setUpNavigationItem()
     setLayout()
+    fetchWeatherIconImage()
   }
   
   private func setUpView() {
     view.backgroundColor = .white
   }
   
-  private func setLayout() {
+  private func setUpNavigationItem() {
     guard let listInfo = info.weatherForecastInfo else { return }
     
     let date: Date = .init(timeIntervalSince1970: listInfo.dateTime)
     navigationItem.title = date.formatted(using: .koreanLongForm)
+  }
+  
+  private func setLayout() {
+    guard let listInfo = info.weatherForecastInfo else { return }
     
     let weatherGroupLabel: WeatherInformationLabel = .init()
     let weatherDescriptionLabel: WeatherInformationLabel = .init()
@@ -115,6 +123,10 @@ final class WeatherDetailViewController: UIViewController {
       sunriseTimeLabel.text = "일출 : \(sunriseDate.formatted(using: .koreanShortForm))"
       sunsetTimeLabel.text = "일몰 : \(sunsetDate.formatted(using: .koreanShortForm))"
     }
+  }
+  
+  private func fetchWeatherIconImage() {
+    guard let listInfo = info.weatherForecastInfo else { return }
     
     Task {
       let iconName: String = listInfo.weather.icon
@@ -123,11 +135,15 @@ final class WeatherDetailViewController: UIViewController {
         let image = try await weatherImageCacheService.execute(iconName: iconName)
         
         await MainActor.run {
-          iconImageView.image = image
+          setIconImage(image)
         }
       } catch {
         print("WeatherDetailViewController - imageCacheService execute Error: \(error)")
       }
     }
+  }
+  
+  private func setIconImage(_ image: UIImage) {
+    iconImageView.image = image
   }
 }

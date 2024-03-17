@@ -105,7 +105,11 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
+        if let _ = weatherJSON {
+            return weatherJSON!.weatherForecast.count
+        }
+        return 0
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

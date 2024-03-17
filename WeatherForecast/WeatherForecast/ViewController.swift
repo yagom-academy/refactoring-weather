@@ -112,6 +112,13 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
+        setLabelText(cell, weatherForecastInfo: weatherForecastInfo)
+        setIconImage(cell, weatherForecastInfo: weatherForecastInfo, indexPath: indexPath)
+      
+        return cell
+    }
+    
+    func setLabelText(_ cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo) {
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(temperatureUnit.expression)"
@@ -120,13 +127,15 @@ extension ViewController: UITableViewDataSource {
         let dateFormatter = DateFormatter.localizedDateFormatter()
         let formattedDate = dateFormatter.string(from: date)
         cell.dateLabel.text = formattedDate
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
+    }
+    
+    func setIconImage(_ cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo, indexPath: IndexPath) {
+        let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
         if let image = imageChache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
-            return cell
+            return
         }
         
         Task {
@@ -142,9 +151,8 @@ extension ViewController: UITableViewDataSource {
                 cell.weatherIcon.image = image
             }
         }
-        
-        return cell
     }
+    
 }
 
 extension ViewController: UITableViewDelegate {

@@ -114,5 +114,13 @@ enum TemperatureUnit: String {
       return "화씨"
     }
   }
+  
+  mutating func toggle() {
+    if self == .celsius {
+      self = .fahrenheit
+      return
+    }
+    self = .celsius
+  }
 }
 

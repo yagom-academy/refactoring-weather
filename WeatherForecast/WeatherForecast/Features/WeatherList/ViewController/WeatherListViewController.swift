@@ -51,7 +51,7 @@ extension WeatherListViewController {
         title: TemperatureUnit.fahrenheit.title,
         image: nil,
         target: self,
-        action: #selector(changeTempUnit)
+        action: #selector(toggleTemperatureUnitButtonTapped)
     )
   }
   
@@ -83,13 +83,8 @@ extension WeatherListViewController {
     tableView.delegate = self
   }
   
-  @objc private func changeTempUnit() {
-    switch temperatureUnit {
-    case .fahrenheit:
-      temperatureUnit = .celsius
-    case .celsius:
-      temperatureUnit = .fahrenheit
-    }
+  @objc private func toggleTemperatureUnitButtonTapped() {
+    temperatureUnit.toggle()
     navigationItem.rightBarButtonItem?.title = temperatureUnit.title
     onRefresh()
   }

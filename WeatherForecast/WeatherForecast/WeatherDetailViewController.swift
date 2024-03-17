@@ -10,14 +10,20 @@ class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
-    var tempUnit: TempUnit = .metric
+    var temperatureUnit: TempUnit = .metric
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
+    private let iconImageView: UIImageView = UIImageView()
+    private let weatherGroupLabel: UILabel = UILabel()
+    private let weatherDescriptionLabel: UILabel = UILabel()
+    private let temperatureLabel: UILabel = UILabel()
+    private let feelsLikeLabel: UILabel = UILabel()
+    private let maximumTemperatureLable: UILabel = UILabel()
+    private let minimumTemperatureLable: UILabel = UILabel()
+    private let popLabel: UILabel = UILabel()
+    private let humidityLabel: UILabel = UILabel()
+    private let sunriseTimeLabel: UILabel = UILabel()
+    private let sunsetTimeLabel: UILabel = UILabel()
+    private let spacingView: UIView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,25 +31,13 @@ class WeatherDetailViewController: UIViewController {
     }
     
     private func initialSetUp() {
+        setUI()
+        setWeatherInfo()
+    }
+    
+    private func setUI() {
         view.backgroundColor = .white
-        
-        guard let listInfo = weatherForecastInfo else { return }
-        
-        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
-        
-        let iconImageView: UIImageView = UIImageView()
-        let weatherGroupLabel: UILabel = UILabel()
-        let weatherDescriptionLabel: UILabel = UILabel()
-        let temperatureLabel: UILabel = UILabel()
-        let feelsLikeLabel: UILabel = UILabel()
-        let maximumTemperatureLable: UILabel = UILabel()
-        let minimumTemperatureLable: UILabel = UILabel()
-        let popLabel: UILabel = UILabel()
-        let humidityLabel: UILabel = UILabel()
-        let sunriseTimeLabel: UILabel = UILabel()
-        let sunsetTimeLabel: UILabel = UILabel()
-        let spacingView: UIView = UIView()
+
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
         
@@ -92,13 +86,22 @@ class WeatherDetailViewController: UIViewController {
             iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
                                                  multiplier: 0.3)
         ])
+    }
+    
+    private func setWeatherInfo() {
+        guard let listInfo = weatherForecastInfo else { return }
+        
+        let date: Date = Date(timeIntervalSince1970: listInfo.dt)
+        let dateFormatter = DateFormatter.localizedDateFormatter()
+        let formattedDate = dateFormatter.string(from: date)
+        navigationItem.title = formattedDate
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
+        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(temperatureUnit.expression)"
+        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(temperatureUnit.expression)"
+        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(temperatureUnit.expression)"
+        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(temperatureUnit.expression)"
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         

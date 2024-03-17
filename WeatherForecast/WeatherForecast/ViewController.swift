@@ -12,14 +12,8 @@ class ViewController: UIViewController {
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
     
-    var tempUnit: TempUnit = .metric
+    var temperatureUnit: TempUnit = .metric
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,31 +22,31 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
-    @objc private func changeTempUnit() {
-        switch tempUnit {
+    @objc private func changeTemperatureUnit() {
+        switch temperatureUnit {
         case .imperial:
-            tempUnit = .metric
+            temperatureUnit = .metric
             navigationItem.rightBarButtonItem?.title = "섭씨"
         case .metric:
-            tempUnit = .imperial
+            temperatureUnit = .imperial
             navigationItem.rightBarButtonItem?.title = "화씨"
         }
-        refresh()
+        refreshTableView()
     }
     
-    @objc private func refresh() {
+    @objc private func refreshTableView() {
         fetchWeatherJSON()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTemperatureUnit))
         
-        layTable()
+        layoutTableView()
         
         refreshControl.addTarget(self,
-                                 action: #selector(refresh),
+                                 action: #selector(refreshTableView),
                                  for: .valueChanged)
         
         tableView.refreshControl = refreshControl
@@ -61,7 +55,7 @@ extension ViewController {
         tableView.delegate = self
     }
     
-    private func layTable() {
+    private func layoutTableView() {
         tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,19 +112,30 @@ extension ViewController: UITableViewDataSource {
             return cell
         }
         
+        setLabelText(cell, weatherForecastInfo: weatherForecastInfo)
+        setIconImage(cell, weatherForecastInfo: weatherForecastInfo, indexPath: indexPath)
+      
+        return cell
+    }
+    
+    func setLabelText(_ cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo) {
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
+        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(temperatureUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
+        let dateFormatter = DateFormatter.localizedDateFormatter()
+        let formattedDate = dateFormatter.string(from: date)
+        cell.dateLabel.text = formattedDate
+    }
+    
+    func setIconImage(_ cell: WeatherTableViewCell, weatherForecastInfo: WeatherForecastInfo, indexPath: IndexPath) {
+        let iconName: String = weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
                 
         if let image = imageChache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
-            return cell
+            return
         }
         
         Task {
@@ -146,9 +151,8 @@ extension ViewController: UITableViewDataSource {
                 cell.weatherIcon.image = image
             }
         }
-        
-        return cell
     }
+    
 }
 
 extension ViewController: UITableViewDelegate {
@@ -158,7 +162,7 @@ extension ViewController: UITableViewDelegate {
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
         detailViewController.weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row]
         detailViewController.cityInfo = weatherJSON?.city
-        detailViewController.tempUnit = tempUnit
+        detailViewController.temperatureUnit = temperatureUnit
         navigationController?.show(detailViewController, sender: self)
     }
 }

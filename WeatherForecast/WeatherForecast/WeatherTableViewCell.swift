@@ -7,16 +7,17 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    var weatherIcon: UIImageView = UIImageView()
+    var dateLabel: UILabel = UILabel()
+    var temperatureLabel: UILabel = UILabel()
+    var weatherLabel: UILabel = UILabel()
+    var dashLabel: UILabel = UILabel()
+    var descriptionLabel: UILabel = UILabel()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
-        reset()
+        setLabelViews()
+        setStackViews()
     }
     
     required init?(coder: NSCoder) {
@@ -25,25 +26,18 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        reset()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
-        
+    private func setLabelViews() {
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
-        
         labels.forEach { label in
             label.textColor = .black
             label.font = .preferredFont(forTextStyle: .body)
             label.numberOfLines = 1
         }
-        
+    }
+    
+    private func setStackViews() {
         let weatherStackView: UIStackView = UIStackView(arrangedSubviews: [
             weatherLabel,
             dashLabel,
@@ -57,7 +51,6 @@ class WeatherTableViewCell: UITableViewCell {
         weatherStackView.spacing = 8
         weatherStackView.alignment = .center
         weatherStackView.distribution = .fill
-        
         
         let verticalStackView: UIStackView = UIStackView(arrangedSubviews: [
             dateLabel,
@@ -93,11 +86,4 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func reset() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
-        dateLabel.text = "0000-00-00 00:00:00"
-        temperatureLabel.text = "00℃"
-        weatherLabel.text = "~~~"
-        descriptionLabel.text = "~~~~~"
-    }
 }

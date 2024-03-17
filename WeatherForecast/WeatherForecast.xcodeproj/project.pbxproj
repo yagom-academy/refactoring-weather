@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		510D0FCA2BA04218002CF674 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510D0FC92BA04218002CF674 /* UIStackView+.swift */; };
-		510D0FCF2BA05D86002CF674 /* DateFormatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510D0FCE2BA05D86002CF674 /* DateFormatType.swift */; };
+		51304F752BA70BF300BBCD8B /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51304F742BA70BF300BBCD8B /* Date+.swift */; };
 		5166E1492BA332C90049011C /* WeatherImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E1482BA332C90049011C /* WeatherImageCacheService.swift */; };
 		5166E14C2BA343BE0049011C /* ImageFetcherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E14B2BA343BE0049011C /* ImageFetcherService.swift */; };
 		5166E14F2BA343E20049011C /* ImageFetcherError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5166E14E2BA343E20049011C /* ImageFetcherError.swift */; };
@@ -27,7 +27,7 @@
 
 /* Begin PBXFileReference section */
 		510D0FC92BA04218002CF674 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
-		510D0FCE2BA05D86002CF674 /* DateFormatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatType.swift; sourceTree = "<group>"; };
+		51304F742BA70BF300BBCD8B /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		5166E1482BA332C90049011C /* WeatherImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherImageCacheService.swift; sourceTree = "<group>"; };
 		5166E14B2BA343BE0049011C /* ImageFetcherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcherService.swift; sourceTree = "<group>"; };
 		5166E14E2BA343E20049011C /* ImageFetcherError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcherError.swift; sourceTree = "<group>"; };
@@ -73,12 +73,12 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
-		5166E1522BA36DCE0049011C /* Enum */ = {
+		51304F732BA70BCA00BBCD8B /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				510D0FCE2BA05D86002CF674 /* DateFormatType.swift */,
+				51304F742BA70BF300BBCD8B /* Date+.swift */,
 			);
-			path = Enum;
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 		5166E1532BA36EF90049011C /* ViewController */ = {
@@ -154,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				510D0FCD2BA05D7D002CF674 /* Entity */,
-				5166E1522BA36DCE0049011C /* Enum */,
 			);
 			path = Domains;
 			sourceTree = "<group>";
@@ -198,6 +197,7 @@
 		C7743D8B2B21C38100DF0D09 /* WeatherForecast */ = {
 			isa = PBXGroup;
 			children = (
+				51304F732BA70BCA00BBCD8B /* Foundation */,
 				5174FC422BA0F4DC00E8E9BA /* Error */,
 				5174FC3F2BA0E53E00E8E9BA /* Service */,
 				5174FC382BA0DB4700E8E9BA /* Application */,
@@ -282,7 +282,6 @@
 				510D0FCA2BA04218002CF674 /* UIStackView+.swift in Sources */,
 				5174FC412BA0E56000E8E9BA /* WeatherFetcherService.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
-				510D0FCF2BA05D86002CF674 /* DateFormatType.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
 				5166E1512BA344340049011C /* ImageCacheError.swift in Sources */,
 				5174FC442BA0F4E600E8E9BA /* WeatherFetcherError.swift in Sources */,
@@ -291,6 +290,7 @@
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				5166E14C2BA343BE0049011C /* ImageFetcherService.swift in Sources */,
+				51304F752BA70BF300BBCD8B /* Date+.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
 				5166E1492BA332C90049011C /* WeatherImageCacheService.swift in Sources */,
 			);

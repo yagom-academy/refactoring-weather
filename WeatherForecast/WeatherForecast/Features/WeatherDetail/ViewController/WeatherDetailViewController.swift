@@ -12,7 +12,7 @@ struct WeatherDetailInfo {
   let temperatureUnit: TemperatureUnit
 }
 
-final class WeatherDetailViewController: UIViewController, DateFormattable {
+final class WeatherDetailViewController: UIViewController {
   private let weatherImageCacheService: WeatherImageCacheServiceable
   private var info: WeatherDetailInfo
   
@@ -45,7 +45,9 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
   
   private func setLayout() {
     guard let listInfo = info.weatherForecastInfo else { return }
-    navigationItem.title = dateFormat(from: listInfo.dateTime, with: .KoreanLongForm)
+    
+    let date: Date = .init(timeIntervalSince1970: listInfo.dateTime)
+    navigationItem.title = date.formatted(using: .koreanLongForm)
     
     let iconImageView: UIImageView = .init()
     let weatherGroupLabel: UILabel = .init()
@@ -117,8 +119,11 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
     humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
     
     if let cityInfo = info.cityInfo {
-      sunriseTimeLabel.text = "일출 : \(dateFormat(from: cityInfo.sunriseTime, with: .KoreanShortForm))"
-      sunsetTimeLabel.text = "일몰 : \(dateFormat(from: cityInfo.sunsetTime, with: .KoreanShortForm))"
+      let sunriseDate: Date = .init(timeIntervalSince1970: cityInfo.sunriseTime)
+      let sunsetDate: Date = .init(timeIntervalSince1970: cityInfo.sunsetTime)
+      
+      sunriseTimeLabel.text = "일출 : \(sunriseDate.formatted(using: .koreanShortForm))"
+      sunsetTimeLabel.text = "일몰 : \(sunsetDate.formatted(using: .koreanShortForm))"
     }
     
     Task {

@@ -150,7 +150,7 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     let weatherCellInfo = WeatherCellInfo(
-        dt: weatherForecastInfo.dateTime,
+        dateTime: weatherForecastInfo.dateTime,
         main: weatherForecastInfo.main,
         weather: weatherForecastInfo.weather,
         tempExpression: temperatureUnit.symbol

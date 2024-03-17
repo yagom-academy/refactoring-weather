@@ -144,12 +144,7 @@ extension WeatherListViewController: UITableViewDataSource {
       return cell
     }
     
-    let weatherCellInfo = WeatherCellInfo(
-        dateTime: weatherForecastInfo.dateTime,
-        main: weatherForecastInfo.main,
-        weather: weatherForecastInfo.weather,
-        tempExpression: temperatureUnit.symbol
-    )
+    let weatherCellInfo = weatherForecastInfo.toCellInfo(temperatureUnit: temperatureUnit)
     
     Task {
       let iconName: String = weatherForecastInfo.weather.icon
@@ -178,9 +173,9 @@ extension WeatherListViewController: UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     
     let detailInfo: WeatherDetailInfo = .init(
-      weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
-      cityInfo: weatherJSON?.city,
-      temperatureUnit: temperatureUnit
+        weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
+        cityInfo: weatherJSON?.city,
+        temperatureUnit: temperatureUnit
     )
     
     let detailViewController: WeatherDetailViewController = .init(
@@ -189,5 +184,16 @@ extension WeatherListViewController: UITableViewDelegate {
     )
     
     navigationController?.show(detailViewController, sender: self)
+  }
+}
+
+fileprivate extension WeatherForecastInfo {
+  func toCellInfo(temperatureUnit: TemperatureUnit) -> WeatherCellInfo {
+    return .init(
+      dateTime: dateTime,
+      main: main,
+      weather: weather,
+      temperatureUnitSymbol: temperatureUnit.symbol
+    )
   }
 }

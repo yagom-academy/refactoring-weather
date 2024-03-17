@@ -10,7 +10,7 @@ struct WeatherCellInfo {
   let dateTime: TimeInterval
   let main: MainInfo
   let weather: Weather
-  let tempExpression: String
+  let temperatureUnitSymbol: String
 }
 
 final class WeatherTableViewCell: UITableViewCell, CellIdentifiable {
@@ -108,7 +108,7 @@ final class WeatherTableViewCell: UITableViewCell, CellIdentifiable {
   func configure(weatherCellInfo info: WeatherCellInfo) {
     weatherLabel.text = info.weather.main
     descriptionLabel.text = info.weather.description
-    temperatureLabel.text = "\(info.main.temperature)\(info.tempExpression)"
+    temperatureLabel.text = "\(info.main.temperature)\(info.temperatureUnitSymbol)"
     let date: Date = .init(timeIntervalSince1970: info.dateTime)
     dateLabel.text = date.formatted(using: .koreanLongForm)
   }

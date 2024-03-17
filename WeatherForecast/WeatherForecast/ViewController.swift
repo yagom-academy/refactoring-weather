@@ -9,7 +9,11 @@ import UIKit
 class ViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
-    var weatherJSON: WeatherJSON?
+    var weatherJSON: WeatherJSON? {
+        willSet {
+            setNavTitle(with: newValue?.city.name)
+        }
+    }
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
     let dateFormatter: DateFormatter = {
@@ -75,6 +79,13 @@ extension ViewController {
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor)
         ])
     }
+    
+    private func setNavTitle(with text: String?) {
+        guard let text else {return}
+        DispatchQueue.main.async {
+            self.navigationItem.title = text
+        }
+    }
 }
 
 extension ViewController {
@@ -96,7 +107,6 @@ extension ViewController {
         }
 
         weatherJSON = info
-        navigationItem.title = weatherJSON?.city.name
     }
 }
 

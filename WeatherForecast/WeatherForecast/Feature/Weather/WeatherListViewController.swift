@@ -46,7 +46,9 @@ extension WeatherListViewController {
             tempUnit = .imperial
         }
         navigationItem.rightBarButtonItem?.title = tempUnit.krString
-        refresh()
+        
+        guard let view = view as? WeatherListView else { return }
+        view.updateUI()
     }
     
     private func initialSetUp() {

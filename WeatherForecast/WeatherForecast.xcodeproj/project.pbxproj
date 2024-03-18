@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D6443382BA7ACF5004340DB /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6443372BA7ACF5004340DB /* DetailView.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
 		C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D6443372BA7ACF5004340DB /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C7743D892B21C38100DF0D09 /* WeatherForecast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				C7743D952B21C38200DF0D09 /* Assets.xcassets */,
 				C7743D972B21C38200DF0D09 /* LaunchScreen.storyboard */,
 				C7743D9A2B21C38200DF0D09 /* Info.plist */,
+				7D6443372BA7ACF5004340DB /* DetailView.swift */,
 			);
 			path = WeatherForecast;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* ViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,
+				7D6443382BA7ACF5004340DB /* DetailView.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
@@ -304,6 +308,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B36234Y8A9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherForecast/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -331,6 +336,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B36234Y8A9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherForecast/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

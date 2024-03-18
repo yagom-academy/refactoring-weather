@@ -13,21 +13,16 @@ protocol WeatherRepository {
 }
 
 struct WeatherRepositoryImpl: WeatherRepository {
+    private var dataSource: WeatherDataSource
+    
+    init(dataSource: WeatherDataSource) {
+        self.dataSource = dataSource
+    }
+    
     func fetchWeather() -> AnyPublisher<FetchWeatherResult, Error> {
-        return Future<FetchWeatherResult, Error> { promise in
-            let jsonDecoder: JSONDecoder = .init()
-            jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-            guard let data = NSDataAsset(name: "weather")?.data else {
-                return
-            }
-            
-            do {
-                let info: FetchWeatherResultDTO = try jsonDecoder.decode(FetchWeatherResultDTO.self, from: data)
-                promise(.success(.init(dto: info)))
-            } catch {
-                promise(.failure(error))
-            }
-        }.eraseToAnyPublisher()
+        dataSource.fetchWeatherData()
+            .decode(type: FetchWeatherResultDTO.self, decoder: JSONDecoder())
+            .map({ .init(dto: $0) })
+            .eraseToAnyPublisher()
     }
 }

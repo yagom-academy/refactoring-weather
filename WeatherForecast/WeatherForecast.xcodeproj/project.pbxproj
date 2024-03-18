@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A776D3242BA7C3E300F537B0 /* WeatherDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A776D3232BA7C3E300F537B0 /* WeatherDataSource.swift */; };
 		A781F3262BA2960B00BC4327 /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A781F3252BA2960B00BC4327 /* TempUnit.swift */; };
 		A79726EE2BA1768C00D9CE5C /* WeatherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */; };
 		A79726F02BA1769200D9CE5C /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A776D3232BA7C3E300F537B0 /* WeatherDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSource.swift; sourceTree = "<group>"; };
 		A781F3252BA2960B00BC4327 /* TempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListView.swift; sourceTree = "<group>"; };
 		A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
@@ -57,6 +59,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A776D3222BA7C3D900F537B0 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				A776D3232BA7C3E300F537B0 /* WeatherDataSource.swift */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
 		A79726E92BA1761100D9CE5C /* Feature */ = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +99,7 @@
 		A79726EC2BA1764C00D9CE5C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A776D3222BA7C3D900F537B0 /* DataSource */,
 				A79726FA2BA1860600D9CE5C /* Repository */,
 				A79726F92BA185FE00D9CE5C /* Data */,
 			);
@@ -241,6 +252,7 @@
 			files = (
 				A79726F82BA180AC00D9CE5C /* ImageCache.swift in Sources */,
 				A79726F02BA1769200D9CE5C /* WeatherDetailView.swift in Sources */,
+				A776D3242BA7C3E300F537B0 /* WeatherDataSource.swift in Sources */,
 				C7743DA12B21C3B400DF0D09 /* WeatherTableViewCell.swift in Sources */,
 				C7743D912B21C38100DF0D09 /* WeatherListViewController.swift in Sources */,
 				C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */,

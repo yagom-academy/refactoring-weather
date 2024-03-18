@@ -19,7 +19,7 @@ protocol WeatherDataSource {
 struct WeatherDataSourceImpl: WeatherDataSource {
     func fetchWeatherData() -> Future<Data, Error> {
         .init { promise in
-            guard let data = NSDataAsset(name: "weather")?.data else {
+            guard let data: Data = NSDataAsset(name: "weather")?.data else {
                 promise(.failure(DataSourceError.noData))
                 return
             }

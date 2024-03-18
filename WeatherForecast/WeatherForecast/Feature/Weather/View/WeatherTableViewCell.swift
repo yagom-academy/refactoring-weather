@@ -129,7 +129,7 @@ extension WeatherTableViewCell {
     }
     
     private func fetchIconImage(_ iconImageUrlString: String) {
-        guard let url = URL(string: iconImageUrlString) else { return }
+        guard let url: URL = URL(string: iconImageUrlString) else { return }
         imageFetcher?.loadImage(url: url)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { result in

@@ -77,7 +77,7 @@ struct WeatherForecastInfo {
     }
     
     var iconUrlString: String {
-        "https://openweathermap.org/img/wn/\(weather.icon)@2x.png"
+        "https://openweathermap.org/img/wn/\(weather.icon.rawValue)@2x.png"
     }
 }
 
@@ -117,9 +117,9 @@ struct Weather {
     let id: Int
     let main: WeatherMain
     let description: String
-    let icon: String
+    let icon: WeatherIcon
     
-    init(id: Int, main: WeatherMain, description: String, icon: String) {
+    init(id: Int, main: WeatherMain, description: String, icon: WeatherIcon) {
         self.id = id
         self.main = main
         self.description = description
@@ -153,7 +153,7 @@ struct City {
     init(dto: CityDTO) {
         self.id = dto.id
         self.name = dto.name
-        self.country = CityCountry(rawValue: dto.country) ?? .us
+        self.country = dto.country
         self.sunrise = .init(timeIntervalSince1970: dto.sunrise)
         self.sunset = .init(timeIntervalSince1970: dto.sunset)
     }

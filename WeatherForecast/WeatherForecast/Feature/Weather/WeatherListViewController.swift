@@ -59,7 +59,7 @@ extension WeatherListViewController {
 
 extension WeatherListViewController: WeatherListViewDelegate {
     func weatherSelected(_ weather: WeatherForecastInfo) {
-        guard let city else { return }
+        guard let city: City else { return }
         
         let detailViewController: WeatherDetailViewController = .init(
             weatherForecastInfo: weather,
@@ -95,7 +95,7 @@ extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let weather = weatherForecast?[indexPath.row] else { return }
+        guard let weather: WeatherForecastInfo = weatherForecast?[indexPath.row] else { return }
         weatherSelected(weather)
     }
 }
@@ -107,14 +107,16 @@ extension WeatherListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherForecast?.count ?? 0
+        guard let weatherForecast: [WeatherForecastInfo] else { return 0 }
+        
+        return weatherForecast.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.ReuseIdentifier, for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherForecast?[indexPath.row] else {
+              let weatherForecastInfo: WeatherForecastInfo = weatherForecast?[indexPath.row] else {
             return cell
         }
         

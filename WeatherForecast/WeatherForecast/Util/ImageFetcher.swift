@@ -26,8 +26,8 @@ struct ImageFetcherImpl: ImageFetcher {
             
             Task {
                 do {
-                    let responseData = try await URLSession.shared.data(from: url)
-                    guard let uiImage = UIImage(data: responseData.0)
+                    let responseData: (Data, URLResponse) = try await URLSession.shared.data(from: url)
+                    guard let uiImage: UIImage = UIImage(data: responseData.0)
                     else {
                         throw ImageFetchError.createUIImageFailed
                     }

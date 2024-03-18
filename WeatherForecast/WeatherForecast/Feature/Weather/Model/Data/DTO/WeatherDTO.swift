@@ -40,14 +40,23 @@ struct MainInfoDTO: Decodable {
 }
 
 // MARK: - Weather
+enum WeatherIcon: String, Decodable {
+    case n4 = "04n"
+    case d4 = "04d"
+    case n10 = "10n"
+    case d10 = "10d"
+    case n13 = "13n"
+    case d13 = "13d"
+}
+
 struct WeatherDTO: Decodable {
     let id: Int
     let main: String
     let description: String
-    let icon: String
+    let icon: WeatherIcon
     
     static var stub: Self {
-        .init(id: 804, main: "Clouds", description: "overcast clouds", icon: "04d")
+        .init(id: 804, main: "Clouds", description: "overcast clouds", icon: .d4)
     }
 }
 

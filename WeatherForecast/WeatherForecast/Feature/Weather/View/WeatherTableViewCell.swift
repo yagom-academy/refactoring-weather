@@ -5,17 +5,23 @@
 // 
 
 import UIKit
+import Combine
 
 class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    static let ReuseIdentifier: String = "WeatherTableViewCell"
+    
+    var weatherIcon: UIImageView = .init()
+    var dateLabel: UILabel = .init()
+    var temperatureLabel: UILabel = .init()
+    var weatherLabel: UILabel = .init()
+    var descriptionLabel: UILabel = .init()
+    
+    private var imageFetcher: ImageFetcher?
+    private var cancellables: Set<AnyCancellable> = .init()
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layViews()
+        layoutViews()
         reset()
     }
     
@@ -28,13 +34,20 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func layViews() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        let dashLabel: UILabel = UILabel()
-        descriptionLabel = UILabel()
+    private func reset() {
+        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
+        dateLabel.text = "0000-00-00 00:00:00"
+        temperatureLabel.text = "00℃"
+        weatherLabel.text = "~~~"
+        descriptionLabel.text = "~~~~~"
+        cancellables.removeAll()
+    }
+}
+
+// MARK: Layout Views
+extension WeatherTableViewCell {
+    private func layoutViews() {
+        let dashLabel: UILabel = .init()
         
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
@@ -92,12 +105,45 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
+}
+
+// MARK: Update UI
+extension WeatherTableViewCell {
+    func setImageFetcher(_ imageFetcher: ImageFetcher) {
+        self.imageFetcher = imageFetcher
+    }
     
-    private func reset() {
-        weatherIcon.image = UIImage(systemName: "arrow.down.circle.dotted")
-        dateLabel.text = "0000-00-00 00:00:00"
-        temperatureLabel.text = "00℃"
-        weatherLabel.text = "~~~"
-        descriptionLabel.text = "~~~~~"
+    func updateUI(
+        weatherMain: String,
+        weatherDescription: String,
+        temperature: String,
+        date: String,
+        icon: String
+    ) {
+        weatherLabel.text = weatherMain
+        descriptionLabel.text = weatherDescription
+        temperatureLabel.text = temperature
+        dateLabel.text = date
+        
+        fetchIconImage(icon)
+    }
+    
+    private func fetchIconImage(_ iconImageUrlString: String) {
+        guard let url = URL(string: iconImageUrlString) else { return }
+        imageFetcher?.loadImage(url: url)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    break
+                case .failure(let error):
+                    // handle error
+                    print(error)
+                }
+            }, receiveValue: { [weak self] fetchedImage in
+                guard let self else { return }
+                
+                weatherIcon.image = fetchedImage
+            }).store(in: &cancellables)
     }
 }

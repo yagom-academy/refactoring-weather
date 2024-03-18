@@ -7,16 +7,29 @@
 
 import UIKit
 
-class DetailView: UIView {
-    let weatherForecastInfo: WeatherForecastInfo
-    let cityInfo: City
+protocol DetailViewInfoProtocol {
+    var weatherForecastInfo: WeatherForecastInfo { get set }
+    var cityInfo: City { get set }
+    var tempUnit: TempUnit { get set }
+}
+
+class DetailInfo: DetailViewInfoProtocol {
+    var weatherForecastInfo: WeatherForecastInfo
+    var cityInfo: City
     var tempUnit: TempUnit
     
     init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit) {
         self.weatherForecastInfo = weatherForecastInfo
         self.cityInfo = cityInfo
         self.tempUnit = tempUnit
-        
+    }
+}
+
+class DetailView: UIView {
+    private let infoProtocol: DetailViewInfoProtocol
+    
+    init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit) {
+        self.infoProtocol = DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit)
         super.init(frame: .zero)
         layViews()
     }
@@ -78,21 +91,21 @@ class DetailView: UIView {
         func layLabels() {
             weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
             weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
-            weatherGroupLabel.text = weatherForecastInfo.weather.main
-            weatherDescriptionLabel.text = weatherForecastInfo.weather.description
-            temperatureLabel.text = "현재 기온 : \(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-            feelsLikeLabel.text = "체감 기온 : \(weatherForecastInfo.main.feelsLike)\(tempUnit.expression)"
-            maximumTemperatureLable.text = "최고 기온 : \(weatherForecastInfo.main.tempMax)\(tempUnit.expression)"
-            minimumTemperatureLable.text = "최저 기온 : \(weatherForecastInfo.main.tempMin)\(tempUnit.expression)"
-            popLabel.text = "강수 확률 : \(weatherForecastInfo.main.pop * 100)%"
-            humidityLabel.text = "습도 : \(weatherForecastInfo.main.humidity)%"
+            weatherGroupLabel.text = infoProtocol.weatherForecastInfo.weather.main
+            weatherDescriptionLabel.text = infoProtocol.weatherForecastInfo.weather.description
+            temperatureLabel.text = "현재 기온 : \(infoProtocol.weatherForecastInfo.main.temp)\(infoProtocol.tempUnit.expression)"
+            feelsLikeLabel.text = "체감 기온 : \(infoProtocol.weatherForecastInfo.main.feelsLike)\(infoProtocol.tempUnit.expression)"
+            maximumTemperatureLable.text = "최고 기온 : \(infoProtocol.weatherForecastInfo.main.tempMax)\(infoProtocol.tempUnit.expression)"
+            minimumTemperatureLable.text = "최저 기온 : \(infoProtocol.weatherForecastInfo.main.tempMin)\(infoProtocol.tempUnit.expression)"
+            popLabel.text = "강수 확률 : \(infoProtocol.weatherForecastInfo.main.pop * 100)%"
+            humidityLabel.text = "습도 : \(infoProtocol.weatherForecastInfo.main.humidity)%"
             
             let formatter: DateFormatter = DateFormatter()
             formatter.dateFormat = .none
             formatter.timeStyle = .short
             formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: infoProtocol.cityInfo.sunrise)))"
+            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: infoProtocol.cityInfo.sunset)))"
         }
         
         func layMainStackView() {
@@ -123,7 +136,7 @@ class DetailView: UIView {
     
     func loadImage(to imageView: UIImageView) {
         Task {
-            let iconName: String = weatherForecastInfo.weather.icon
+            let iconName: String = infoProtocol.weatherForecastInfo.weather.icon
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
             
             guard let url: URL = URL(string: urlString),

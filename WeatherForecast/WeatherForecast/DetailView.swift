@@ -135,16 +135,10 @@ class DetailView: UIView {
     }
     
     func loadImage(to imageView: UIImageView) {
-        Task {
-            let iconName: String = infoProtocol.weatherForecastInfo.weather.icon
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-            
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
+        let iconName: String = infoProtocol.weatherForecastInfo.weather.icon
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+        
+        ImageChacher.shared.load(urlString: urlString) { image in
             imageView.image = image
         }
     }

@@ -12,7 +12,7 @@ protocol WeatherListViewDelegate: UITableViewDelegate, UITableViewDataSource {
     func refresh()
 }
 
-class WeatherListView: UIView {
+final class WeatherListView: UIView {
     
     private let tableView: UITableView = .init()
     private let refreshControl: UIRefreshControl = .init()

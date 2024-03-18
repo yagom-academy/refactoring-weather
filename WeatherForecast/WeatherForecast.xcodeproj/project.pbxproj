@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A776D3242BA7C3E300F537B0 /* WeatherDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A776D3232BA7C3E300F537B0 /* WeatherDataSource.swift */; };
+		A776D32A2BA7D3A700F537B0 /* DataDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A776D3292BA7D3A700F537B0 /* DataDecoder.swift */; };
 		A781F3262BA2960B00BC4327 /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A781F3252BA2960B00BC4327 /* TempUnit.swift */; };
 		A79726EE2BA1768C00D9CE5C /* WeatherListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */; };
 		A79726F02BA1769200D9CE5C /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		A776D3232BA7C3E300F537B0 /* WeatherDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataSource.swift; sourceTree = "<group>"; };
+		A776D3292BA7D3A700F537B0 /* DataDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDecoder.swift; sourceTree = "<group>"; };
 		A781F3252BA2960B00BC4327 /* TempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		A79726ED2BA1768C00D9CE5C /* WeatherListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherListView.swift; sourceTree = "<group>"; };
 		A79726EF2BA1769200D9CE5C /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
@@ -78,8 +80,8 @@
 		A79726EA2BA1761500D9CE5C /* Weather */ = {
 			isa = PBXGroup;
 			children = (
-				A79726EB2BA1762200D9CE5C /* View */,
 				A79726EC2BA1764C00D9CE5C /* Model */,
+				A79726EB2BA1762200D9CE5C /* View */,
 				C7743D902B21C38100DF0D09 /* WeatherListViewController.swift */,
 				C7743DA22B21CA8500DF0D09 /* WeatherDetailViewController.swift */,
 			);
@@ -119,6 +121,7 @@
 			children = (
 				A79726F52BA17E7400D9CE5C /* ImageFetcher.swift */,
 				A79726F72BA180AC00D9CE5C /* ImageCache.swift */,
+				A776D3292BA7D3A700F537B0 /* DataDecoder.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				A79726FF2BA1862200D9CE5C /* WeatherDTO.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				A776D32A2BA7D3A700F537B0 /* DataDecoder.swift in Sources */,
 				A781F3262BA2960B00BC4327 /* TempUnit.swift in Sources */,
 				A79726F32BA1773300D9CE5C /* Date+Extension.swift in Sources */,
 				A79726F62BA17E7400D9CE5C /* ImageFetcher.swift in Sources */,

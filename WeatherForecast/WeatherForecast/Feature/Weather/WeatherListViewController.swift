@@ -7,7 +7,7 @@
 import UIKit
 import Combine
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
     
     private var weatherForecast: [WeatherForecastInfo]?
     private var city: City?

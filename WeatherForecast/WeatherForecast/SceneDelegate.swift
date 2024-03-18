@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         let weatherListViewController: WeatherListViewController = .init(
-            weatherRepository: WeatherRepositoryImpl(),
+            weatherRepository: WeatherRepositoryImpl(dataSource: WeatherDataSourceImpl(), decoder: DataDecoderJSON(decoder: JSONDecoder())),
             imageFetcher: ImageFetcherImpl()
         )
         let navigationController: UINavigationController = UINavigationController(rootViewController: weatherListViewController)

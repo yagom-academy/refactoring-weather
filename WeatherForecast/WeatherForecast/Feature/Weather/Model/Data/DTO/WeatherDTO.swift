@@ -52,16 +52,21 @@ struct WeatherDTO: Decodable {
 }
 
 // MARK: - City
+enum CityCountry: String, Decodable {
+    case korea = "KR"
+    case us = "US"
+}
+
 struct CityDTO: Decodable {
     let id: Int
     let name: String
     let coord: CoordDTO
-    let country: String
+    let country: CityCountry
     let population, timezone: Int
     let sunrise, sunset: TimeInterval
     
     static var stub: Self {
-        .init(id: 1845604, name: "Cheongju-si", coord: .stub, country: "KR", population: 634596, timezone: 32400, sunrise: 1705531242, sunset: 1705567148)
+        .init(id: 1845604, name: "Cheongju-si", coord: .stub, country: .korea, population: 634596, timezone: 32400, sunrise: 1705531242, sunset: 1705567148)
     }
 }
 

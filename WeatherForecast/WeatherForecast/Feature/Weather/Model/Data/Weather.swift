@@ -7,7 +7,7 @@
 import Foundation
 
 // MARK: - Weather UI Model
-class FetchWeatherResult {
+struct FetchWeatherResult {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
     
@@ -23,7 +23,7 @@ class FetchWeatherResult {
 }
 
 // MARK: - List
-class WeatherForecastInfo {
+struct WeatherForecastInfo {
     private let date: Date
     private let main: MainInfo
     private let weather: Weather
@@ -82,7 +82,7 @@ class WeatherForecastInfo {
 }
 
 // MARK: - MainClass
-class MainInfo {
+struct MainInfo {
     let temp, feelsLike, tempMin, tempMax: Double
     let humidity, pop: Double
     
@@ -113,7 +113,7 @@ enum WeatherMain: String {
     case snow = "Snow"
 }
 
-class Weather {
+struct Weather {
     let id: Int
     let main: WeatherMain
     let description: String
@@ -135,12 +135,8 @@ class Weather {
 }
 
 // MARK: - City
-enum CityCountry: String {
-    case korea = "KR"
-    case us = "US"
-}
 
-class City {
+struct City {
     private let id: Int
     private let name: String
     private let country: CityCountry

@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class WeatherDetailView: UIView {
+final class WeatherDetailView: UIView {
     private let iconImageView: UIImageView = UIImageView()
     private let weatherGroupLabel: UILabel = UILabel()
     private let weatherDescriptionLabel: UILabel = UILabel()

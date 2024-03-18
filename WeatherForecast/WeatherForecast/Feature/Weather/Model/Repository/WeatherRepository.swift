@@ -13,16 +13,25 @@ protocol WeatherRepository {
 }
 
 struct WeatherRepositoryImpl: WeatherRepository {
-    private var dataSource: WeatherDataSource
+    private let dataSource: WeatherDataSource
+    private let decoder: DataDecoder
     
-    init(dataSource: WeatherDataSource) {
+    init(
+        dataSource: WeatherDataSource,
+        decoder: DataDecoder
+    ) {
         self.dataSource = dataSource
+        self.decoder = decoder
     }
     
     func fetchWeather() -> AnyPublisher<FetchWeatherResult, Error> {
         dataSource.fetchWeatherData()
-            .decode(type: FetchWeatherResultDTO.self, decoder: JSONDecoder())
-            .map({ .init(dto: $0) })
+            .flatMap {
+                decoder.decode(type: FetchWeatherResultDTO.self, from: $0)
+            }
+            .map {
+                .init(dto: $0)
+            }
             .eraseToAnyPublisher()
     }
 }

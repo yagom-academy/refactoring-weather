@@ -7,14 +7,14 @@
 import UIKit
 import Combine
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     static let ReuseIdentifier: String = "WeatherTableViewCell"
     
-    var weatherIcon: UIImageView = .init()
-    var dateLabel: UILabel = .init()
-    var temperatureLabel: UILabel = .init()
-    var weatherLabel: UILabel = .init()
-    var descriptionLabel: UILabel = .init()
+    private let weatherIcon: UIImageView = .init()
+    private let dateLabel: UILabel = .init()
+    private let temperatureLabel: UILabel = .init()
+    private let weatherLabel: UILabel = .init()
+    private let descriptionLabel: UILabel = .init()
     
     private var imageFetcher: ImageFetcher?
     private var cancellables: Set<AnyCancellable> = .init()

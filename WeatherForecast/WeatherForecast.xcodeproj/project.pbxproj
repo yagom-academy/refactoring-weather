@@ -135,6 +135,15 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		51379CEB2BAA201D00EA9EC9 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				51304F8B2BA7526700BBCD8B /* NSDataProviderError.swift */,
+				5174FC432BA0F4E600E8E9BA /* WeatherFetcherError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		5166E1532BA36EF90049011C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +180,7 @@
 		5174FC362BA0DB3100E8E9BA /* WeatherList */ = {
 			isa = PBXGroup;
 			children = (
+				51379CEB2BAA201D00EA9EC9 /* Error */,
 				5166E1542BA36F0A0049011C /* View */,
 				5166E1532BA36EF90049011C /* ViewController */,
 			);
@@ -227,10 +237,8 @@
 		5174FC422BA0F4DC00E8E9BA /* Error */ = {
 			isa = PBXGroup;
 			children = (
-				5174FC432BA0F4E600E8E9BA /* WeatherFetcherError.swift */,
 				5166E14E2BA343E20049011C /* HTTPSessionServiceError.swift */,
 				5166E1502BA344340049011C /* ImageCacheError.swift */,
-				51304F8B2BA7526700BBCD8B /* NSDataProviderError.swift */,
 			);
 			path = Error;
 			sourceTree = "<group>";

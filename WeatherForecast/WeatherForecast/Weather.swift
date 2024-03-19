@@ -60,3 +60,6 @@ enum TempUnit: String {
     }
 }
 
+struct Shared {
+    static var tempUnit: TempUnit = .metric
+}

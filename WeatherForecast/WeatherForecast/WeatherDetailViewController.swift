@@ -19,7 +19,7 @@ class WeatherDetailViewController: UIViewController {
     }
     
     override func loadView() {
-        view = DetailView(weatherForecastInfo: info.weatherForecastInfo, cityInfo: info.cityInfo, tempUnit: info.tempUnit)
+        view = DetailView(weatherForecastInfo: info.weatherForecastInfo, cityInfo: info.cityInfo)
         layViews()
     }
     

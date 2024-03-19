@@ -11,13 +11,11 @@ class WeatherListTableDelegate: NSObject, UITableViewDelegate {
     let baseVC: UIViewController
     var weathers: [WeatherForecastInfo]
     var city: City
-    var tempUnit: TempUnit
     
-    init(baseVC: UIViewController, weathers: [WeatherForecastInfo], city: City, tempUnit: TempUnit) {
+    init(baseVC: UIViewController, weathers: [WeatherForecastInfo], city: City) {
         self.baseVC = baseVC
         self.weathers = weathers
         self.city = city
-        self.tempUnit = tempUnit
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -25,7 +23,7 @@ class WeatherListTableDelegate: NSObject, UITableViewDelegate {
         
         let weatherForecastInfo = weathers[indexPath.row]
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(info: DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: city, tempUnit: tempUnit))
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(info: DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: city))
         baseVC.navigationController?.show(detailViewController, sender: self)
     }
 }

@@ -32,7 +32,6 @@ class WeatherListViewController: UIViewController {
             setTableDataSourceAndDelegate(with: newValue)
         }
     }
-    var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,12 +41,12 @@ class WeatherListViewController: UIViewController {
 
 extension WeatherListViewController {
     @objc private func changeTempUnit() {
-        switch tempUnit {
+        switch Shared.tempUnit {
         case .imperial:
-            tempUnit = .metric
+            Shared.tempUnit = .metric
             navigationItem.rightBarButtonItem?.title = "섭씨"
         case .metric:
-            tempUnit = .imperial
+            Shared.tempUnit = .imperial
             navigationItem.rightBarButtonItem?.title = "화씨"
         }
         refresh()
@@ -100,8 +99,8 @@ extension WeatherListViewController {
         guard let weathers = jsonData?.weatherForecast,
               let city = jsonData?.city else {return}
         
-        let weatherListDataSource = WeatherListTableDataSource(weathers: weathers, tempUnit: tempUnit)
-        let weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city, tempUnit: tempUnit)
+        let weatherListDataSource = WeatherListTableDataSource(weathers: weathers)
+        let weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city)
         
         tableViewAdopter = WeatherListTableViewAdopter(weatherListDataSource: weatherListDataSource, weatherListDelegate: weatherListDelegate)
         tableView.dataSource = weatherListDataSource

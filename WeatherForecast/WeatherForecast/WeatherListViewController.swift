@@ -8,12 +8,14 @@ import UIKit
 
 class WeatherListViewController: UIViewController {
     var tableView: UITableView!
-    var weatherListDataSource = WeatherListDataSource()
+    var weatherListDataSource: WeatherListTableDataSource?
+    var weatherListDelegate: WeatherListTableDelegate?
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON? {
         willSet {
             setNavTitle(with: newValue?.city.name)
-            setDataSource(with: newValue)
+            setTableDataSource(with: newValue)
+            setTableDelegate(with: newValue)
         }
     }
     var icons: [UIImage]?
@@ -57,7 +59,7 @@ extension WeatherListViewController {
         tableView.refreshControl = refreshControl
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
         tableView.dataSource = weatherListDataSource
-        tableView.delegate = self
+        tableView.delegate = weatherListDelegate
     }
     
     private func layTable() {
@@ -82,16 +84,22 @@ extension WeatherListViewController {
         }
     }
     
-    private func setDataSource(with jsonData: WeatherJSON?) {
+    private func setTableDataSource(with jsonData: WeatherJSON?) {
         guard let weathers = jsonData?.weatherForecast else {return}
-        self.weatherListDataSource = WeatherListDataSource(weathers: weathers, tempUnit: tempUnit)
+        self.weatherListDataSource = WeatherListTableDataSource(weathers: weathers, tempUnit: tempUnit)
         tableView.dataSource = weatherListDataSource
+    }
+    
+    private func setTableDelegate(with jsonData: WeatherJSON?) {
+        guard let weathers = jsonData?.weatherForecast,
+              let city = jsonData?.city else {return}
+        self.weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city, tempUnit: tempUnit)
+        tableView.delegate = weatherListDelegate
     }
 }
 
 extension WeatherListViewController {
     private func fetchWeatherJSON() {
-        
         let jsonDecoder: JSONDecoder = .init()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
 
@@ -118,7 +126,7 @@ extension WeatherListViewController: UITableViewDelegate {
         guard let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row],
               let cityInfo = weatherJSON?.city else {return}
         
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(infoProtocol: DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit))
+        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(info: DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit))
         navigationController?.show(detailViewController, sender: self)
     }
 }

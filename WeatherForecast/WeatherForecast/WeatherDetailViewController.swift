@@ -18,13 +18,6 @@ class WeatherDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     override func loadView() {view = DetailView(weatherForecastInfo: infoProtocol.weatherForecastInfo, cityInfo: infoProtocol.cityInfo, tempUnit: infoProtocol.tempUnit)
         layViews()
     }
@@ -34,6 +27,6 @@ class WeatherDetailViewController: UIViewController {
         
         let weatherForecastInfo = infoProtocol.weatherForecastInfo
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = Date.string(from: date, format: "yyyy-MM-dd(EEEEE) a HH:mm")
     }
 }

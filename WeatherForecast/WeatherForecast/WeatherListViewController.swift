@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherListViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON? {
@@ -16,13 +16,6 @@ class ViewController: UIViewController {
     }
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
     var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
@@ -31,7 +24,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
+extension WeatherListViewController {
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
@@ -88,7 +81,7 @@ extension ViewController {
     }
 }
 
-extension ViewController {
+extension WeatherListViewController {
     private func fetchWeatherJSON() {
         
         let jsonDecoder: JSONDecoder = .init()
@@ -110,7 +103,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension WeatherListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         1
@@ -133,7 +126,7 @@ extension ViewController: UITableViewDataSource {
         cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
+        cell.dateLabel.text = Date.string(from: date, format: "yyyy-MM-dd(EEEEE) a HH:mm")
                 
         let iconName: String = weatherForecastInfo.weather.icon         
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
@@ -148,7 +141,7 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-extension ViewController: UITableViewDelegate {
+extension WeatherListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

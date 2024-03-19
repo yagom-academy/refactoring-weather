@@ -13,7 +13,7 @@ protocol DetailViewInfoProtocol {
     var tempUnit: TempUnit { get set }
 }
 
-class DetailInfo: DetailViewInfoProtocol {
+struct DetailInfo: DetailViewInfoProtocol {
     var weatherForecastInfo: WeatherForecastInfo
     var cityInfo: City
     var tempUnit: TempUnit
@@ -26,10 +26,10 @@ class DetailInfo: DetailViewInfoProtocol {
 }
 
 class DetailView: UIView {
-    private let infoProtocol: DetailViewInfoProtocol
+    private let info: DetailViewInfoProtocol
     
     init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City, tempUnit: TempUnit) {
-        self.infoProtocol = DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit)
+        self.info = DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit)
         super.init(frame: .zero)
         layViews()
     }
@@ -91,21 +91,16 @@ class DetailView: UIView {
         func layLabels() {
             weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
             weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
-            weatherGroupLabel.text = infoProtocol.weatherForecastInfo.weather.main
-            weatherDescriptionLabel.text = infoProtocol.weatherForecastInfo.weather.description
-            temperatureLabel.text = "현재 기온 : \(infoProtocol.weatherForecastInfo.main.temp)\(infoProtocol.tempUnit.expression)"
-            feelsLikeLabel.text = "체감 기온 : \(infoProtocol.weatherForecastInfo.main.feelsLike)\(infoProtocol.tempUnit.expression)"
-            maximumTemperatureLable.text = "최고 기온 : \(infoProtocol.weatherForecastInfo.main.tempMax)\(infoProtocol.tempUnit.expression)"
-            minimumTemperatureLable.text = "최저 기온 : \(infoProtocol.weatherForecastInfo.main.tempMin)\(infoProtocol.tempUnit.expression)"
-            popLabel.text = "강수 확률 : \(infoProtocol.weatherForecastInfo.main.pop * 100)%"
-            humidityLabel.text = "습도 : \(infoProtocol.weatherForecastInfo.main.humidity)%"
-            
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: infoProtocol.cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: infoProtocol.cityInfo.sunset)))"
+            weatherGroupLabel.text = info.weatherForecastInfo.weather.main
+            weatherDescriptionLabel.text = info.weatherForecastInfo.weather.description
+            temperatureLabel.text = "현재 기온 : \(info.weatherForecastInfo.main.temp)\(info.tempUnit.expression)"
+            feelsLikeLabel.text = "체감 기온 : \(info.weatherForecastInfo.main.feelsLike)\(info.tempUnit.expression)"
+            maximumTemperatureLable.text = "최고 기온 : \(info.weatherForecastInfo.main.tempMax)\(info.tempUnit.expression)"
+            minimumTemperatureLable.text = "최저 기온 : \(info.weatherForecastInfo.main.tempMin)\(info.tempUnit.expression)"
+            popLabel.text = "강수 확률 : \(info.weatherForecastInfo.main.pop * 100)%"
+            humidityLabel.text = "습도 : \(info.weatherForecastInfo.main.humidity)%"
+            sunriseTimeLabel.text = "일출 : \(Date.string(from: Date(timeIntervalSince1970: info.cityInfo.sunrise), style: .short))"
+            sunsetTimeLabel.text = "일몰 : \(Date.string(from: Date(timeIntervalSince1970: info.cityInfo.sunset), style: .short))"
         }
         
         func layMainStackView() {
@@ -135,7 +130,7 @@ class DetailView: UIView {
     }
     
     func loadImage(to imageView: UIImageView) {
-        let iconName: String = infoProtocol.weatherForecastInfo.weather.icon
+        let iconName: String = info.weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
         ImageChacher.shared.load(urlString: urlString) { image in

@@ -90,10 +90,10 @@ class DetailView: UIView {
             weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
             weatherGroupLabel.text = info.weatherForecastInfo.weather.main
             weatherDescriptionLabel.text = info.weatherForecastInfo.weather.description
-            temperatureLabel.text = "현재 기온 : \(info.weatherForecastInfo.main.temp)\(Shared.tempUnit.expression)"
-            feelsLikeLabel.text = "체감 기온 : \(info.weatherForecastInfo.main.feelsLike)\(Shared.tempUnit.expression)"
-            maximumTemperatureLable.text = "최고 기온 : \(info.weatherForecastInfo.main.tempMax)\(Shared.tempUnit.expression)"
-            minimumTemperatureLable.text = "최저 기온 : \(info.weatherForecastInfo.main.tempMin)\(Shared.tempUnit.expression)"
+            temperatureLabel.text = "현재 기온 : \(Shared.tempUnit.applyTempUnit(temp: info.weatherForecastInfo.main.temp))\(Shared.tempUnit.expression)"
+            feelsLikeLabel.text = "체감 기온 : \(Shared.tempUnit.applyTempUnit(temp: info.weatherForecastInfo.main.feelsLike))\(Shared.tempUnit.expression)"
+            maximumTemperatureLable.text = "최고 기온 : \(Shared.tempUnit.applyTempUnit(temp: info.weatherForecastInfo.main.tempMax))\(Shared.tempUnit.expression)"
+            minimumTemperatureLable.text = "최저 기온 : \(Shared.tempUnit.applyTempUnit(temp: info.weatherForecastInfo.main.tempMin))\(Shared.tempUnit.expression)"
             popLabel.text = "강수 확률 : \(info.weatherForecastInfo.main.pop * 100)%"
             humidityLabel.text = "습도 : \(info.weatherForecastInfo.main.humidity)%"
             sunriseTimeLabel.text = "일출 : \(Date.string(from: Date(timeIntervalSince1970: info.cityInfo.sunrise), style: .short))"

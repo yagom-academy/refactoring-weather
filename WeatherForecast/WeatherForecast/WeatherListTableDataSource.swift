@@ -32,7 +32,7 @@ class WeatherListTableDataSource: NSObject, UITableViewDataSource {
         let weatherForecastInfo = weathers[indexPath.row]
         cell.weatherLabel.text = weatherForecastInfo.weather.main
         cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(Shared.tempUnit.expression)"
+        cell.temperatureLabel.text = "\(Shared.tempUnit.applyTempUnit(temp: weatherForecastInfo.main.temp))\(Shared.tempUnit.expression)"
         
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
         cell.dateLabel.text = Date.string(from: date, format: "yyyy-MM-dd(EEEEE) a HH:mm")

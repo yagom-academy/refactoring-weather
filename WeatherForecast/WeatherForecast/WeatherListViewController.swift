@@ -41,14 +41,9 @@ class WeatherListViewController: UIViewController {
 
 extension WeatherListViewController {
     @objc private func changeTempUnit() {
-        switch Shared.tempUnit {
-        case .imperial:
-            Shared.tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
-        case .metric:
-            Shared.tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
-        }
+        Shared.tempUnit = Shared.tempUnit.toggle()
+        navigationItem.rightBarButtonItem?.title = Shared.tempUnit.textKR
+
         refresh()
     }
     

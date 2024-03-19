@@ -8,9 +8,11 @@ import UIKit
 
 class WeatherListViewController: UIViewController {
     var tableView: UITableView!
+    let refreshControl: UIRefreshControl = UIRefreshControl()
+    
     var weatherListDataSource: WeatherListTableDataSource?
     var weatherListDelegate: WeatherListTableDelegate?
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    
     var weatherJSON: WeatherJSON? {
         willSet {
             setNavTitle(with: newValue?.city.name)
@@ -18,8 +20,6 @@ class WeatherListViewController: UIViewController {
             setTableDelegate(with: newValue)
         }
     }
-    var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
     var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
@@ -118,17 +118,3 @@ extension WeatherListViewController {
         weatherJSON = info
     }
 }
-
-extension WeatherListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        guard let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row],
-              let cityInfo = weatherJSON?.city else {return}
-        
-        let detailViewController: WeatherDetailViewController = WeatherDetailViewController(info: DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo, tempUnit: tempUnit))
-        navigationController?.show(detailViewController, sender: self)
-    }
-}
-
-

@@ -7,13 +7,9 @@
 
 import UIKit
 
-class WeatherListDataSource: NSObject, UITableViewDataSource {
+class WeatherListTableDataSource: NSObject, UITableViewDataSource {
     var weathers: [WeatherForecastInfo]
     var tempUnit: TempUnit
-    
-    convenience override init() {
-        self.init(weathers: [WeatherForecastInfo](), tempUnit: .metric)
-    }
     
     init(weathers: [WeatherForecastInfo], tempUnit: TempUnit) {
         self.weathers = weathers

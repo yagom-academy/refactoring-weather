@@ -109,10 +109,10 @@ final class WeatherDetailViewController: UIViewController {
     
     weatherGroupLabel.text = listInfo.weather.main
     weatherDescriptionLabel.text = listInfo.weather.description
-    temperatureLabel.text = "현재 기온 : \(listInfo.main.temperature)\(info.temperatureUnit.symbol)"
-    feelsLikeLabel.text = "체감 기온 : \(listInfo.main.windChillTemperature)\(info.temperatureUnit.symbol)"
-    maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.highestTemperature)\(info.temperatureUnit.symbol)"
-    minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.lowestTemperature)\(info.temperatureUnit.symbol)"
+    temperatureLabel.text = "현재 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.temperature))"
+    feelsLikeLabel.text = "체감 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.windChillTemperature))"
+    maximumTemperatureLable.text = "최고 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.highestTemperature))"
+    minimumTemperatureLable.text = "최저 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.lowestTemperature))"
     popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
     humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
     

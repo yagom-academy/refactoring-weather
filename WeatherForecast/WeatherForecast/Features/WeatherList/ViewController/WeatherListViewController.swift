@@ -43,7 +43,7 @@ extension WeatherListViewController {
   
   private func setUpNavigationItem() {
     navigationItem.rightBarButtonItem = .init(
-        title: TemperatureUnit.fahrenheit.title,
+        title: TemperatureUnit.fahrenheit.strategy.title,
         image: nil,
         target: self,
         action: #selector(toggleTemperatureUnitButtonTapped)
@@ -80,7 +80,7 @@ extension WeatherListViewController {
   
   @objc private func toggleTemperatureUnitButtonTapped() {
     temperatureUnit.toggle()
-    navigationItem.rightBarButtonItem?.title = temperatureUnit.title
+    navigationItem.rightBarButtonItem?.title = temperatureUnit.strategy.title
     onRefresh()
   }
   
@@ -173,7 +173,7 @@ fileprivate extension WeatherForecastInfo {
       dateTime: dateTime,
       main: main,
       weather: weather,
-      temperatureUnitSymbol: temperatureUnit.symbol
+      temperatureUnitStrategy: temperatureUnit.strategy
     )
   }
 }

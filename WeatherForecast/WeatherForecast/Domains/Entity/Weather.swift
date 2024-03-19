@@ -93,34 +93,3 @@ struct Coordinates: Decodable {
     case longitude = "lon"
   }
 }
-
-// MARK: - Temperature Unit
-enum TemperatureUnit: String {
-  case celsius
-  case fahrenheit
-  
-  var symbol: String {
-    switch self {
-    case .celsius: return "℃"
-    case .fahrenheit: return "℉"
-    }
-  }
-  
-  var title: String {
-    switch self {
-    case .celsius:
-      return "섭씨"
-    case .fahrenheit:
-      return "화씨"
-    }
-  }
-  
-  mutating func toggle() {
-    if self == .celsius {
-      self = .fahrenheit
-      return
-    }
-    self = .celsius
-  }
-}
-

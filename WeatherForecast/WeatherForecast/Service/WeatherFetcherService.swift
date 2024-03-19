@@ -8,11 +8,11 @@
 import UIKit
 
 protocol WeatherFetcherServiceable {
-  func execute() -> Result<WeatherJSON, WeatherFetcherError>
+  func fetchWeather() -> Result<WeatherJSON, WeatherFetcherError>
 }
 
 final class WeatherFetcherService: WeatherFetcherServiceable, NSDataProviderProtocol {
-  func execute() -> Result<WeatherJSON, WeatherFetcherError> {
+  func fetchWeather() -> Result<WeatherJSON, WeatherFetcherError> {
     let jsonDecoder: JSONDecoder = .init()
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     

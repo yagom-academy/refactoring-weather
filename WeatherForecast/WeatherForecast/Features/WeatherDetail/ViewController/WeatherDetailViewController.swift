@@ -13,16 +13,16 @@ struct WeatherDetailInfo {
 }
 
 final class WeatherDetailViewController: UIViewController {
-  private let weatherImageCacheService: WeatherImageCacheServiceable
+  private let weatherListUseCase: WeatherUseCase
   private var info: WeatherDetailInfo
   
   private let iconImageView: UIImageView = .init()
   
   init(
-      weatherImageCacheService: WeatherImageCacheServiceable,
+      weatherListUseCase: WeatherUseCase,
       weatherDetailInfo info: WeatherDetailInfo
   ) {
-    self.weatherImageCacheService = weatherImageCacheService
+    self.weatherListUseCase = weatherListUseCase
     self.info = info
     super.init(nibName: nil, bundle: nil)
   }
@@ -130,15 +130,12 @@ final class WeatherDetailViewController: UIViewController {
     
     Task {
       let iconName: String = listInfo.weather.icon
+      guard let image = await weatherListUseCase.fetchImage(from: iconName) else {
+        return
+      }
       
-      do {
-        let image = try await weatherImageCacheService.execute(iconName: iconName)
-        
-        await MainActor.run {
-          setIconImage(image)
-        }
-      } catch {
-        print("WeatherDetailViewController - imageCacheService execute Error: \(error)")
+      await MainActor.run {
+        setIconImage(image)
       }
     }
   }

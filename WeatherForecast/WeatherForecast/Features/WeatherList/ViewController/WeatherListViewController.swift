@@ -7,19 +7,14 @@
 import UIKit
 
 final class WeatherListViewController: UIViewController {
-  private let weatherFetcherService: WeatherFetcherServiceable
-  private let weatherImageCacheService: WeatherImageCacheServiceable
+  private let weatherUseCase: WeatherUseCase
   private var weatherJSON: WeatherJSON?
   private var temperatureUnit: TemperatureUnit = .celsius
   
   private let tableView: UITableView = .init(frame: .zero, style: .plain)
   
-  init(
-      weatherFetcherService: WeatherFetcherServiceable,
-      weatherImageCacheService: WeatherImageCacheServiceable
-  ) {
-    self.weatherFetcherService = weatherFetcherService
-    self.weatherImageCacheService = weatherImageCacheService
+  init(weatherUseCase: WeatherUseCase) {
+    self.weatherUseCase = weatherUseCase
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -102,22 +97,11 @@ extension WeatherListViewController {
 
 extension WeatherListViewController {
   private func fetchWeatherJSON() {
-    let result = weatherFetcherService.execute()
-    switch result {
-    case .success(let weatherJson):
-      onSuccessFetchWeather(weatherJson)
-    case .failure(let error):
-      onFailFetchWeather(error)
+    guard let weatherJSON = weatherUseCase.fetchWeather() else {
+      return
     }
-  }
-  
-  private func onSuccessFetchWeather(_ weatherJson: WeatherJSON) {
-    self.weatherJSON = weatherJson
-    navigationItem.title = weatherJSON?.city.name
-  }
-  
-  private func onFailFetchWeather(_ error: Error) {
-    print("WeatherListViewController - onFail fetchWeather: \(error)")
+    self.weatherJSON = weatherJSON
+    navigationItem.title = weatherJSON.city.name
   }
 }
 
@@ -146,17 +130,15 @@ extension WeatherListViewController: UITableViewDataSource {
     
     Task {
       let iconName: String = weatherForecastInfo.weather.icon
-      do {
-        let image = try await weatherImageCacheService.execute(iconName: iconName)
-        
-        await MainActor.run {
-          guard indexPath == tableView.indexPath(for: cell) else {
-            return
-          }
-          cell.set(image: image)
+      guard let image = await weatherUseCase.fetchImage(from: iconName) else {
+        return
+      }
+      
+      await MainActor.run {
+        guard indexPath == tableView.indexPath(for: cell) else {
+          return
         }
-      } catch {
-        print("WeatherListViewController - imageCacheService execute Error: \(error)")
+        cell.set(image: image)
       }
     }
   
@@ -177,7 +159,7 @@ extension WeatherListViewController: UITableViewDelegate {
     )
     
     let detailViewController: WeatherDetailViewController = .init(
-        weatherImageCacheService: weatherImageCacheService,
+        weatherListUseCase: weatherUseCase,
         weatherDetailInfo: detailInfo
     )
     

@@ -6,18 +6,30 @@
 
 import UIKit
 
+protocol WeatherListTableViewProtocol {
+    var weatherListDataSource: WeatherListTableDataSource { get }
+    var weatherListDelegate: WeatherListTableDelegate { get }
+}
+
+struct WeatherListTableViewAdopter: WeatherListTableViewProtocol {
+    let weatherListDataSource: WeatherListTableDataSource
+    let weatherListDelegate: WeatherListTableDelegate
+    
+    init(weatherListDataSource: WeatherListTableDataSource, weatherListDelegate: WeatherListTableDelegate) {
+        self.weatherListDataSource = weatherListDataSource
+        self.weatherListDelegate = weatherListDelegate
+    }
+}
+
 class WeatherListViewController: UIViewController {
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    var weatherListDataSource: WeatherListTableDataSource?
-    var weatherListDelegate: WeatherListTableDelegate?
-    
+    var tableViewAdopter: WeatherListTableViewProtocol?
     var weatherJSON: WeatherJSON? {
         willSet {
             setNavTitle(with: newValue?.city.name)
-            setTableDataSource(with: newValue)
-            setTableDelegate(with: newValue)
+            setTableDataSourceAndDelegate(with: newValue)
         }
     }
     var tempUnit: TempUnit = .metric
@@ -58,8 +70,8 @@ extension WeatherListViewController {
         
         tableView.refreshControl = refreshControl
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = weatherListDataSource
-        tableView.delegate = weatherListDelegate
+        tableView.dataSource = tableViewAdopter?.weatherListDataSource
+        tableView.delegate = tableViewAdopter?.weatherListDelegate
     }
     
     private func layTable() {
@@ -84,16 +96,15 @@ extension WeatherListViewController {
         }
     }
     
-    private func setTableDataSource(with jsonData: WeatherJSON?) {
-        guard let weathers = jsonData?.weatherForecast else {return}
-        self.weatherListDataSource = WeatherListTableDataSource(weathers: weathers, tempUnit: tempUnit)
-        tableView.dataSource = weatherListDataSource
-    }
-    
-    private func setTableDelegate(with jsonData: WeatherJSON?) {
+    private func setTableDataSourceAndDelegate(with jsonData: WeatherJSON?) {
         guard let weathers = jsonData?.weatherForecast,
               let city = jsonData?.city else {return}
-        self.weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city, tempUnit: tempUnit)
+        
+        let weatherListDataSource = WeatherListTableDataSource(weathers: weathers, tempUnit: tempUnit)
+        let weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city, tempUnit: tempUnit)
+        
+        tableViewAdopter = WeatherListTableViewAdopter(weatherListDataSource: weatherListDataSource, weatherListDelegate: weatherListDelegate)
+        tableView.dataSource = weatherListDataSource
         tableView.delegate = weatherListDelegate
     }
 }

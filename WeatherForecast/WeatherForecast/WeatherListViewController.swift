@@ -8,10 +8,12 @@ import UIKit
 
 class WeatherListViewController: UIViewController {
     var tableView: UITableView!
+    var weatherListDataSource = WeatherListDataSource()
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON? {
         willSet {
             setNavTitle(with: newValue?.city.name)
+            setDataSource(with: newValue)
         }
     }
     var icons: [UIImage]?
@@ -54,7 +56,7 @@ extension WeatherListViewController {
         
         tableView.refreshControl = refreshControl
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = self
+        tableView.dataSource = weatherListDataSource
         tableView.delegate = self
     }
     
@@ -79,6 +81,12 @@ extension WeatherListViewController {
             self.navigationItem.title = text
         }
     }
+    
+    private func setDataSource(with jsonData: WeatherJSON?) {
+        guard let weathers = jsonData?.weatherForecast else {return}
+        self.weatherListDataSource = WeatherListDataSource(weathers: weathers, tempUnit: tempUnit)
+        tableView.dataSource = weatherListDataSource
+    }
 }
 
 extension WeatherListViewController {
@@ -100,44 +108,6 @@ extension WeatherListViewController {
         }
 
         weatherJSON = info
-    }
-}
-
-extension WeatherListViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherJSON?.weatherForecast.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
-        
-        guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
-              let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
-            return cell
-        }
-        
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = Date.string(from: date, format: "yyyy-MM-dd(EEEEE) a HH:mm")
-                
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-        
-        ImageChacher.shared.load(urlString: urlString, completion: { image in
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        })
-        
-        return cell
     }
 }
 

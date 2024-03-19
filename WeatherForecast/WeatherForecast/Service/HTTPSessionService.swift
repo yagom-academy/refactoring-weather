@@ -26,7 +26,7 @@ struct HTTPSessionService: HTTPSessionServiceable {
       
       return data
     } catch {
-      throw HTTPSessionServiceError.networkError(error: error)
+      throw HTTPSessionServiceError.unknown(error: error)
     }
   }
 }

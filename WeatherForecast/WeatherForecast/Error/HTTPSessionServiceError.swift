@@ -10,5 +10,5 @@ import Foundation
 enum HTTPSessionServiceError: Error {
   case noHTTPResponse
   case invalidStatusCode(statusCode: Int)
-  case networkError(error: Error)
+  case unknown(error: Error)
 }

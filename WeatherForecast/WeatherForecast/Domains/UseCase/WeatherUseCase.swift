@@ -38,7 +38,7 @@ final class WeatherUseCaseImpl: WeatherUseCase {
   
   func fetchImage(from iconName: String) async -> UIImage? {
     do {
-      let image = try await weatherImageCacheService.execute(iconName: iconName)
+      let image = try await weatherImageCacheService.fetchImage(iconName: iconName)
       return image
     } catch {
       print(error.localizedDescription)

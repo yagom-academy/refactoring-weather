@@ -34,10 +34,10 @@ extension ViewController {
         switch tempUnit {
         case .imperial:
             tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.celsius)"
+            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.celsius.rawValue)"
         case .metric:
             tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.fahrenheit)"
+            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.fahrenheit.rawValue)"
         }
         refresh()
     }

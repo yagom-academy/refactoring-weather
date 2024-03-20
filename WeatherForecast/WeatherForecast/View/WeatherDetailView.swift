@@ -14,25 +14,19 @@ protocol WeatherDetailDelegate: AnyObject {
 final class WeatherDeatilView: UIView {
     private var weatherApi: WeatherApi
     private weak var delegate: WeatherDetailDelegate?
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
     
-    let iconImageView: UIImageView = UIImageView()
-    let weatherGroupLabel: UILabel = UILabel()
-    let weatherDescriptionLabel: UILabel = UILabel()
-    let temperatureLabel: UILabel = UILabel()
-    let feelsLikeLabel: UILabel = UILabel()
-    let maximumTemperatureLable: UILabel = UILabel()
-    let minimumTemperatureLable: UILabel = UILabel()
-    let popLabel: UILabel = UILabel()
-    let humidityLabel: UILabel = UILabel()
-    let sunriseTimeLabel: UILabel = UILabel()
-    let sunsetTimeLabel: UILabel = UILabel()
-    let spacingView: UIView = UIView()
+    private let iconImageView: UIImageView = UIImageView()
+    private let weatherGroupLabel: UILabel = UILabel()
+    private let weatherDescriptionLabel: UILabel = UILabel()
+    private let temperatureLabel: UILabel = UILabel()
+    private let feelsLikeLabel: UILabel = UILabel()
+    private let maximumTemperatureLable: UILabel = UILabel()
+    private let minimumTemperatureLable: UILabel = UILabel()
+    private let popLabel: UILabel = UILabel()
+    private let humidityLabel: UILabel = UILabel()
+    private let sunriseTimeLabel: UILabel = UILabel()
+    private let sunsetTimeLabel: UILabel = UILabel()
+    private let spacingView: UIView = UIView()
     
     init(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, cityInfo: City, weatherApi: WeatherApi, delegate: WeatherDetailDelegate) {
         self.weatherApi = weatherApi
@@ -106,7 +100,7 @@ final class WeatherDeatilView: UIView {
 extension WeatherDeatilView {
     private func setUpData(weatherForecastInfo: WeatherForecastInfo, tempUnit: TempUnit, cityInfo: City) {
         let weatherForecastInfo = weatherForecastInfo
-//        
+        
         setUpData(weatherForecastInfo: weatherForecastInfo, tempExpression: tempUnit.expression)
         setUpData(cityInfo: cityInfo)
         Task {
@@ -128,9 +122,8 @@ extension WeatherDeatilView {
         popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
-        if let timeInterval = weatherForecastInfo?.dt {
-            let date = Date(timeIntervalSince1970: timeInterval)
-            delegate?.dateDidChanged(text: dateFormatter.string(from: date))
+        if let weatherForecastInfo {
+            delegate?.dateDidChanged(text: weatherForecastInfo.dateString)
         }
     }
     

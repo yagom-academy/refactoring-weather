@@ -19,6 +19,18 @@ struct WeatherForecastInfo: Decodable {
     let main: MainInfo
     let weather: Weather
     let dtTxt: String
+    
+    var dateString: String {
+        let dateFormatter: DateFormatter = {
+            let df = DateFormatter()
+            df.locale = .init(identifier: "ko_KR")
+            df.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
+            return df
+        }()
+        
+        let date: Date = Date(timeIntervalSince1970: self.dt)
+        return dateFormatter.string(from: date)
+    }
 }
 
 // MARK: - MainClass

@@ -13,7 +13,7 @@ protocol WeatherListViewDelegate: UITableViewDataSource, UITableViewDelegate {
     var navigationItem: UINavigationItem { get }}
 
 final class WeatherListView: UIView {
-    var delegate: WeatherListViewDelegate
+    private var delegate: WeatherListViewDelegate?
     
     private var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -22,7 +22,7 @@ final class WeatherListView: UIView {
         return tableView
     }()
     
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     init(delegate: WeatherListViewDelegate) {
         self.delegate = delegate
@@ -46,7 +46,7 @@ final class WeatherListView: UIView {
         tableView.dataSource = delegate
         tableView.refreshControl = refreshControl
         
-        delegate.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        delegate?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
@@ -75,14 +75,14 @@ final class WeatherListView: UIView {
 
 extension WeatherListView {
     @objc private func refresh() {
-        delegate.refresh()
+        delegate?.refresh()
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
 
     @objc private func changeTempUnit() {
-        let title = delegate.changeTempUnit()
-        delegate.navigationItem.rightBarButtonItem?.title = title
+        let title = delegate?.changeTempUnit()
+        delegate?.navigationItem.rightBarButtonItem?.title = title
         self.tableView.reloadData()
     }
 }

@@ -9,12 +9,12 @@ import UIKit
 final class WeatherTableViewCell: UITableViewCell, ReusableCell {
     typealias SuperView = UITableView
     
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var dashLabel: UILabel!
-    var descriptionLabel: UILabel!
+    private var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var dashLabel: UILabel!
+    private var descriptionLabel: UILabel!
     private var imageTask: Task<Void, Error>?
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -40,15 +40,7 @@ final class WeatherTableViewCell: UITableViewCell, ReusableCell {
         descriptionLabel.text = weatherForecastInfo.weather.description
         temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
         
-        let dateFormatter: DateFormatter = {
-            let df = DateFormatter()
-            df.locale = .init(identifier: "ko_KR")
-            df.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-            return df
-        }()
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        dateLabel.text = dateFormatter.string(from: date)
+        dateLabel.text = weatherForecastInfo.dateString
     }
     
     func setImage(with imageUrl: String) {

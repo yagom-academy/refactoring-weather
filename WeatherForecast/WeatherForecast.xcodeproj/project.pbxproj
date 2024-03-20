@@ -14,8 +14,8 @@
 		7D6443462BAA7784004340DB /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6443452BAA7784004340DB /* UILabel+.swift */; };
 		7D6443482BAA783E004340DB /* DateFormatter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6443472BAA783E004340DB /* DateFormatter+.swift */; };
 		7D64434A2BAA8B30004340DB /* JsonFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6443492BAA8B30004340DB /* JsonFetcher.swift */; };
+		7D6443552BAAB30D004340DB /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6443542BAAB30D004340DB /* TempUnit.swift */; };
 		8E65653A2BA8891100A4634E /* ImageChacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6565392BA8891100A4634E /* ImageChacher.swift */; };
-		8E65653C2BA9D53100A4634E /* TempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E65653B2BA9D53100A4634E /* TempUnit.swift */; };
 		C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C741F66F2B58F00500A4DDC0 /* Weather.swift */; };
 		C7743D8D2B21C38100DF0D09 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8C2B21C38100DF0D09 /* AppDelegate.swift */; };
 		C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7743D8E2B21C38100DF0D09 /* SceneDelegate.swift */; };
@@ -35,6 +35,7 @@
 		7D6443452BAA7784004340DB /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		7D6443472BAA783E004340DB /* DateFormatter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+.swift"; sourceTree = "<group>"; };
 		7D6443492BAA8B30004340DB /* JsonFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonFetcher.swift; sourceTree = "<group>"; };
+		7D6443542BAAB30D004340DB /* TempUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		8E6565392BA8891100A4634E /* ImageChacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChacher.swift; sourceTree = "<group>"; };
 		8E65653B2BA9D53100A4634E /* TempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempUnit.swift; sourceTree = "<group>"; };
 		C741F66F2B58F00500A4DDC0 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 				7D6443392BA903AA004340DB /* WeatherListTableDataSource.swift */,
 				7D64433D2BA94CFC004340DB /* WeatherListTableDelegate.swift */,
 				C741F66F2B58F00500A4DDC0 /* Weather.swift */,
+				7D6443542BAAB30D004340DB /* TempUnit.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -108,11 +110,20 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		7D6443512BAAB15E004340DB /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				8E65653B2BA9D53100A4634E /* TempUnit.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		C7743D802B21C38100DF0D09 = {
 			isa = PBXGroup;
 			children = (
 				C7743D8B2B21C38100DF0D09 /* WeatherForecast */,
 				C7743D8A2B21C38100DF0D09 /* Products */,
+				7D6443512BAAB15E004340DB /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -221,13 +232,13 @@
 				7D64433E2BA94CFC004340DB /* WeatherListTableDelegate.swift in Sources */,
 				C7743DA32B21CA8600DF0D09 /* WeatherDetailViewController.swift in Sources */,
 				7D64433A2BA903AA004340DB /* WeatherListTableDataSource.swift in Sources */,
-				8E65653C2BA9D53100A4634E /* TempUnit.swift in Sources */,
 				8E65653A2BA8891100A4634E /* ImageChacher.swift in Sources */,
 				7D6443482BAA783E004340DB /* DateFormatter+.swift in Sources */,
 				7D6443442BAA6F9C004340DB /* CustomLabel.swift in Sources */,
 				7D64434A2BAA8B30004340DB /* JsonFetcher.swift in Sources */,
 				C741F6702B58F00500A4DDC0 /* Weather.swift in Sources */,
 				C7743D8F2B21C38100DF0D09 /* SceneDelegate.swift in Sources */,
+				7D6443552BAAB30D004340DB /* TempUnit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

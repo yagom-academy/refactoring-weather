@@ -9,10 +9,14 @@ import UIKit
 
 class WeatherListTableDelegate: NSObject, UITableViewDelegate {
     let baseVC: UIViewController
-    var weathers: [WeatherForecastInfo]
-    var city: City
+    var weathers: [WeatherForecastInfo]?
+    var city: City?
     
-    init(baseVC: UIViewController, weathers: [WeatherForecastInfo], city: City) {
+    convenience init(baseVC: UIViewController) {
+        self.init(baseVC: baseVC, weathers: nil, city: nil)
+    }
+    
+    init(baseVC: UIViewController, weathers: [WeatherForecastInfo]?, city: City?) {
         self.baseVC = baseVC
         self.weathers = weathers
         self.city = city
@@ -20,6 +24,8 @@ class WeatherListTableDelegate: NSObject, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let weathers,
+              let city else {return}
         
         let weatherForecastInfo = weathers[indexPath.row]
         

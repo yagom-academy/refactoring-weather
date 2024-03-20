@@ -22,20 +22,21 @@ struct WeatherListTableViewAdopter: WeatherListTableViewProtocol {
 }
 
 class WeatherListViewController: UIViewController {
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
+    private var tableView: UITableView!
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
-    var tableViewAdopter: WeatherListTableViewProtocol?
-    var weatherJSON: WeatherJSON? {
+    private var tableViewAdopter: WeatherListTableViewProtocol?
+    private var weatherJSON: WeatherJSON? {
         willSet {
             setNavTitle(with: newValue?.city.name)
-            setTableDataSourceAndDelegate(with: newValue)
+            updateTable(with: newValue)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initialSetUp()
+        initialSetup()
+        setTableDataSourceAndDelegate()
     }
 }
 
@@ -58,10 +59,10 @@ extension WeatherListViewController {
         refreshControl.endRefreshing()
     }
     
-    private func initialSetUp() {
+    private func initialSetup() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
         
-        layTable()
+        layoutTable()
         
         refreshControl.addTarget(self,
                                  action: #selector(refresh),
@@ -69,11 +70,9 @@ extension WeatherListViewController {
         
         tableView.refreshControl = refreshControl
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherCell")
-        tableView.dataSource = tableViewAdopter?.weatherListDataSource
-        tableView.delegate = tableViewAdopter?.weatherListDelegate
     }
     
-    private func layTable() {
+    private func layoutTable() {
         tableView = .init(frame: .zero, style: .plain)
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,36 +94,31 @@ extension WeatherListViewController {
         }
     }
     
-    private func setTableDataSourceAndDelegate(with jsonData: WeatherJSON?) {
+    private func setTableDataSourceAndDelegate() {
+        self.tableViewAdopter = WeatherListTableViewAdopter(weatherListDataSource: WeatherListTableDataSource(), weatherListDelegate: WeatherListTableDelegate(baseVC: self))
+        tableView.dataSource = tableViewAdopter?.weatherListDataSource
+        tableView.delegate = tableViewAdopter?.weatherListDelegate
+    }
+    
+    private func updateTable(with jsonData: WeatherJSON?) {
         guard let weathers = jsonData?.weatherForecast,
-              let city = jsonData?.city else {return}
+                      let city = jsonData?.city else {return}
         
-        let weatherListDataSource = WeatherListTableDataSource(weathers: weathers)
-        let weatherListDelegate = WeatherListTableDelegate(baseVC: self, weathers: weathers, city: city)
+        tableViewAdopter?.weatherListDataSource.weathers = weathers
+        tableViewAdopter?.weatherListDelegate.weathers = weathers
+        tableViewAdopter?.weatherListDelegate.city = city
         
-        tableViewAdopter = WeatherListTableViewAdopter(weatherListDataSource: weatherListDataSource, weatherListDelegate: weatherListDelegate)
-        tableView.dataSource = weatherListDataSource
-        tableView.delegate = weatherListDelegate
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 
 extension WeatherListViewController {
     private func fetchWeatherJSON() {
-        let jsonDecoder: JSONDecoder = .init()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-
-        guard let data = NSDataAsset(name: "weather")?.data else {
-            return
-        }
+        guard let assetData = JSONFetcher.createData(from: "weather"),
+              let info: WeatherJSON = JSONFetcher.decodeJSON(data: assetData) else {return}
         
-        let info: WeatherJSON
-        do {
-            info = try jsonDecoder.decode(WeatherJSON.self, from: data)
-        } catch {
-            print(error.localizedDescription)
-            return
-        }
-
         weatherJSON = info
     }
 }

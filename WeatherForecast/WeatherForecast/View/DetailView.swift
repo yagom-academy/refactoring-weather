@@ -7,12 +7,7 @@
 
 import UIKit
 
-protocol DetailViewInfoProtocol {
-    var weatherForecastInfo: WeatherForecastInfo { get set }
-    var cityInfo: City { get set }
-}
-
-struct DetailInfo: DetailViewInfoProtocol {
+struct DetailInfo {
     var weatherForecastInfo: WeatherForecastInfo
     var cityInfo: City
     
@@ -23,30 +18,30 @@ struct DetailInfo: DetailViewInfoProtocol {
 }
 
 class DetailView: UIView {
-    private let info: DetailViewInfoProtocol
+    private let info: DetailInfo
+    private let iconImageView: UIImageView = UIImageView()
     
     init(weatherForecastInfo: WeatherForecastInfo, cityInfo: City) {
         self.info = DetailInfo(weatherForecastInfo: weatherForecastInfo, cityInfo: cityInfo)
         super.init(frame: .zero)
-        layViews()
+        setupLayout()
+        loadImage()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func layViews() {
-        let iconImageView: UIImageView = UIImageView()
-        let weatherGroupLabel: UILabel = UILabel()
-        let weatherDescriptionLabel: UILabel = UILabel()
-        let temperatureLabel: UILabel = UILabel()
-        let feelsLikeLabel: UILabel = UILabel()
-        let maximumTemperatureLable: UILabel = UILabel()
-        let minimumTemperatureLable: UILabel = UILabel()
-        let popLabel: UILabel = UILabel()
-        let humidityLabel: UILabel = UILabel()
-        let sunriseTimeLabel: UILabel = UILabel()
-        let sunsetTimeLabel: UILabel = UILabel()
+    private func setupLayout() {let weatherGroupLabel: UILabel = UILabel()
+        let weatherDescriptionLabel = DetailViewCustomLabel()
+        let temperatureLabel = DetailViewCustomLabel()
+        let feelsLikeLabel = DetailViewCustomLabel()
+        let maximumTemperatureLable = DetailViewCustomLabel()
+        let minimumTemperatureLable = DetailViewCustomLabel()
+        let popLabel = DetailViewCustomLabel()
+        let humidityLabel = DetailViewCustomLabel()
+        let sunriseTimeLabel = DetailViewCustomLabel()
+        let sunsetTimeLabel = DetailViewCustomLabel()
         let spacingView: UIView = UIView()
         spacingView.backgroundColor = .clear
         spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -66,26 +61,16 @@ class DetailView: UIView {
                 sunsetTimeLabel,
                 spacingView
             ])
-                    
-            mainStackView.arrangedSubviews.forEach { subview in
-                guard let subview: UILabel = subview as? UILabel else { return }
-                subview.textColor = .black
-                subview.backgroundColor = .clear
-                subview.numberOfLines = 1
-                subview.textAlignment = .center
-                subview.font = .preferredFont(forTextStyle: .body)
-            }
             
             mainStackView.axis = .vertical
             mainStackView.alignment = .center
             mainStackView.spacing = 8
-            
             mainStackView.translatesAutoresizingMaskIntoConstraints = false
             
             return mainStackView
         }
         
-        func layLabels() {
+        func layoutLabels() {
             weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
             weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
             weatherGroupLabel.text = info.weatherForecastInfo.weather.main
@@ -96,14 +81,14 @@ class DetailView: UIView {
             minimumTemperatureLable.text = "최저 기온 : \(info.weatherForecastInfo.main.tempMin)\(Shared.tempUnit.expression)"
             popLabel.text = "강수 확률 : \(info.weatherForecastInfo.main.pop * 100)%"
             humidityLabel.text = "습도 : \(info.weatherForecastInfo.main.humidity)%"
-            sunriseTimeLabel.text = "일출 : \(Date.string(from: Date(timeIntervalSince1970: info.cityInfo.sunrise), style: .short))"
-            sunsetTimeLabel.text = "일몰 : \(Date.string(from: Date(timeIntervalSince1970: info.cityInfo.sunset), style: .short))"
+            sunriseTimeLabel.text = "일출 : \(DateFormatter.KRShortStyle.string(from: Date(timeIntervalSince1970: info.cityInfo.sunrise)))"
+            
+            sunsetTimeLabel.text = "일몰 : \(DateFormatter.KRShortStyle.string(from: Date(timeIntervalSince1970: info.cityInfo.sunset)))"
         }
         
-        func layMainStackView() {
+        func layoutMainStackView() {
             let mainStackView = mainStackView()
             addSubview(mainStackView)
-            
             
             let safeArea: UILayoutGuide = self.safeAreaLayoutGuide
             NSLayoutConstraint.activate([
@@ -112,26 +97,30 @@ class DetailView: UIView {
                 mainStackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor,
                                                        constant: 16),
                 mainStackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor,
-                                                       constant: -16),
+                                                       constant: -16)
+            ])
+        }
+        
+        func layoutIconImage() {
+            let safeArea: UILayoutGuide = self.safeAreaLayoutGuide
+            NSLayoutConstraint.activate([
                 iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor),
                 iconImageView.widthAnchor.constraint(equalTo: safeArea.widthAnchor,
                                                      multiplier: 0.3)
             ])
         }
-        
 
-        
-        layLabels()
-        layMainStackView()
-        loadImage(to: iconImageView)
+        layoutLabels()
+        layoutMainStackView()
+        layoutIconImage()
     }
     
-    func loadImage(to imageView: UIImageView) {
+    func loadImage() {
         let iconName: String = info.weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         
         ImageChacher.shared.load(urlString: urlString) { image in
-            imageView.image = image
+            self.iconImageView.image = image
         }
     }
 }

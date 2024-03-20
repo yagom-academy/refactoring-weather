@@ -8,7 +8,7 @@
 import UIKit
 
 protocol WeatherApi {
-    var imageLoader: ImageLoader { get }
+    var imageLoader: ImageLoadable { get }
     func fetchData() async throws -> WeatherJSON
     func fetchImage(iconName: String) async -> UIImage?
     func iconImageUrlString(iconName: String) -> String
@@ -20,7 +20,11 @@ enum ApiError: Error {
 }
 
 class OpenWeatherAPI: WeatherApi {
-    let imageLoader: ImageLoader = ImageLoader.shared
+    let imageLoader: ImageLoadable
+    
+    init(imageLoader: ImageLoadable) {
+        self.imageLoader = imageLoader
+    }
     
     func fetchData() async throws -> WeatherJSON {
         let jsonDecoder: JSONDecoder = .init()
@@ -44,7 +48,7 @@ class OpenWeatherAPI: WeatherApi {
     func fetchImage(iconName: String) async -> UIImage? {
         let urlString: String = iconImageUrlString(iconName: iconName)
         do {
-            return try await imageLoader.fetchImage(with: urlString)
+            return try await imageLoader.fetchImage(urlString)
         } catch {
             return nil
         }

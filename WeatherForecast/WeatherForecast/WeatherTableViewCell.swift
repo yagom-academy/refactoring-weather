@@ -53,7 +53,7 @@ final class WeatherTableViewCell: UITableViewCell, ReusableCell {
     
     func setImage(with imageUrl: String) {
         self.imageTask = Task {
-            let icon = try await ImageLoader.shared.fetchImageFromNetwork(with: imageUrl)
+            let icon = try await ImageLoader.shared.fetchImage(with: imageUrl)
             weatherIcon.image = icon
         }
     }

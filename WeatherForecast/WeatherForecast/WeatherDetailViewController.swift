@@ -41,7 +41,7 @@ struct DataCase {
     
 }
 
-class WeatherDetailViewController: UIViewController, dateFomatterSetUp {
+class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
@@ -58,7 +58,7 @@ class WeatherDetailViewController: UIViewController, dateFomatterSetUp {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateSetUp(DataCase.long).string(from: date)
+        navigationItem.title = Utils.dateSetUp(DataCase.long).string(from: date)
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -131,8 +131,8 @@ class WeatherDetailViewController: UIViewController, dateFomatterSetUp {
         humidityLabel.text = "\(DetailGroupList.humidity) \(listInfo.main.humidity)%"
         
         if let cityInfo {
-            sunriseTimeLabel.text = "\(DetailGroupList.sunriseTime) \(dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "\(DetailGroupList.sunsetTime) \(dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+            sunriseTimeLabel.text = "\(DetailGroupList.sunriseTime) \(Utils.dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
+            sunsetTimeLabel.text = "\(DetailGroupList.sunsetTime) \(Utils.dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }
         
         weatherTask(iconName: listInfo.weather.icon, imageView: iconImageView)
@@ -155,20 +155,20 @@ extension WeatherDetailViewController : WeatherForecastInfoDelegate {
         }
     }
     
-    //날짜형식 변환
-    func dateSetUp(_ format: String?) -> DateFormatter {
-        let formatter: DateFormatter = DateFormatter()
-        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
-        formatter.timeStyle = .short
-        formatter.locale = .init(identifier: dateFormat.locale)
-        formatter.dateFormat = dateFormat.dataFormater
-
-        guard format != nil else {
-            formatter.dateFormat = .none
-            return formatter
-        }
-
-        return formatter
-    }
+//    //날짜형식 변환
+//    func dateSetUp(_ format: String?) -> DateFormatter {
+//        let formatter: DateFormatter = DateFormatter()
+//        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
+//        formatter.timeStyle = .short
+//        formatter.locale = .init(identifier: dateFormat.locale)
+//        formatter.dateFormat = dateFormat.dataFormater
+//
+//        guard format != nil else {
+//            formatter.dateFormat = .none
+//            return formatter
+//        }
+//
+//        return formatter
+//    }
 
 }

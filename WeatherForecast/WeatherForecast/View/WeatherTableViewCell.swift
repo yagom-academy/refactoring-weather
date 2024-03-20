@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     lazy var weatherIcon = UIImageView()
     lazy var dateLabel = UILabel(textColor: .black,
                                  font: .preferredFont(forTextStyle: .body),

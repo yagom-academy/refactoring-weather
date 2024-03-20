@@ -17,7 +17,7 @@ struct DetailInfo {
     }
 }
 
-class DetailView: UIView {
+final class DetailView: UIView {
     private let info: DetailInfo
     private let iconImageView: UIImageView = UIImageView()
     
@@ -115,7 +115,7 @@ class DetailView: UIView {
         layoutIconImage()
     }
     
-    func loadImage() {
+    private func loadImage() {
         let iconName: String = info.weatherForecastInfo.weather.icon
         let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetailViewCustomLabel: UILabel {
+final class DetailViewCustomLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -18,7 +18,7 @@ class DetailViewCustomLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func styleSetup() {
+    private func styleSetup() {
         self.textColor = .black
         self.backgroundColor = .clear
         self.font = .preferredFont(forTextStyle: .body)

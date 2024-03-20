@@ -21,7 +21,7 @@ struct WeatherListTableViewAdopter: WeatherListTableViewProtocol {
     }
 }
 
-class WeatherListViewController: UIViewController {
+final class WeatherListViewController: UIViewController {
     private var tableView: UITableView!
     private let refreshControl: UIRefreshControl = UIRefreshControl()
     

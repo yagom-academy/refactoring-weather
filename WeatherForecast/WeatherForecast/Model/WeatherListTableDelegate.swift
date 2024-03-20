@@ -7,8 +7,8 @@
 
 import UIKit
 
-class WeatherListTableDelegate: NSObject, UITableViewDelegate {
-    let baseVC: UIViewController
+final class WeatherListTableDelegate: NSObject, UITableViewDelegate {
+    private let baseVC: UIViewController
     var weathers: [WeatherForecastInfo]?
     var city: City?
     

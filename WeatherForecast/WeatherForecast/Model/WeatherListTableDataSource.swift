@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherListTableDataSource: NSObject, UITableViewDataSource {
+final class WeatherListTableDataSource: NSObject, UITableViewDataSource {
     var weathers: [WeatherForecastInfo]?
     
     convenience override init() {

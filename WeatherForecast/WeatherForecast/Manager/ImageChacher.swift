@@ -11,9 +11,9 @@ struct ImageChacher {
     private init() {}
     static let shared = ImageChacher()
     
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    private let imageChache: NSCache<NSString, UIImage> = NSCache()
     
-    func chachedImage(from urlString: String) -> UIImage? {
+    private func chachedImage(from urlString: String) -> UIImage? {
         return imageChache.object(forKey: urlString as NSString)
     }
     

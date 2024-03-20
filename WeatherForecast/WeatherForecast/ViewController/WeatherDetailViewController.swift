@@ -7,9 +7,9 @@
 import UIKit
 
 class WeatherDetailViewController: UIViewController {
-    private let info: DetailViewInfoProtocol
+    private let info: DetailInfo
     
-    init(info: DetailViewInfoProtocol) {
+    init(info: DetailInfo) {
         self.info = info
         super.init(nibName: nil, bundle: nil)
     }
@@ -20,14 +20,14 @@ class WeatherDetailViewController: UIViewController {
     
     override func loadView() {
         view = DetailView(weatherForecastInfo: info.weatherForecastInfo, cityInfo: info.cityInfo)
-        layViews()
+        setupLayout()
     }
     
-    private func layViews() {
+    private func setupLayout() {
         view.backgroundColor = .white
         
         let weatherForecastInfo = info.weatherForecastInfo
         let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        navigationItem.title = Date.string(from: date, format: "yyyy-MM-dd(EEEEE) a HH:mm")
+        navigationItem.title = DateFormatter.KRFullFormat.string(from: date)
     }
 }

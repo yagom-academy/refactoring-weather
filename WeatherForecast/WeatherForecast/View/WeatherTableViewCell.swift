@@ -7,17 +7,27 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
-    var dashLabel: UILabel!
+    lazy var weatherIcon = UIImageView()
+    lazy var dateLabel = UILabel(textColor: .black,
+                                 font: .preferredFont(forTextStyle: .body),
+                                 numberOfLines: 1)
+    lazy var temperatureLabel = UILabel(textColor: .black,
+                                   font: .preferredFont(forTextStyle: .body),
+                                   numberOfLines: 1)
+    lazy var weatherLabel = UILabel(textColor: .black,
+                               font: .preferredFont(forTextStyle: .body),
+                               numberOfLines: 1)
+    lazy var descriptionLabel = UILabel(textColor: .black,
+                                   font: .preferredFont(forTextStyle: .body),
+                                   numberOfLines: 1)
+    lazy var dashLabel = UILabel(textColor: .black,
+                                 font: .preferredFont(forTextStyle: .body),
+                                 numberOfLines: 1)
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        initialSetUp()
-        layViews()
+        
+        setupLayout()
         reset()
     }
     
@@ -30,16 +40,7 @@ class WeatherTableViewCell: UITableViewCell {
         reset()
     }
     
-    private func initialSetUp() {
-        weatherIcon = UIImageView()
-        dateLabel = UILabel()
-        temperatureLabel = UILabel()
-        weatherLabel = UILabel()
-        descriptionLabel = UILabel()
-        dashLabel = UILabel()
-    }
-    
-    private func layLabels() {
+    private func layoutLabels() {
         let labels: [UILabel] = [dateLabel, temperatureLabel, weatherLabel, dashLabel, descriptionLabel]
         
         labels.forEach { label in
@@ -101,7 +102,7 @@ class WeatherTableViewCell: UITableViewCell {
         return contentsStackView
     }
     
-    private func layContentsStackView() {
+    private func layoutContentsStackView() {
         let contentsStackView = contentsStackView()
         contentView.addSubview(contentsStackView)
 
@@ -115,9 +116,9 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    private func layViews() {
-        layLabels()
-        layContentsStackView()
+    private func setupLayout() {
+        layoutLabels()
+        layoutContentsStackView()
     }
     
     private func reset() {

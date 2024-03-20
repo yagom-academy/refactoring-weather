@@ -19,7 +19,7 @@ enum ApiError: Error {
     case failedDecode
 }
 
-class OpenWeatherAPI: WeatherApi {
+final class OpenWeatherAPI: WeatherApi {
     let imageLoader: ImageLoadable
     
     init(imageLoader: ImageLoadable) {

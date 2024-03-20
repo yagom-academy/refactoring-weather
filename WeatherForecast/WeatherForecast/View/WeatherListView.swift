@@ -12,7 +12,7 @@ protocol WeatherListViewDelegate: UITableViewDataSource, UITableViewDelegate {
     func changeTempUnit() -> String
     var navigationItem: UINavigationItem { get }}
 
-class WeatherListView: UIView {
+final class WeatherListView: UIView {
     var delegate: WeatherListViewDelegate
     
     private var tableView: UITableView = {

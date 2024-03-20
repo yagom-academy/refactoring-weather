@@ -11,7 +11,7 @@ protocol WeatherDetailDelegate: AnyObject {
     func dateDidChanged(text: String)
 }
 
-class WeatherDeatilView: UIView {
+final class WeatherDeatilView: UIView {
     private var weatherApi: WeatherApi
     private weak var delegate: WeatherDetailDelegate?
     let dateFormatter: DateFormatter = {

@@ -6,7 +6,7 @@
 
 import UIKit
 
-class WeatherDetailViewController: UIViewController {
+final class WeatherDetailViewController: UIViewController {
     var weatherForecastInfo: WeatherForecastInfo
     var cityInfo: City
     var tempUnit: TempUnit = .metric

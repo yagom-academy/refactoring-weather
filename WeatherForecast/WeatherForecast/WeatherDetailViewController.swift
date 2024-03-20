@@ -10,19 +10,43 @@ protocol WeatherForecastInfoDelegate {
     func weatherTask(iconName: String, imageView: UIImageView)
 }
 
-class WeatherDetailViewController: UIViewController {
+protocol dateFomatterSetUp {
+    func dateSetUp(_ format: String?) -> DateFormatter
+}
+
+struct DateFormat {
+    var dataFormater: String?
+    let locale = "ko_KR"
+    let dateFormatStyle: DateFormatter.Style
+    
+    init(dataFormater: String?, dateFormatStyle: DateFormatter.Style) {
+        self.dataFormater = dataFormater
+        self.dateFormatStyle = dateFormatStyle
+    }
+}
+
+enum DetailGroupList: String {
+    case temperature = "현재 기온 : "
+    case feelsLike = "체감 기온 : "
+    case maximumTemperature = "최고 기온 : "
+    case minimumTemperature = "최저 기온 : "
+    case pop = "강수 확률 : "
+    case humidity = "습도 : "
+    case sunriseTime = "일출 : "
+    case sunsetTime = "일몰 : "
+}
+
+struct DataCase {
+    static let long = "yyyy-MM-dd(EEEEE) a HH:mm"
+    
+}
+
+class WeatherDetailViewController: UIViewController, dateFomatterSetUp {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?
     var tempUnit: TempUnit = .metric
-    
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetUp()
@@ -34,7 +58,7 @@ class WeatherDetailViewController: UIViewController {
         guard let listInfo = weatherForecastInfo else { return }
         
         let date: Date = Date(timeIntervalSince1970: listInfo.dt)
-        navigationItem.title = dateFormatter.string(from: date)
+        navigationItem.title = dateSetUp(DataCase.long).string(from: date)
         
         let iconImageView: UIImageView = UIImageView()
         let weatherGroupLabel: UILabel = UILabel()
@@ -99,17 +123,16 @@ class WeatherDetailViewController: UIViewController {
         
         weatherGroupLabel.text = listInfo.weather.main
         weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
-        humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
+        temperatureLabel.text = "\(DetailGroupList.temperature) \(listInfo.main.temp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "\(DetailGroupList.feelsLike) \(listInfo.main.feelsLike)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "\(DetailGroupList.maximumTemperature)\(listInfo.main.tempMax)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "\(DetailGroupList.minimumTemperature)\(listInfo.main.tempMin)\(tempUnit.expression)"
+        popLabel.text = "\(DetailGroupList.pop)\(listInfo.main.pop * 100)%"
+        humidityLabel.text = "\(DetailGroupList.humidity) \(listInfo.main.humidity)%"
         
         if let cityInfo {
-            let formatter: DateFormatter = dateFomatterSetUp()
-            sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
-            sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
+            sunriseTimeLabel.text = "\(DetailGroupList.sunriseTime) \(dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
+            sunsetTimeLabel.text = "\(DetailGroupList.sunsetTime) \(dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }
         
         weatherTask(iconName: listInfo.weather.icon, imageView: iconImageView)
@@ -118,11 +141,11 @@ class WeatherDetailViewController: UIViewController {
 }
 
 extension WeatherDetailViewController : WeatherForecastInfoDelegate {
+    //이미지 처리
     func weatherTask(iconName: String, imageView: UIImageView) {
         Task {
             let iconName: String = iconName
-            let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-
+            let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"
             guard let url: URL = URL(string: urlString),
                   let (data, _) = try? await URLSession.shared.data(from: url),
                   let image: UIImage = UIImage(data: data) else {
@@ -132,11 +155,20 @@ extension WeatherDetailViewController : WeatherForecastInfoDelegate {
         }
     }
     
-    func dateFomatterSetUp() -> DateFormatter {
+    //날짜형식 변환
+    func dateSetUp(_ format: String?) -> DateFormatter {
         let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = .none
+        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
         formatter.timeStyle = .short
-        formatter.locale = .init(identifier: "ko_KR")
+        formatter.locale = .init(identifier: dateFormat.locale)
+        formatter.dateFormat = dateFormat.dataFormater
+
+        guard format != nil else {
+            formatter.dateFormat = .none
+            return formatter
+        }
+
         return formatter
     }
+
 }

@@ -6,18 +6,14 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
+    
     var tableView: UITableView!
     let refreshControl: UIRefreshControl = UIRefreshControl()
     var weatherJSON: WeatherJSON?
     var icons: [UIImage]?
     let imageChache: NSCache<NSString, UIImage> = NSCache()
-    let dateFormatter: DateFormatter = {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.locale = .init(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy-MM-dd(EEEEE) a HH:mm"
-        return formatter
-    }()
     
     var tempUnit: TempUnit = .metric
     
@@ -27,15 +23,21 @@ class ViewController: UIViewController {
     }
 }
 
+enum WeatherTitleType: String {
+    case celsius = "섭씨"
+    case fahrenheit = "화씨"
+}
+
 extension ViewController {
+    
     @objc private func changeTempUnit() {
         switch tempUnit {
         case .imperial:
             tempUnit = .metric
-            navigationItem.rightBarButtonItem?.title = "섭씨"
+            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.celsius)"
         case .metric:
             tempUnit = .imperial
-            navigationItem.rightBarButtonItem?.title = "화씨"
+            navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.fahrenheit)"
         }
         refresh()
     }
@@ -47,7 +49,7 @@ extension ViewController {
     }
     
     private func initialSetUp() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "화씨", image: nil, target: self, action: #selector(changeTempUnit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(WeatherTitleType.fahrenheit)", image: nil, target: self, action: #selector(changeTempUnit))
         
         layTable()
         
@@ -117,9 +119,9 @@ extension ViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
+        
         cell.delegate = self
                              
-        
         WeatherTableCell(cell: cell, indexPath: indexPath,iconName: weatherForecastInfo.weather.icon, imageView: cell.weatherIcon)
                 
         cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weatherForecastInfo.weather.main, descriptionLabel: weatherForecastInfo.weather.description)
@@ -139,17 +141,33 @@ extension ViewController: UITableViewDelegate {
         navigationController?.show(detailViewController, sender: self)
     }
 }
-extension ViewController {
+extension ViewController : dateFomatterSetUp {
     private func dataTimeIntervalSince1970(_ dt: TimeInterval) -> String {
         let date: Date = Date(timeIntervalSince1970: dt)
-        return dateFormatter.string(from: date)
+        return dateSetUp(DataCase.long).string(from: date)
     }
+    
+    func dateSetUp(_ format: String?) -> DateFormatter {
+        let formatter: DateFormatter = DateFormatter()
+        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: dateFormat.locale)
+        formatter.dateFormat = dateFormat.dataFormater
+
+        guard format != nil else {
+            formatter.dateFormat = .none
+            return formatter
+        }
+        
+        return formatter
+    }
+
 }
 
 extension ViewController: WeatherTableDelegate {
     func WeatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
+        let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"
+
         if let image = imageChache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
             return

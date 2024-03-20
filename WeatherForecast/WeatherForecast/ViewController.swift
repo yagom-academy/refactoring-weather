@@ -117,36 +117,13 @@ extension ViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
+        cell.delegate = self
+                             
         
-        cell.weatherLabel.text = weatherForecastInfo.weather.main
-        cell.descriptionLabel.text = weatherForecastInfo.weather.description
-        cell.temperatureLabel.text = "\(weatherForecastInfo.main.temp)\(tempUnit.expression)"
-        
-        let date: Date = Date(timeIntervalSince1970: weatherForecastInfo.dt)
-        cell.dateLabel.text = dateFormatter.string(from: date)
+        WeatherTableCell(cell: cell, indexPath: indexPath,iconName: weatherForecastInfo.weather.icon, imageView: cell.weatherIcon)
                 
-        let iconName: String = weatherForecastInfo.weather.icon         
-        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
-                
-        if let image = imageChache.object(forKey: urlString as NSString) {
-            cell.weatherIcon.image = image
-            return cell
-        }
-        
-        Task {
-            guard let url: URL = URL(string: urlString),
-                  let (data, _) = try? await URLSession.shared.data(from: url),
-                  let image: UIImage = UIImage(data: data) else {
-                return
-            }
-            
-            imageChache.setObject(image, forKey: urlString as NSString)
-            
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
-        }
-        
+        cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weatherForecastInfo.weather.main, descriptionLabel: weatherForecastInfo.weather.description)
+
         return cell
     }
 }
@@ -162,5 +139,36 @@ extension ViewController: UITableViewDelegate {
         navigationController?.show(detailViewController, sender: self)
     }
 }
+extension ViewController {
+    private func dataTimeIntervalSince1970(_ dt: TimeInterval) -> String {
+        let date: Date = Date(timeIntervalSince1970: dt)
+        return dateFormatter.string(from: date)
+    }
+}
 
+extension ViewController: WeatherTableDelegate {
+    func WeatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
+        let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+                
+        if let image = imageChache.object(forKey: urlString as NSString) {
+            cell.weatherIcon.image = image
+            return
+        }
+        
+        Task {
+            guard let url: URL = URL(string: urlString),
+                  let (data, _) = try? await URLSession.shared.data(from: url),
+                  let image: UIImage = UIImage(data: data) else {
+                return
+            }
+            
+            imageChache.setObject(image, forKey: urlString as NSString)
+
+            if indexPath == tableView.indexPath(for: cell) {
+                cell.weatherIcon.image = image
+            }
+        }
+    }
+    
+}
 

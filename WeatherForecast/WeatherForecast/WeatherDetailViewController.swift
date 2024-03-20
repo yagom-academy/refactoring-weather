@@ -6,6 +6,10 @@
 
 import UIKit
 
+protocol WeatherForecastInfoDelegate {
+    func weatherTask(iconName: String, imageView: UIImageView)
+}
+
 class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
@@ -103,16 +107,20 @@ class WeatherDetailViewController: UIViewController {
         humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
         
         if let cityInfo {
-            let formatter: DateFormatter = DateFormatter()
-            formatter.dateFormat = .none
-            formatter.timeStyle = .short
-            formatter.locale = .init(identifier: "ko_KR")
+            let formatter: DateFormatter = dateFomatterSetUp()
             sunriseTimeLabel.text = "일출 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
             sunsetTimeLabel.text = "일몰 : \(formatter.string(from: Date(timeIntervalSince1970: cityInfo.sunset)))"
         }
         
+        weatherTask(iconName: listInfo.weather.icon, imageView: iconImageView)
+        
+    }
+}
+
+extension WeatherDetailViewController : WeatherForecastInfoDelegate {
+    func weatherTask(iconName: String, imageView: UIImageView) {
         Task {
-            let iconName: String = listInfo.weather.icon
+            let iconName: String = iconName
             let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
 
             guard let url: URL = URL(string: urlString),
@@ -120,8 +128,15 @@ class WeatherDetailViewController: UIViewController {
                   let image: UIImage = UIImage(data: data) else {
                 return
             }
-            
-            iconImageView.image = image
+            imageView.image = image
         }
+    }
+    
+    func dateFomatterSetUp() -> DateFormatter {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = .none
+        formatter.timeStyle = .short
+        formatter.locale = .init(identifier: "ko_KR")
+        return formatter
     }
 }

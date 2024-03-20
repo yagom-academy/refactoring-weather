@@ -6,7 +6,13 @@
 
 import UIKit
 
+protocol WeatherTableDelegate {
+    func WeatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView)
+}
+
 class WeatherTableViewCell: UITableViewCell {
+    var delegate: WeatherTableDelegate?
+    
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!
     var temperatureLabel: UILabel!
@@ -91,6 +97,13 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalTo: weatherIcon.heightAnchor),
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
+    }
+    final func configure(weatherIcon:UIImageView, dateLabel:String, temperatureLabel:String, weatherLabel:String, descriptionLabel:String){
+        self.weatherIcon = weatherIcon
+        self.dateLabel.text = dateLabel
+        self.temperatureLabel.text = temperatureLabel
+        self.weatherLabel.text = weatherLabel
+        self.descriptionLabel.text = descriptionLabel
     }
     
     private func reset() {

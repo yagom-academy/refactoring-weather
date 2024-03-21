@@ -11,7 +11,7 @@ final class WeatherListViewController: UIViewController {
     var weatherJSON: WeatherJSON? {
         didSet { NotificationCenter.default.post(name: .init(WeatherJSON.changeWeaterJsonKey), object: nil) }
     }
-    var tempUnit: TempUnit = .metric
+    var tempUnit: TempUnit = Metric()
     var weatherApi: WeatherApi
     
     init(weatherApi: WeatherApi) {
@@ -36,7 +36,7 @@ final class WeatherListViewController: UIViewController {
 
 extension WeatherListViewController: WeatherListViewDelegate {
     func changeTempUnit() -> String {
-        let newTempUnit: TempUnit = tempUnit == .imperial ? .metric : .imperial
+        let newTempUnit: TempUnit = tempUnit is Metric ? Imperial() : Metric()
         self.tempUnit = newTempUnit
         refresh()
 

@@ -7,21 +7,17 @@
 
 import Foundation
 
-enum TempUnit: String {
-    case metric, imperial
-    
-    var expression: String {
-        switch self {
-        case .metric: return "℃"
-        case .imperial: return "℉"
-        }
-    }
-    
-    var buttonTitle: String {
-        switch self {
-        case .metric: return "섭씨"
-        case .imperial: return "화씨"
-        }
-    }
+protocol TempUnit {
+    var expression: String { get }
+    var buttonTitle: String { get }
 }
 
+struct Metric: TempUnit {
+    var expression: String { "℃" }
+    var buttonTitle: String { "섭씨" }
+}
+
+struct Imperial: TempUnit {
+    var expression: String { "℉" }
+    var buttonTitle: String { "화씨" }
+}

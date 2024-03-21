@@ -98,6 +98,7 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
+    
     final func configure(weatherIcon:UIImageView, dateLabel:String, temperatureLabel:String, weatherLabel:String, descriptionLabel:String){
         self.weatherIcon = weatherIcon
         self.dateLabel.text = dateLabel

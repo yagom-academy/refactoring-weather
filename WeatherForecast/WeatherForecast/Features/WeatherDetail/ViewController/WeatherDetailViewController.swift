@@ -9,18 +9,20 @@ import UIKit
 struct WeatherDetailInfo {
   let weatherForecastInfo: WeatherForecastInfo?
   let cityInfo: City?
-  let tempUnit: TempUnit
+  let temperatureUnit: TemperatureUnit
 }
 
-final class WeatherDetailViewController: UIViewController, DateFormattable {
-  private let weatherImageCacheService: WeatherImageCacheServiceable
+final class WeatherDetailViewController: UIViewController {
+  private let weatherListUseCase: WeatherUseCase
   private var info: WeatherDetailInfo
   
+  private let iconImageView: UIImageView = .init()
+  
   init(
-      weatherImageCacheService: WeatherImageCacheServiceable,
+      weatherListUseCase: WeatherUseCase,
       weatherDetailInfo info: WeatherDetailInfo
   ) {
-    self.weatherImageCacheService = weatherImageCacheService
+    self.weatherListUseCase = weatherListUseCase
     self.info = info
     super.init(nibName: nil, bundle: nil)
   }
@@ -36,28 +38,35 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
   
   private func initialSetUp() {
     setUpView()
+    setUpNavigationItem()
     setLayout()
+    fetchWeatherIconImage()
   }
   
   private func setUpView() {
     view.backgroundColor = .white
   }
   
+  private func setUpNavigationItem() {
+    guard let listInfo = info.weatherForecastInfo else { return }
+    
+    let date: Date = .init(timeIntervalSince1970: listInfo.dateTime)
+    navigationItem.title = date.formatted(using: .koreanLongForm)
+  }
+  
   private func setLayout() {
     guard let listInfo = info.weatherForecastInfo else { return }
-    navigationItem.title = dateFormat(from: listInfo.dt, with: .KoreanLongForm)
     
-    let iconImageView: UIImageView = .init()
-    let weatherGroupLabel: UILabel = .init()
-    let weatherDescriptionLabel: UILabel = .init()
-    let temperatureLabel: UILabel = .init()
-    let feelsLikeLabel: UILabel = .init()
-    let maximumTemperatureLable: UILabel = .init()
-    let minimumTemperatureLable: UILabel = .init()
-    let popLabel: UILabel = .init()
-    let humidityLabel: UILabel = .init()
-    let sunriseTimeLabel: UILabel = .init()
-    let sunsetTimeLabel: UILabel = .init()
+    let weatherGroupLabel: WeatherInformationLabel = .init()
+    let weatherDescriptionLabel: WeatherInformationLabel = .init()
+    let temperatureLabel: WeatherInformationLabel = .init()
+    let feelsLikeLabel: WeatherInformationLabel = .init()
+    let maximumTemperatureLable: WeatherInformationLabel = .init()
+    let minimumTemperatureLable: WeatherInformationLabel = .init()
+    let popLabel: WeatherInformationLabel = .init()
+    let humidityLabel: WeatherInformationLabel = .init()
+    let sunriseTimeLabel: WeatherInformationLabel = .init()
+    let sunsetTimeLabel: WeatherInformationLabel = .init()
     let spacingView: UIView = .init()
     spacingView.backgroundColor = .clear
     spacingView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -82,15 +91,6 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
         spacing: 8
     )
     
-    mainStackView.arrangedSubviews.forEach { subview in
-      guard let subview: UILabel = subview as? UILabel else { return }
-      subview.textColor = .black
-      subview.backgroundColor = .clear
-      subview.numberOfLines = 1
-      subview.textAlignment = .center
-      subview.font = .preferredFont(forTextStyle: .body)
-    }
-    
     weatherGroupLabel.font = .preferredFont(forTextStyle: .largeTitle)
     weatherDescriptionLabel.font = .preferredFont(forTextStyle: .largeTitle)
     
@@ -109,30 +109,38 @@ final class WeatherDetailViewController: UIViewController, DateFormattable {
     
     weatherGroupLabel.text = listInfo.weather.main
     weatherDescriptionLabel.text = listInfo.weather.description
-    temperatureLabel.text = "현재 기온 : \(listInfo.main.temp)\(info.tempUnit.expression)"
-    feelsLikeLabel.text = "체감 기온 : \(listInfo.main.feelsLike)\(info.tempUnit.expression)"
-    maximumTemperatureLable.text = "최고 기온 : \(listInfo.main.tempMax)\(info.tempUnit.expression)"
-    minimumTemperatureLable.text = "최저 기온 : \(listInfo.main.tempMin)\(info.tempUnit.expression)"
+    temperatureLabel.text = "현재 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.temperature))"
+    feelsLikeLabel.text = "체감 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.windChillTemperature))"
+    maximumTemperatureLable.text = "최고 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.highestTemperature))"
+    minimumTemperatureLable.text = "최저 기온 : \(info.temperatureUnit.strategy.convert(temperature: listInfo.main.lowestTemperature))"
     popLabel.text = "강수 확률 : \(listInfo.main.pop * 100)%"
     humidityLabel.text = "습도 : \(listInfo.main.humidity)%"
     
     if let cityInfo = info.cityInfo {
-      sunriseTimeLabel.text = "일출 : \(dateFormat(from: cityInfo.sunrise, with: .KoreanShortForm))"
-      sunsetTimeLabel.text = "일몰 : \(dateFormat(from: cityInfo.sunset, with: .KoreanShortForm))"
+      let sunriseDate: Date = .init(timeIntervalSince1970: cityInfo.sunriseTime)
+      let sunsetDate: Date = .init(timeIntervalSince1970: cityInfo.sunsetTime)
+      
+      sunriseTimeLabel.text = "일출 : \(sunriseDate.formatted(using: .koreanShortForm))"
+      sunsetTimeLabel.text = "일몰 : \(sunsetDate.formatted(using: .koreanShortForm))"
     }
+  }
+  
+  private func fetchWeatherIconImage() {
+    guard let listInfo = info.weatherForecastInfo else { return }
     
     Task {
       let iconName: String = listInfo.weather.icon
+      guard let image = await weatherListUseCase.fetchImage(from: iconName) else {
+        return
+      }
       
-      do {
-        let image = try await weatherImageCacheService.execute(iconName: iconName)
-        
-        await MainActor.run {
-          iconImageView.image = image
-        }
-      } catch {
-        print("WeatherDetailViewController - imageCacheService execute Error: \(error)")
+      await MainActor.run {
+        setIconImage(image)
       }
     }
+  }
+  
+  private func setIconImage(_ image: UIImage) {
+    iconImageView.image = image
   }
 }

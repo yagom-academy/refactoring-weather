@@ -14,16 +14,42 @@ struct WeatherJSON: Decodable {
 
 // MARK: - List
 struct WeatherForecastInfo: Decodable {
-  let dt: TimeInterval
+  let dateTime: TimeInterval
   let main: MainInfo
   let weather: Weather
-  let dtTxt: String
+  let dateText: String
+  
+  enum CodingKeys: String, CodingKey {
+    case dateTime = "dt"
+    case main
+    case weather
+    case dateText = "dtTxt"
+  }
 }
 
 // MARK: - MainClass
 struct MainInfo: Decodable {
-  let temp, feelsLike, tempMin, tempMax: Double
-  let pressure, seaLevel, grndLevel, humidity, pop: Double
+  let temperature: Double
+  let windChillTemperature: Double
+  let lowestTemperature: Double
+  let highestTemperature: Double
+  let pressure: Double
+  let seaLevel: Double
+  let grndLevel: Double
+  let humidity: Double
+  let pop: Double
+  
+  enum CodingKeys: String, CodingKey {
+    case temperature = "temp"
+    case windChillTemperature = "feelsLike"
+    case lowestTemperature = "tempMin"
+    case highestTemperature = "tempMax"
+    case pressure
+    case seaLevel
+    case grndLevel
+    case humidity
+    case pop
+  }
 }
 
 // MARK: - Weather
@@ -38,35 +64,32 @@ struct Weather: Decodable {
 struct City: Decodable {
   let id: Int
   let name: String
-  let coord: Coord
+  let coordinates: Coordinates
   let country: String
-  let population, timezone: Int
-  let sunrise, sunset: TimeInterval
-}
-
-// MARK: - Coord
-struct Coord: Decodable {
-  let lat, lon: Double
-}
-
-// MARK: - Temperature Unit
-enum TempUnit: String {
-  case metric, imperial
+  let population: Int
+  let timezone: Int
+  let sunriseTime: TimeInterval
+  let sunsetTime: TimeInterval
   
-  var expression: String {
-    switch self {
-    case .metric: return "℃"
-    case .imperial: return "℉"
-    }
-  }
-  
-  var title: String {
-    switch self {
-    case .metric:
-      return "섭씨"
-    case .imperial:
-      return "화씨"
-    }
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case coordinates = "coord"
+    case country
+    case population
+    case timezone
+    case sunriseTime = "sunrise"
+    case sunsetTime = "sunset"
   }
 }
 
+// MARK: - Coordinates
+struct Coordinates: Decodable {
+  let latitude: Double
+  let longitude: Double
+  
+  enum CodingKeys: String, CodingKey {
+    case latitude = "lat"
+    case longitude = "lon"
+  }
+}

@@ -7,19 +7,14 @@
 import UIKit
 
 final class WeatherListViewController: UIViewController {
-  private let weatherFetcherService: WeatherFetcherServiceable
-  private let weatherImageCacheService: WeatherImageCacheServiceable
+  private let weatherUseCase: WeatherUseCase
   private var weatherJSON: WeatherJSON?
-  private var tempUnit: TempUnit = .metric
+  private var temperatureUnit: TemperatureUnit = .celsius
   
   private let tableView: UITableView = .init(frame: .zero, style: .plain)
   
-  init(
-      weatherFetcherService: WeatherFetcherServiceable,
-      weatherImageCacheService: WeatherImageCacheServiceable
-  ) {
-    self.weatherFetcherService = weatherFetcherService
-    self.weatherImageCacheService = weatherImageCacheService
+  init(weatherUseCase: WeatherUseCase) {
+    self.weatherUseCase = weatherUseCase
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -30,6 +25,7 @@ final class WeatherListViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     initialSetUp()
+    onRefresh()
   }
 }
 
@@ -47,10 +43,10 @@ extension WeatherListViewController {
   
   private func setUpNavigationItem() {
     navigationItem.rightBarButtonItem = .init(
-        title: TempUnit.imperial.title,
+        title: TemperatureUnit.fahrenheit.strategy.title,
         image: nil,
         target: self,
-        action: #selector(changeTempUnit)
+        action: #selector(toggleTemperatureUnitButtonTapped)
     )
   }
   
@@ -75,22 +71,16 @@ extension WeatherListViewController {
         action: #selector(onRefresh),
         for: .valueChanged
     )
-    tableView.register(
-        WeatherTableViewCell.self,
-        forCellReuseIdentifier: WeatherTableViewCell.identifier
-    )
+    
+    tableView.register(WeatherTableViewCell.self)
+    
     tableView.dataSource = self
     tableView.delegate = self
   }
   
-  @objc private func changeTempUnit() {
-    switch tempUnit {
-    case .imperial:
-      tempUnit = .metric
-    case .metric:
-      tempUnit = .imperial
-    }
-    navigationItem.rightBarButtonItem?.title = tempUnit.title
+  @objc private func toggleTemperatureUnitButtonTapped() {
+    temperatureUnit.toggle()
+    navigationItem.rightBarButtonItem?.title = temperatureUnit.strategy.title
     onRefresh()
   }
   
@@ -107,22 +97,11 @@ extension WeatherListViewController {
 
 extension WeatherListViewController {
   private func fetchWeatherJSON() {
-    let result = weatherFetcherService.execute()
-    switch result {
-    case .success(let weatherJson):
-      onSuccessFetchWeather(weatherJson)
-    case .failure(let error):
-      onFailFetchWeather(error)
+    guard let weatherJSON = weatherUseCase.fetchWeather() else {
+      return
     }
-  }
-  
-  private func onSuccessFetchWeather(_ weatherJson: WeatherJSON) {
-    self.weatherJSON = weatherJson
-    navigationItem.title = weatherJSON?.city.name
-  }
-  
-  private func onFailFetchWeather(_ error: Error) {
-    print("WeatherListViewController - onFail fetchWeather: \(error)")
+    self.weatherJSON = weatherJSON
+    navigationItem.title = weatherJSON.city.name
   }
 }
 
@@ -133,42 +112,33 @@ extension WeatherListViewController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    weatherJSON?.weatherForecast.count ?? 0
+    guard let count = weatherJSON?.weatherForecast.count else {
+      return 0
+    }
+    return count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    guard let cell = tableView.dequeueReusableCell(
-        withIdentifier: WeatherTableViewCell.identifier,
-        for: indexPath
-    ) as? WeatherTableViewCell else {
-      return .init()
-    }
+    let cell: WeatherTableViewCell = tableView.dequeueReusableCell(for: indexPath)
     
     guard let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
       return cell
     }
     
-    let weatherCellInfo = WeatherCellInfo(
-        dt: weatherForecastInfo.dt,
-        main: weatherForecastInfo.main,
-        weather: weatherForecastInfo.weather,
-        tempExpression: tempUnit.expression
-    )
+    let weatherCellInfo = weatherForecastInfo.toCellInfo(temperatureUnit: temperatureUnit)
     
     Task {
       let iconName: String = weatherForecastInfo.weather.icon
-      do {
-        let image = try await weatherImageCacheService.execute(iconName: iconName)
-        
-        await MainActor.run {
-          guard indexPath == tableView.indexPath(for: cell) else {
-            return
-          }
-          cell.set(image: image)
+      guard let image = await weatherUseCase.fetchImage(from: iconName) else {
+        return
+      }
+      
+      await MainActor.run {
+        guard indexPath == tableView.indexPath(for: cell) else {
+          return
         }
-      } catch {
-        print("WeatherListViewController - imageCacheService execute Error: \(error)")
+        cell.set(image: image)
       }
     }
   
@@ -183,16 +153,27 @@ extension WeatherListViewController: UITableViewDelegate {
     tableView.deselectRow(at: indexPath, animated: true)
     
     let detailInfo: WeatherDetailInfo = .init(
-      weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
-      cityInfo: weatherJSON?.city,
-      tempUnit: tempUnit
+        weatherForecastInfo: weatherJSON?.weatherForecast[indexPath.row],
+        cityInfo: weatherJSON?.city,
+        temperatureUnit: temperatureUnit
     )
     
     let detailViewController: WeatherDetailViewController = .init(
-        weatherImageCacheService: weatherImageCacheService,
+        weatherListUseCase: weatherUseCase,
         weatherDetailInfo: detailInfo
     )
     
     navigationController?.show(detailViewController, sender: self)
+  }
+}
+
+fileprivate extension WeatherForecastInfo {
+  func toCellInfo(temperatureUnit: TemperatureUnit) -> WeatherCellInfo {
+    return .init(
+      dateTime: dateTime,
+      main: main,
+      weather: weather,
+      temperatureUnitStrategy: temperatureUnit.strategy
+    )
   }
 }

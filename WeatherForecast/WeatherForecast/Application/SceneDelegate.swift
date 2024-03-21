@@ -19,15 +19,17 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     let weatherFetcherService: WeatherFetcherServiceable = WeatherFetcherService()
     
-    let imagefetcherService: ImageFetcherServiceable = ImageFetcherService()
+    let httpSessionService: HTTPSessionServiceable = HTTPSessionService()
     let weatherImageCacheService: WeatherImageCacheServiceable = WeatherImageCacheService(
-        service: imagefetcherService
+        service: httpSessionService
     )
     
-    let weatherViewController: UIViewController = WeatherListViewController(
+    let weatherUseCase: WeatherUseCase = WeatherUseCaseImpl(
         weatherFetcherService: weatherFetcherService,
         weatherImageCacheService: weatherImageCacheService
     )
+    
+    let weatherViewController: UIViewController = WeatherListViewController(weatherUseCase: weatherUseCase)
     let navigationController: UINavigationController = .init(rootViewController: weatherViewController)
     
     window = .init(windowScene: scene)

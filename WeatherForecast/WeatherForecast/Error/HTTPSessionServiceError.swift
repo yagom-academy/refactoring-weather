@@ -1,5 +1,5 @@
 //
-//  ImageFetcherError.swift
+//  HTTPSessionServiceError.swift
 //  WeatherForecast
 //
 //  Created by 홍은표 on 3/14/24.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum ImageFetcherError: Error {
-  case failedToCastingResponse
+enum HTTPSessionServiceError: Error {
+  case noHTTPResponse
   case invalidStatusCode(statusCode: Int)
-  case invalidData
+  case unknown(error: Error)
 }

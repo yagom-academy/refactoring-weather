@@ -8,35 +8,39 @@
 import UIKit
 
 protocol WeatherImageCacheServiceable {
-  func execute(iconName: String) async throws -> UIImage
+  func fetchImage(iconName: String) async throws -> UIImage
 }
 
-struct WeatherImageCacheService: WeatherImageCacheServiceable {
-  private let service: ImageFetcherServiceable
-  private let cache: NSCache<NSString, UIImage> = .init()
+final class WeatherImageCacheService: WeatherImageCacheServiceable {
+  private let service: HTTPSessionServiceable
+  private var cache: ImageCachable
   
-  init(service: ImageFetcherServiceable) {
+  init(
+    service: HTTPSessionServiceable,
+    cache: ImageCachable = ImageCache()
+  ) {
     self.service = service
+    self.cache = cache
   }
   
-  func execute(iconName: String) async throws -> UIImage {
+  func fetchImage(iconName: String) async throws -> UIImage {
     let urlString: String = "https://openweathermap.org/img/wn/\(iconName)@2x.png"
+    
+    if let image: UIImage = cache[urlString] {
+      return image
+    }
     
     guard let url: URL = .init(string: urlString) else {
       throw ImageCacheError.invalidURL
     }
     
-    if let image: UIImage = cache.object(forKey: urlString as NSString) {
-      return image
-    }
-    
-    let imageData = try await service.execute(from: url)
+    let imageData = try await service.downloadData(from: url)
     
     guard let image: UIImage = .init(data: imageData) else {
       throw ImageCacheError.failedToConvertImage
     }
     
-    cache.setObject(image, forKey: urlString as NSString)
+    cache[urlString] = image
     return image
   }
 }

@@ -7,15 +7,13 @@
 import UIKit
 
 struct WeatherCellInfo {
-  let dt: TimeInterval
+  let dateTime: TimeInterval
   let main: MainInfo
   let weather: Weather
-  let tempExpression: String
+  let temperatureUnitStrategy: TemperatureUnitStrategy
 }
 
-final class WeatherTableViewCell: UITableViewCell, DateFormattable {
-  static let identifier: String = "WeatherTableViewCell"
-  
+final class WeatherTableViewCell: UITableViewCell, CellIdentifiable {
   private let weatherIcon: UIImageView = .init()
   private let dateLabel: UILabel = .init()
   private let temperatureLabel: UILabel = .init()
@@ -108,10 +106,12 @@ final class WeatherTableViewCell: UITableViewCell, DateFormattable {
   }
   
   func configure(weatherCellInfo info: WeatherCellInfo) {
+    
     weatherLabel.text = info.weather.main
     descriptionLabel.text = info.weather.description
-    temperatureLabel.text = "\(info.main.temp)\(info.tempExpression)"
-    dateLabel.text = dateFormat(from: info.dt, with: .KoreanLongForm)
+    temperatureLabel.text = info.temperatureUnitStrategy.convert(temperature: info.main.temperature)
+    let date: Date = .init(timeIntervalSince1970: info.dateTime)
+    dateLabel.text = date.formatted(using: .koreanLongForm)
   }
   
   func set(image: UIImage) {

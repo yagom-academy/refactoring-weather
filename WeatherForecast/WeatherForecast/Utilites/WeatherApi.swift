@@ -48,7 +48,7 @@ final class OpenWeatherAPI: WeatherApi {
     func fetchImage(iconName: String) async -> UIImage? {
         let urlString: String = iconImageUrlString(iconName: iconName)
         do {
-            return try await imageLoader.fetchImage(urlString)
+            return try await imageLoader.fetchImage(wtih: urlString)
         } catch {
             return nil
         }

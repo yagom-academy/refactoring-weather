@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else {
             return
         }
-        let openWeatherApi = OpenWeatherAPI()
+        let openWeatherApi = OpenWeatherAPI(imageLoader: ImageLoader.shared)
         let viewController = WeatherListViewController(weatherApi: openWeatherApi)
         let navigationController: UINavigationController = UINavigationController(rootViewController: viewController)
         navigationController.navigationBar.tintColor = .black

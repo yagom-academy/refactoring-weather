@@ -11,22 +11,27 @@ enum ImageLoadError: Error {
     case invalidImage
 }
 
-class ImageLoader {
+protocol ImageLoadable {
+    func fetchImage(wtih url: String) async throws -> UIImage
+    func downloadImage(with urlString: String) async throws -> UIImage
+}
+
+final class ImageLoader: ImageLoadable {
     static let shared: ImageLoader = .init()
     
     private let imageChache: NSCache<NSString, UIImage> = NSCache()
     
     private init() {}
     
-    func fetchImage(with url: String) async throws -> UIImage {
+    func fetchImage(wtih url: String) async throws -> UIImage {
         if let image = imageChache.object(forKey: url as NSString) {
             return image
         }
         
-        return try await fetchImageFromNetwork(with: url)
+        return try await downloadImage(with: url)
     }
     
-    func fetchImageFromNetwork(with urlString: String) async throws -> UIImage {
+    func downloadImage(with urlString: String) async throws -> UIImage {
         guard let url: URL = URL(string: urlString),
               let (data, _) = try? await URLSession.shared.data(from: url),
               let image: UIImage = UIImage(data: data) else {

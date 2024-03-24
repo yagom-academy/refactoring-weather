@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     }
 }
 
-enum WeatherTitleType: String {
+fileprivate enum WeatherTitleType: String {
     case celsius = "섭씨"
     case fahrenheit = "화씨"
 }
@@ -104,32 +104,34 @@ extension ViewController {
 
 extension ViewController: UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    final func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    final func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         weatherJSON?.weatherForecast.count ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    final func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
-                                     
-        weatherTableCell(cell: cell, indexPath: indexPath,iconName: weatherForecastInfo.weather.icon, imageView: cell.weatherIcon)
+                          
+        let weather = weatherForecastInfo.weather
+        
+        weatherTableCell(cell: cell, indexPath: indexPath,iconName: weather.icon, imageView: cell.weatherIcon)
                 
-        cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weatherForecastInfo.weather.main, descriptionLabel: weatherForecastInfo.weather.description)
+        cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weather.main, descriptionLabel: weather.description)
 
         return cell
     }
 }
 
 extension ViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    final func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
@@ -147,7 +149,7 @@ extension ViewController {
 }
 
 extension ViewController {
-    func weatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
+    final func weatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
         let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"
 
       

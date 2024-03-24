@@ -114,14 +114,17 @@ class WeatherDetailViewController: UIViewController {
                                                  multiplier: 0.3)
         ])
         
-        weatherGroupLabel.text = listInfo.weather.main
-        weatherDescriptionLabel.text = listInfo.weather.description
-        temperatureLabel.text = "\(DetailGroupList.temperature) \(listInfo.main.temp)\(tempUnit.expression)"
-        feelsLikeLabel.text = "\(DetailGroupList.feelsLike) \(listInfo.main.feelsLike)\(tempUnit.expression)"
-        maximumTemperatureLable.text = "\(DetailGroupList.maximumTemperature)\(listInfo.main.tempMax)\(tempUnit.expression)"
-        minimumTemperatureLable.text = "\(DetailGroupList.minimumTemperature)\(listInfo.main.tempMin)\(tempUnit.expression)"
-        popLabel.text = "\(DetailGroupList.pop)\(listInfo.main.pop * 100)%"
-        humidityLabel.text = "\(DetailGroupList.humidity) \(listInfo.main.humidity)%"
+        let infoWeather = listInfo.weather
+        let infoMain = listInfo.main
+
+        weatherGroupLabel.text = infoWeather.main
+        weatherDescriptionLabel.text = infoWeather.description
+        temperatureLabel.text = "\(DetailGroupList.temperature) \(infoMain.temp)\(tempUnit.expression)"
+        feelsLikeLabel.text = "\(DetailGroupList.feelsLike) \(infoMain.feelsLike)\(tempUnit.expression)"
+        maximumTemperatureLable.text = "\(DetailGroupList.maximumTemperature)\(infoMain.tempMax)\(tempUnit.expression)"
+        minimumTemperatureLable.text = "\(DetailGroupList.minimumTemperature)\(infoMain.tempMin)\(tempUnit.expression)"
+        popLabel.text = "\(DetailGroupList.pop)\(infoMain.pop * 100)%"
+        humidityLabel.text = "\(DetailGroupList.humidity) \(infoMain.humidity)%"
         
         if let cityInfo {
             sunriseTimeLabel.text = "\(DetailGroupList.sunriseTime) \(Utils.dateSetUp(nil).string(from: Date(timeIntervalSince1970: cityInfo.sunrise)))"
@@ -135,7 +138,7 @@ class WeatherDetailViewController: UIViewController {
 
 extension WeatherDetailViewController {
     //이미지 처리
-    func weatherTask(iconName: String, imageView: UIImageView) {
+   private func weatherTask(iconName: String, imageView: UIImageView) {
         Task {
             let iconName: String = iconName
             let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"

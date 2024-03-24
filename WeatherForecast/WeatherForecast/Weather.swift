@@ -7,13 +7,13 @@
 import Foundation
 
 // MARK: - Weather JSON Format
-class WeatherJSON: Decodable {
+struct WeatherJSON: Decodable {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
 }
 
 // MARK: - List
-class WeatherForecastInfo: Decodable {
+struct WeatherForecastInfo: Decodable {
     let dt: TimeInterval
     let main: MainInfo
     let weather: Weather

@@ -6,13 +6,6 @@
 
 import UIKit
 
-protocol WeatherForecastInfoDelegate {
-    func weatherTask(iconName: String, imageView: UIImageView)
-}
-
-protocol dateFomatterSetUp {
-    func dateSetUp(_ format: String?) -> DateFormatter
-}
 
 struct DateFormat {
     var dataFormater: String?
@@ -140,7 +133,7 @@ class WeatherDetailViewController: UIViewController {
     }
 }
 
-extension WeatherDetailViewController : WeatherForecastInfoDelegate {
+extension WeatherDetailViewController {
     //이미지 처리
     func weatherTask(iconName: String, imageView: UIImageView) {
         Task {
@@ -155,20 +148,4 @@ extension WeatherDetailViewController : WeatherForecastInfoDelegate {
         }
     }
     
-//    //날짜형식 변환
-//    func dateSetUp(_ format: String?) -> DateFormatter {
-//        let formatter: DateFormatter = DateFormatter()
-//        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
-//        formatter.timeStyle = .short
-//        formatter.locale = .init(identifier: dateFormat.locale)
-//        formatter.dateFormat = dateFormat.dataFormater
-//
-//        guard format != nil else {
-//            formatter.dateFormat = .none
-//            return formatter
-//        }
-//
-//        return formatter
-//    }
-
 }

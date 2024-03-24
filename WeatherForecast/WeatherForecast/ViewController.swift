@@ -119,10 +119,8 @@ extension ViewController: UITableViewDataSource {
               let weatherForecastInfo = weatherJSON?.weatherForecast[indexPath.row] else {
             return cell
         }
-        
-        cell.delegate = self
-                             
-        WeatherTableCell(cell: cell, indexPath: indexPath,iconName: weatherForecastInfo.weather.icon, imageView: cell.weatherIcon)
+                                     
+        weatherTableCell(cell: cell, indexPath: indexPath,iconName: weatherForecastInfo.weather.icon, imageView: cell.weatherIcon)
                 
         cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weatherForecastInfo.weather.main, descriptionLabel: weatherForecastInfo.weather.description)
 
@@ -141,38 +139,33 @@ extension ViewController: UITableViewDelegate {
         navigationController?.show(detailViewController, sender: self)
     }
 }
-extension ViewController : dateFomatterSetUp {
+extension ViewController {
     private func dataTimeIntervalSince1970(_ dt: TimeInterval) -> String {
         let date: Date = Date(timeIntervalSince1970: dt)
-        return dateSetUp(DataCase.long).string(from: date)
+        return Utils.dateSetUp(DataCase.long).string(from: date)
     }
-    
-    func dateSetUp(_ format: String?) -> DateFormatter {
-        let formatter: DateFormatter = DateFormatter()
-        let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)
-        formatter.timeStyle = .short
-        formatter.locale = .init(identifier: dateFormat.locale)
-        formatter.dateFormat = dateFormat.dataFormater
-
-        guard format != nil else {
-            formatter.dateFormat = .none
-            return formatter
-        }
-        
-        return formatter
-    }
-
 }
 
-extension ViewController: WeatherTableDelegate {
-    func WeatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
+extension ViewController {
+    func weatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
         let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"
 
-        if let image = imageChache.object(forKey: urlString as NSString) {
+      
+            setImageChache(chache: imageChache, cell: cell, urlString: urlString)
+        
+        
+            setImageTask(table: tableView, index: indexPath, cell: cell, urlString: urlString)
+                
+    }
+    
+    private func setImageChache(chache: NSCache<NSString, UIImage>, cell: WeatherTableViewCell, urlString: String) {
+        if let image = chache.object(forKey: urlString as NSString) {
             cell.weatherIcon.image = image
             return
         }
-        
+    }
+    
+    private func setImageTask(table: UITableView, index: IndexPath, cell: WeatherTableViewCell, urlString: String) {
         Task {
             guard let url: URL = URL(string: urlString),
                   let (data, _) = try? await URLSession.shared.data(from: url),
@@ -180,12 +173,20 @@ extension ViewController: WeatherTableDelegate {
                 return
             }
             
-            imageChache.setObject(image, forKey: urlString as NSString)
-
-            if indexPath == tableView.indexPath(for: cell) {
-                cell.weatherIcon.image = image
-            }
+            setObjectImageChache(chache: imageChache, image: image, urlString: urlString)
+        
+            setWeatherIconImage(table: tableView, index: index, cell: cell, image: image)
+       
         }
+    }
+    
+    private func setObjectImageChache(chache: NSCache<NSString, UIImage>, image: UIImage, urlString: String) {
+        chache.setObject(image, forKey: urlString as NSString)
+    }
+    
+    private func setWeatherIconImage(table: UITableView, index: IndexPath, cell: WeatherTableViewCell, image: UIImage) {
+        guard index == table.indexPath(for: cell) else { return }
+        cell.weatherIcon.image = image
     }
     
 }

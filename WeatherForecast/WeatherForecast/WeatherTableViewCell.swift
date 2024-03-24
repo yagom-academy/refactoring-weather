@@ -6,12 +6,8 @@
 
 import UIKit
 
-protocol WeatherTableDelegate {
-    func WeatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView)
-}
 
 class WeatherTableViewCell: UITableViewCell {
-    var delegate: WeatherTableDelegate?
     
     var weatherIcon: UIImageView!
     var dateLabel: UILabel!

@@ -7,15 +7,15 @@
 import UIKit
 
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    var tableView: UITableView!
-    let refreshControl: UIRefreshControl = UIRefreshControl()
-    var weatherJSON: WeatherJSON?
-    var icons: [UIImage]?
-    let imageChache: NSCache<NSString, UIImage> = NSCache()
+    private var tableView: UITableView!
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
+    private var weatherJSON: WeatherJSON?
+    private var icons: [UIImage]?
+    private let imageChache: NSCache<NSString, UIImage> = NSCache()
     
-    var tempUnit: TempUnit = .metric
+    private var tempUnit: TempUnit = .metric
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,15 +104,15 @@ extension ViewController {
 
 extension ViewController: UITableViewDataSource {
     
-    final func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
     
-    final func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         weatherJSON?.weatherForecast.count ?? 0
     }
     
-    final func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
         
         guard let cell: WeatherTableViewCell = cell as? WeatherTableViewCell,
@@ -131,7 +131,7 @@ extension ViewController: UITableViewDataSource {
 }
 
 extension ViewController: UITableViewDelegate {
-    final func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let detailViewController: WeatherDetailViewController = WeatherDetailViewController()
@@ -149,7 +149,7 @@ extension ViewController {
 }
 
 extension ViewController {
-    final func weatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
+    private func weatherTableCell(cell: WeatherTableViewCell, indexPath: IndexPath, iconName: String, imageView: UIImageView) {
         let urlString: String = "\(ImageURLType.path.rawValue)\(iconName)\(ImageURLType.png.rawValue)"
 
       

@@ -7,13 +7,13 @@
 import UIKit
 
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+    public var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,7 +95,7 @@ class WeatherTableViewCell: UITableViewCell {
         ])
     }
     
-    final func configure(weatherIcon:UIImageView, dateLabel:String, temperatureLabel:String, weatherLabel:String, descriptionLabel:String){
+    func configure(weatherIcon:UIImageView, dateLabel:String, temperatureLabel:String, weatherLabel:String, descriptionLabel:String){
         self.weatherIcon = weatherIcon
         self.dateLabel.text = dateLabel
         self.temperatureLabel.text = temperatureLabel

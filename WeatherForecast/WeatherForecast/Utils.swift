@@ -8,7 +8,7 @@
 import UIKit
 
 
-public class Utils {
+final class Utils {
     static func dateSetUp(_ format: String?) -> DateFormatter {
         let formatter: DateFormatter = DateFormatter()
         let dateFormat = DateFormat(dataFormater: format, dateFormatStyle: .none)

@@ -34,7 +34,7 @@ struct DataCase {
     
 }
 
-class WeatherDetailViewController: UIViewController {
+final class WeatherDetailViewController: UIViewController {
 
     var weatherForecastInfo: WeatherForecastInfo?
     var cityInfo: City?

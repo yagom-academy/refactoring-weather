@@ -6,12 +6,14 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
-    var weatherIcon: UIImageView!
-    var dateLabel: UILabel!
-    var temperatureLabel: UILabel!
-    var weatherLabel: UILabel!
-    var descriptionLabel: UILabel!
+
+final class WeatherTableViewCell: UITableViewCell {
+    
+    public var weatherIcon: UIImageView!
+    private var dateLabel: UILabel!
+    private var temperatureLabel: UILabel!
+    private var weatherLabel: UILabel!
+    private var descriptionLabel: UILabel!
      
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -91,6 +93,14 @@ class WeatherTableViewCell: UITableViewCell {
             weatherIcon.widthAnchor.constraint(equalTo: weatherIcon.heightAnchor),
             weatherIcon.widthAnchor.constraint(equalToConstant: 100)
         ])
+    }
+    
+    func configure(weatherIcon:UIImageView, dateLabel:String, temperatureLabel:String, weatherLabel:String, descriptionLabel:String){
+        self.weatherIcon = weatherIcon
+        self.dateLabel.text = dateLabel
+        self.temperatureLabel.text = temperatureLabel
+        self.weatherLabel.text = weatherLabel
+        self.descriptionLabel.text = descriptionLabel
     }
     
     private func reset() {

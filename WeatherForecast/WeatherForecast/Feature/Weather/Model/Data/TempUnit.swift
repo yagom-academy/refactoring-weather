@@ -27,9 +27,9 @@ struct ImperialStrategy: TemperatureStrategy {
         "화씨"
     }
     
+    /// 화씨 변환: (a × 9/5) + 32
     func convert(_ temperature: Double) -> String {
-        // TOOD: 변환
-        let convertedTemperature: Double = temperature
+        let convertedTemperature: Double = round(((temperature * 9 / 5) + 32) * 100) / 100
         
         return "\(convertedTemperature)℉"
     }

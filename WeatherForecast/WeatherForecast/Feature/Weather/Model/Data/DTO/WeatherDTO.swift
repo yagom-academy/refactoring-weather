@@ -40,28 +40,42 @@ struct MainInfoDTO: Decodable {
 }
 
 // MARK: - Weather
+enum WeatherIcon: String, Decodable {
+    case n4 = "04n"
+    case d4 = "04d"
+    case n10 = "10n"
+    case d10 = "10d"
+    case n13 = "13n"
+    case d13 = "13d"
+}
+
 struct WeatherDTO: Decodable {
     let id: Int
     let main: String
     let description: String
-    let icon: String
+    let icon: WeatherIcon
     
     static var stub: Self {
-        .init(id: 804, main: "Clouds", description: "overcast clouds", icon: "04d")
+        .init(id: 804, main: "Clouds", description: "overcast clouds", icon: .d4)
     }
 }
 
 // MARK: - City
+enum CityCountry: String, Decodable {
+    case korea = "KR"
+    case us = "US"
+}
+
 struct CityDTO: Decodable {
     let id: Int
     let name: String
     let coord: CoordDTO
-    let country: String
+    let country: CityCountry
     let population, timezone: Int
     let sunrise, sunset: TimeInterval
     
     static var stub: Self {
-        .init(id: 1845604, name: "Cheongju-si", coord: .stub, country: "KR", population: 634596, timezone: 32400, sunrise: 1705531242, sunset: 1705567148)
+        .init(id: 1845604, name: "Cheongju-si", coord: .stub, country: .korea, population: 634596, timezone: 32400, sunrise: 1705531242, sunset: 1705567148)
     }
 }
 

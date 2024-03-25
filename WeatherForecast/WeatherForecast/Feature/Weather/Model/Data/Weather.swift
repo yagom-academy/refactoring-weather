@@ -7,7 +7,7 @@
 import Foundation
 
 // MARK: - Weather UI Model
-class FetchWeatherResult {
+struct FetchWeatherResult {
     let weatherForecast: [WeatherForecastInfo]
     let city: City
     
@@ -23,7 +23,7 @@ class FetchWeatherResult {
 }
 
 // MARK: - List
-class WeatherForecastInfo {
+struct WeatherForecastInfo {
     private let date: Date
     private let main: MainInfo
     private let weather: Weather
@@ -77,12 +77,12 @@ class WeatherForecastInfo {
     }
     
     var iconUrlString: String {
-        "https://openweathermap.org/img/wn/\(weather.icon)@2x.png"
+        "https://openweathermap.org/img/wn/\(weather.icon.rawValue)@2x.png"
     }
 }
 
 // MARK: - MainClass
-class MainInfo {
+struct MainInfo {
     let temp, feelsLike, tempMin, tempMax: Double
     let humidity, pop: Double
     
@@ -113,13 +113,13 @@ enum WeatherMain: String {
     case snow = "Snow"
 }
 
-class Weather {
+struct Weather {
     let id: Int
     let main: WeatherMain
     let description: String
-    let icon: String
+    let icon: WeatherIcon
     
-    init(id: Int, main: WeatherMain, description: String, icon: String) {
+    init(id: Int, main: WeatherMain, description: String, icon: WeatherIcon) {
         self.id = id
         self.main = main
         self.description = description
@@ -135,12 +135,8 @@ class Weather {
 }
 
 // MARK: - City
-enum CityCountry: String {
-    case korea = "KR"
-    case us = "US"
-}
 
-class City {
+struct City {
     private let id: Int
     private let name: String
     private let country: CityCountry
@@ -157,7 +153,7 @@ class City {
     init(dto: CityDTO) {
         self.id = dto.id
         self.name = dto.name
-        self.country = CityCountry(rawValue: dto.country) ?? .us
+        self.country = dto.country
         self.sunrise = .init(timeIntervalSince1970: dto.sunrise)
         self.sunset = .init(timeIntervalSince1970: dto.sunset)
     }

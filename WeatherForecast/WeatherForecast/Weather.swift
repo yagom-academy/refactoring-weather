@@ -60,6 +60,7 @@ enum TempUnit: String {
     }
 }
 
+
 // MARK: - ImageURLType
 enum ImageURLType: String {
     case path = "https://openweathermap.org/img/wn/"

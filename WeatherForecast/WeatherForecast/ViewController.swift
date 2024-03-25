@@ -28,14 +28,28 @@ fileprivate enum WeatherTitleType: String {
     case fahrenheit = "화씨"
 }
 
+//fileprivate enum TempValueUnit: Double {
+//    case metric, imperial
+//    var expression: Double {
+//        switch self {
+//        case .metric: return "℃"
+//        case .imperial: return celsiusToFahrenheit(<#T##celsius: Double##Double#>)
+//        }
+//    }
+//    
+//    private func celsiusToFahrenheit(_ celsius: Double) -> Double {
+//        return celsius * 9 / 5 + 32
+//    }
+//}
+
 extension ViewController {
     
     @objc private func changeTempUnit() {
         switch tempUnit {
-        case .imperial:
+        case .imperial: //화
             tempUnit = .metric
             navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.celsius.rawValue)"
-        case .metric:
+        case .metric: //섭
             tempUnit = .imperial
             navigationItem.rightBarButtonItem?.title = "\(WeatherTitleType.fahrenheit.rawValue)"
         }
@@ -48,6 +62,20 @@ extension ViewController {
         refreshControl.endRefreshing()
     }
     
+    private func temperatureValue(_ celsius: Double, teampUnit: TempUnit) -> String {
+        guard tempUnit == .metric
+        else {
+            return "\(celsius)"
+        }
+        
+        let fahrenheitTemperature = celsiusToFahrenheit(celsius)
+        return "\(fahrenheitTemperature)"
+    }
+
+    private func celsiusToFahrenheit(_ celsius: Double) -> Double {
+        return celsius * 9 / 5 + 32
+    }
+
     private func initialSetUp() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(WeatherTitleType.fahrenheit)", image: nil, target: self, action: #selector(changeTempUnit))
         
@@ -121,10 +149,11 @@ extension ViewController: UITableViewDataSource {
         }
                           
         let weather = weatherForecastInfo.weather
+        let tempValue = temperatureValue(weatherForecastInfo.main.temp, teampUnit: tempUnit)
         
         weatherTableCell(cell: cell, indexPath: indexPath,iconName: weather.icon, imageView: cell.weatherIcon)
                 
-        cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(weatherForecastInfo.main.temp)\(tempUnit.expression)", weatherLabel: weather.main, descriptionLabel: weather.description)
+        cell.configure(weatherIcon: cell.weatherIcon, dateLabel: dataTimeIntervalSince1970(weatherForecastInfo.dt), temperatureLabel: "\(tempValue)\(tempUnit.expression)", weatherLabel: weather.main, descriptionLabel: weather.description)
 
         return cell
     }
